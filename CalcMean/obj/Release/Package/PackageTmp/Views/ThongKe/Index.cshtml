@@ -1,0 +1,134 @@
+﻿@using System.Globalization
+@model CalcMean.Models.ThongKe
+
+@{
+    ViewBag.Title = Model.DotChot.Title;
+}
+
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <label>Đợt chốt</label>
+        @using (Html.BeginForm())
+        {
+            @Html.DropDownList("chotSoId", ViewBag.ChotSoId as SelectList, new { Class = "form-control", onchange = "form.submit();" })
+        }
+
+    </div>
+</div>
+<br />
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Thời gian từ
+        </dt>
+        <dd>
+            @Model.DotChot.StartDate - @Model.DotChot.EndDate
+        </dd>
+        <dt>
+            Tổng thu
+        </dt>
+        <dd>
+            @Model.TongThu.ToString("C0")  (vnđ)
+        </dd>
+
+        <dt>
+            Tổng chi chưa gạo
+        </dt>
+
+        <dd>
+            @Model.TongChiChuaGao.ToString("C0") (vnđ)
+        </dd>
+        <dt>
+            Tổng tiền gạo đã chén
+        </dt>
+
+        <dd>
+            @Model.TongTienGao.ToString("C0") (vnđ)
+        </dd>
+        <dt>
+            Tổng chi toàn bộ
+        </dt>
+
+        <dd>
+            @Model.TongChi.ToString("C0") (vnđ)
+        </dd>
+
+        <dt>
+            Trạng thái
+        </dt>
+
+        <dd>
+            @if (Model.DotChot.IsChot)
+            {
+                <span class="label label-success">Đã chốt</span>
+            }
+            else
+            {
+                <span class="label label-danger">Chưa chốt</span>
+            }
+        </dd>
+    </dl>
+</div>
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Người ăn</th>
+                <th>Đã nộp (vnđ)</th>
+                <th>Ăn hết (vnđ)</th>
+                <th>Tiền gạo đã chén (vnđ)</th>
+                <th>Còn thiếu (vnđ)</th>
+                <th>Còn thừa (vnđ)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var i = 1;
+                foreach (var item in Model.List)
+                {
+                    <tr>
+                        <td>@(i++)</td>
+                        <td>@Common.Decode(item.User.Name)</td>
+                        <td>@item.TongDaNop.ToString("C0") </td>
+                        <td>@item.TongDaAn.ToString("C0") </td>
+                        <td>@item.TienGao.ToString("C0") </td>
+                        <td>
+                            @{
+                    var thieu = (item.TongDaAn + item.TienGao) - item.TongDaNop;
+                    if (thieu > 0)
+                    {
+                        <span class="bg-danger">- @thieu.ToString("C0")</span>
+                    }
+                    else
+                    {
+                        @("0")
+                    }
+                            }
+                        </td>
+                        <td>
+                            @{
+                    var thua = item.TongDaNop - (item.TongDaAn + item.TienGao);
+                    if (thua > 0)
+                    {
+                        <span class="bg-success">+ @thua.ToString("C0")</span>
+                    }
+                    else
+                    {
+                        @("0")
+                    }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Danh sách đợt chốt sổ", "Index", "DotChotSo", null, new { @class = "btn btn-default" })
+</p>

@@ -1,0 +1,70 @@
+﻿@model CalcMean.Models.MyStatistic
+
+@{
+    ViewBag.Title = "Thống kê của tôi cho đợt chốt sổ: " + Model.DotChot.Title;
+}
+
+<h2> @ViewBag.Title</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Thời gian từ
+        </dt>
+        <dd>
+            @Model.DotChot.StartDate - @Model.DotChot.EndDate
+        </dd>
+        <dt>
+            Tổng đã nộp
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TongDaNop)
+        </dd>
+
+        <dt>
+            Tổng đã ăn
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TongDaAn)
+        </dd>
+
+        <dt>
+            Tổng phải nộp
+        </dt>
+
+        <dd>
+            @if (Model.TongDaAn > Model.TongDaNop)
+            {
+                @(Model.TongDaAn - Model.TongDaNop)
+            }
+            else
+            {
+                @("0")
+            }
+            (vnđ)
+        </dd>
+
+        <dt>
+            Tổng còn dư
+        </dt>
+
+        <dd>
+            @if (Model.TongDaNop > Model.TongDaAn)
+            {
+                @(Model.TongDaNop - Model.TongDaAn)
+            }
+            else
+            {
+                @("0")
+            }
+            (vnđ)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Danh sách đợt chốt sổ", "Index", "DotChotSo", null, new { @class = "btn btn-default" })
+</p>

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<CalcMean.Models.CmUser>
+@{
+    ViewBag.Title = "Danh sách người ăn";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Tạo mới", "CreateOrEdit", null, new { Class = "btn btn-primary" })
+</p>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>
+                    Tên người ăn
+                </th>
+                <th>
+                    Có ăn sáng
+                </th>
+                <th>
+                    Có tính tiền
+                </th>
+                <th></th>
+            </tr>
+
+            <tbody>
+                @{
+                    var i = 1;
+                    foreach (var item in Model)
+                    {
+                        var cls = i % 2 == 0 ? "Class=active" : "";
+                        <tr @cls>
+                            <td>@(i++)</td>
+                            <td>
+                                @Common.Decode(item.Name)
+                            </td>
+                            <td>
+                                @if (item.CoAnSang)
+                                {
+                                    <span class="label label-success"><i class="glyphicon glyphicon-ok"></i> Có</span>
+                                }
+                                else
+                                {
+                                    <span class="label label-danger"><i class="glyphicon glyphicon-remove"></i> Không</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.IsShow)
+                                {
+                                    <span class="label label-success"><i class="glyphicon glyphicon-ok"></i> Có</span>
+                                }
+                                else
+                                {
+                                    <span class="label label-danger"><i class="glyphicon glyphicon-remove"></i> Không</span>
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "CreateOrEdit", new {id = item.Id}, new {Class = "btn btn-xs btn-default"})
+                                @Html.ActionLink("Delete", "Delete", new {id = item.Id}, new {Class = "confirmDelete btn btn-xs btn-danger"})
+                            </td>
+                        </tr>
+                    }}
+            </tbody>
+
+        </table>
+    </div>
+</div>

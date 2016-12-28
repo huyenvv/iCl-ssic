@@ -1,0 +1,88 @@
+﻿@using System.Globalization
+@model IEnumerable<CalcMean.Models.DotChotSo>
+
+@{
+    ViewBag.Title = "Danh sách các đợt chốt sổ";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Tạo mới", "CreateOrEdit", null, new { Class = "btn btn-primary" })
+</p>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th>
+                    Tiêu đề
+                </th>
+                <th>
+                    Từ ngày
+                </th>
+                <th>
+                    Đến ngày
+                </th>
+                <th>
+                    Tổng thu
+                </th>
+                <th>
+                    Tổng chi
+                </th>
+                <th>
+                    Trạng thái
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Common.Decode(item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @(item.TongThu.HasValue ? item.TongThu.Value.ToString("C0") : "0")
+                    </td>
+                    <td>
+                        @(item.TongChi.HasValue ? item.TongChi.Value.ToString("C0") : "0")
+                    </td>
+                    <td>
+                        @if (item.IsChot)
+                        {
+                            <span class="label label-success">Đã chốt</span>
+                        }
+                        else
+                        {
+                            <span class="label label-danger">Chưa chốt</span>
+                        }
+
+                    </td>
+                    <td>
+                        @if (item.IsChot)
+                        {
+                            <div class="row">
+                                @Html.ActionLink("Chi tiết", "Index", "ThongKe", new { dotChotId = item.Id }, new { Class = "btn btn-xs btn-primary" })
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                @Html.ActionLink("Chốt sổ", "ChotSo", new { id = item.Id }, new { Class = "btn btn-xs btn-primary confirmDelete" })
+                                @Html.ActionLink("Sửa ", "CreateOrEdit", new { id = item.Id }, new { Class = "btn btn-xs btn-default" })
+                                @Html.ActionLink("Xóa ", "Delete", new { id = item.Id }, new { Class = "confirmDelete btn btn-xs btn-danger" })
+                            </div>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

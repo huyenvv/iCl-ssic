@@ -1,0 +1,68 @@
+﻿@model IEnumerable<DsNopTruoc>
+@using System.Globalization
+@using CalcMean.Models;
+@{
+    ViewBag.Title = "Danh sách đã đóng tiền";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Tạo mới", "CreateOrEdit", null, new { Class = "btn btn-primary" })
+</p>
+<div class="row">
+    <div class="col-md-12">
+        <label>Chọn đợt chốt</label>
+        @using (Html.BeginForm())
+        {
+            @Html.DropDownList("dotChotId", ViewBag.dotChotId as SelectList, new { Class = "form-control", onchange = "form.submit();" })
+        }
+
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th>
+                    Người đóng
+                </th>
+                <th>
+                    Số tiền
+                </th>
+                <th>
+                    Ngày đóng
+                </th>
+                <th>
+                    Nội dung
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Common.Decode(item.CmUser.Name)
+                    </td>
+                    <td>
+                        @item.SoTien.ToString("C0")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDate)
+                    </td>
+                    <td>
+                        @Common.Decode(item.Title)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "CreateOrEdit", new { id = item.Id }, new { Class = "btn btn-xs btn-default" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { Class = "confirmDelete btn btn-xs btn-danger" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+

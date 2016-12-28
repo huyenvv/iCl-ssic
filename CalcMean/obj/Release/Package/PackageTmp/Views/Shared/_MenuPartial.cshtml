@@ -1,0 +1,21 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <ul class="nav navbar-nav" id="Menu">
+        <li>
+            <a href="@Url.Action("Index", "DsChiTieu")" data-href="/DsChiTieu/Index/CreateOrEdit/">DS Đã Chi</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "DsNopTruoc")" data-href="/Index/CreateOrEdit">DS Đã thu</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "TienGao")" data-href="/Index/MyStatistic/">Tiền gạo</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "DotChotSo")" data-href="/Index/CreateOrEdit">DS các đợt chốt sổ</a>
+        </li>
+        <li>
+            <a href="@Url.Action("Index", "ThongKe")" data-href="/Index/MyStatistic/">Thống kê</a>
+        </li>
+
+    </ul>
+}
