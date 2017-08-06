@@ -472,15 +472,11 @@ strong {
 }
 
 .logopanel {
-    padding: 4px;
+    padding: 12px 4px;
     background: #fff;
     box-sizing: border-box;
     text-align: center;
 }
-
-    .logopanel img {
-        width: 90%;
-    }
 
 .leftpanelinner {
     padding: 5px 15px;
