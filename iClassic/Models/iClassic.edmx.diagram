@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="adf06491c88c4bb8a265b6624547db2f" Name="Diagram1">
+        <EntityTypeShape EntityType="iClassicModel.AspNetRoles" Width="1.5" PointX="7.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="iClassicModel.AspNetUsers" Width="1.5" PointX="10" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="iClassicModel.Branch" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iClassicModel.Customer" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuChi" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuSanXuat" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuSua" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
+        <AssociationConnector Association="iClassicModel.FK_Customer_Branch" ManuallyRouted="false" />
+        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="iClassicModel.FK_PhieuSua_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="iClassicModel.AspNetUserRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

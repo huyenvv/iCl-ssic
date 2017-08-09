@@ -6,8 +6,8 @@ using System.Web.Mvc;
 
 namespace iClassic.Controllers
 {
-    [Authorize]
-    public class HomeController : Controller
+    [Override.Authorize]
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {

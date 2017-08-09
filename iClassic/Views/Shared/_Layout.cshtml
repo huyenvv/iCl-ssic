@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using iClassic.Helper;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -7,7 +8,8 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="~/images/icon.png" type="image/png">
     <title>@ViewBag.Title - iClassic</title>
-    <link href="../../css/style.default.css" rel="stylesheet">
+    <link href="@Url.Content("~/css/style.default.css")" rel="stylesheet">
+    <link href="@Url.Content("~/css/font.helvetica-neue.css")" rel="stylesheet" />
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="../../js/html5shiv.js"></script>
@@ -25,7 +27,9 @@
     <section>
         <div class="leftpanel">
             <div class="logopanel">
-                <img src="../../images/logo.png" />
+                <a href="@Url.Action("Index", "Home")">
+                    <img src="@Url.Content("~/Images/logo.png")" alt="iClassic" />
+                </a>
             </div><!-- logopanel -->
             <div class="leftpanelinner">
                 <!-- This is only visible to small devices -->
@@ -44,14 +48,14 @@
                     </ul>
                 </div>
                 <h5 class="sidebartitle">Navigation</h5>
-                <ul class="nav nav-pills nav-stacked nav-bracket">
-                    <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
-                    <li><a href="@Url.Action("About", "Home")"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
+                <ul class="nav nav-pills nav-stacked nav-bracket" id="LeftMenu">
+                    <li><a href="@Url.Action("Index", "Home")" data-href="Home/Index"><i class="fa fa-home"></i> <span>Trang chủ</span></a></li>
+                    <li><a href="@Url.Action("Index", "Customers")" data-href="Index"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
                     <li><a href="@Url.Action("Contact", "Home")"><i class="fa fa-dollar"></i> <span>Phiếu sản xuất</span></a></li>
                     <li><a href="@Url.Action("About", "Home")"><i class="fa fa-cog"></i> <span>Phiếu sửa chữa</span></a></li>
                     <li><a href="@Url.Action("About", "Home")"><i class="fa fa-dollar"></i> <span>Phiếu chi</span></a></li>
                     <li><a href="@Url.Action("About", "Home")"><i class="fa fa-dollar"></i> <span>Thống kê</span></a></li>
-                    <li><a href="@Url.Action("About", "Home")"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
+                    <li><a href="@Url.Action("Index", "Branches")" data-href="Index"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
                     <li><a href="@Url.Action("About", "Home")"><i class="fa fa-user"></i> <span>Nhân viên</span></a></li>
                 </ul>
             </div><!-- leftpanelinner -->
@@ -82,17 +86,48 @@
                 </div><!-- header-right -->
             </div><!-- headerbar -->
             <div class="pageheader">
-                <h2><i class="fa fa-home"></i> Blank Page </h2>
+                <h2><i class="@ViewBag.Class"></i> @Html.Raw(ViewBag.Breadcrumbs)</h2>
             </div>
             <div class="contentpanel">
+                @if (SessionHelpers.Exist(Constant.SESSION_MessageError))
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-body padding5">
+                            <div class="alert alert-danger nomargin padding10" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeParentPanel(this);"><span aria-hidden="true">×</span></button>
+                                @SessionHelpers.Get(Constant.SESSION_MessageError)
+                            </div>
+                        </div>
+                    </div>
+                    SessionHelpers.Remove(Constant.SESSION_MessageError);
+                }
+                @if (SessionHelpers.Exist(Constant.SESSION_MessageSuccess))
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-body padding5">
+                            <div class="alert alert-success nomargin padding10" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeParentPanel(this);"><span aria-hidden="true">×</span></button>
+                                @SessionHelpers.Get(Constant.SESSION_MessageSuccess)
+                            </div>
+                        </div>
+                    </div>
+                    SessionHelpers.Remove(Constant.SESSION_MessageSuccess);
+                }
                 @RenderBody()
             </div>
         </div><!-- mainpanel -->
 
     </section>
 
-    @*@Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")*@
+    <!-- Modal Default -->
+    <div class="modal fade" id="modalDefault" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    </div>
+    <script>
+        var iclassic = {
+            currentLink: "/@ViewContext.RouteData.Values["controller"]/@ViewContext.RouteData.Values["action"]"
+        };
+    </script>
+
     <script src="@Url.Content("~/js/jquery-1.11.1.min.js")"></script>
     <script src="@Url.Content("~/js/jquery-migrate-1.2.1.min.js")"></script>
     <script src="@Url.Content("~/js/bootstrap.min.js")"></script>
@@ -102,6 +137,7 @@
     <script src="@Url.Content("~/js/retina.min.js")"></script>
     <script src="@Url.Content("~/js/jquery.cookies.js")"></script>
     <script src="@Url.Content("~/js/custom.js")"></script>
+    <script src="@Url.Content("~/Scripts/iClassic.js")"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

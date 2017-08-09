@@ -13,7 +13,7 @@ using iClassic.Models;
 namespace iClassic.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -399,6 +399,12 @@ namespace iClassic.Controllers
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ViewResult AccessDenied()
         {
             return View();
         }

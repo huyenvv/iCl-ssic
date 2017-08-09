@@ -10,8 +10,8 @@ using iClassic.Models;
 
 namespace iClassic.Controllers
 {
-    [Authorize]
-    public class ManageController : Controller
+    [Override.Authorize]
+    public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;

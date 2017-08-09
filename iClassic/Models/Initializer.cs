@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using iClassic.Helper;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
@@ -20,8 +22,19 @@ namespace iClassic.Models
 
             context.Users.AddOrUpdate(
               p => p.Id,
-              new ApplicationUser { UserName = "admin", SecurityStamp = Guid.NewGuid().ToString(), PasswordHash = pass, Name = "Lê Anh Tuấn" }
+              new ApplicationUser { UserName = "admin", SecurityStamp = Guid.NewGuid().ToString(), PasswordHash = pass, Name = "Lê Anh Tuấn"}
             );
+
+            foreach (var roleName in RoleList.GetAll())
+            {
+                context.Roles.AddOrUpdate(
+                    p => p.Id,
+                        new IdentityRole
+                        {
+                            Name = roleName
+                        }
+                    );
+            }
         }
     }
 }
