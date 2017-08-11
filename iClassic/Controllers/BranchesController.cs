@@ -1,78 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using iClassic.Models;
+using iClassic.Services.Implementation;
+using PagedList;
+using log4net;
+using iClassic.Helper;
 
 namespace iClassic.Controllers
 {
     [Override.Authorize]
     public class BranchesController : BaseController
     {
-        private iClassicEntities db = new iClassicEntities();
+        private readonly ILog _log;
+        private BranchRepository _branchRepository;
+
+        public BranchesController()
+        {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _branchRepository = new BranchRepository(_entities);
+        }
 
         // GET: Branches
-        public async Task<ActionResult> Index()
+        public ActionResult Index(BranchSearch model)
         {
-            return View(await db.Branch.ToListAsync());
+            var result = _branchRepository.Search(model);
+            int pageSize = model?.PageSize ?? _pageSize;
+            int pageNumber = (model?.Page ?? 1);
+
+            ViewBag.SearchModel = model;
+            return View(result.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Branches/Details/5
-        public async Task<ActionResult> Details(int? id)
+        // GET: Branches/NewOrEdit/5
+        public async Task<ActionResult> NewOrEdit(int id = 0)
         {
-            if (id == null)
+            var model = await _branchRepository.GetByIdAsync(id);
+            if (model == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Branch branch = await db.Branch.FindAsync(id);
-            if (branch == null)
-            {
-                return HttpNotFound();
-            }
-            return View(branch);
-        }
-
-        // GET: Branches/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Branches/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Address,SDT")] Branch branch)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Branch.Add(branch);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return View(new Branch());
             }
 
-            return View(branch);
-        }
-
-        // GET: Branches/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Branch branch = await db.Branch.FindAsync(id);
-            if (branch == null)
-            {
-                return HttpNotFound();
-            }
-            return View(branch);
+            return View(model);
         }
 
         // POST: Branches/Edit/5
@@ -80,40 +50,62 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Address,SDT")] Branch branch)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,Address,SDT")] Branch model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(branch).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    if (model.Id == 0)
+                    {
+                        _branchRepository.Insert(model);
+                    }
+                    else
+                    {
+                        _branchRepository.Update(model);
+                    }
+                    await _branchRepository.SaveAsync();
+
+                    ShowMessageSuccess(Message.Update_Successfully);
+
+                    return RedirectToAction("Index");
+                }
             }
-            return View(branch);
+            catch (Exception ex)
+            {
+                ShowMessageError(Message.Update_Fail);
+
+                _log.Info(ex.ToString());
+            }
+            return View(model);
         }
 
         // GET: Branches/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> Delete(int id = 0)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Branch branch = await db.Branch.FindAsync(id);
-            if (branch == null)
-            {
-                return HttpNotFound();
-            }
-            return View(branch);
-        }
+                if (id == 0)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var obj = await _branchRepository.GetByIdAsync(id);
+                if (obj == null)
+                {
+                    return HttpNotFound();
+                }
+                _branchRepository.Delete(obj);
 
-        // POST: Branches/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Branch branch = await db.Branch.FindAsync(id);
-            db.Branch.Remove(branch);
-            await db.SaveChangesAsync();
+                await _branchRepository.SaveAsync();
+
+                ShowMessageSuccess(Message.Update_Successfully);
+            }
+            catch (Exception ex)
+            {
+                ShowMessageError(Message.Update_Fail);
+
+                _log.Info(ex.ToString());
+            }
             return RedirectToAction("Index");
         }
 
@@ -121,7 +113,7 @@ namespace iClassic.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _branchRepository.Dispose();
             }
             base.Dispose(disposing);
         }

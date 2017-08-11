@@ -37,7 +37,7 @@ namespace iClassic.Controllers
             {
                 return User.Identity.GetUserId();
             }
-        }        
+        }       
 
         public void ShowMessageError(string message)
         {
@@ -47,6 +47,6 @@ namespace iClassic.Controllers
         public void ShowMessageSuccess(string message)
         {
             SessionHelpers.Set(Constant.SESSION_MessageSuccess, message);
-        }
+        }     
     }
 }

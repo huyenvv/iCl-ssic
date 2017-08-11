@@ -1,132 +1,137 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using iClassic.Models;
+using iClassic.Services.Implementation;
+using PagedList;
+using log4net;
+using iClassic.Helper;
+using System.Web;
 
 namespace iClassic.Controllers
 {
     [Override.Authorize]
     public class CustomersController : BaseController
     {
-        private iClassicEntities db = new iClassicEntities();
+        private readonly ILog _log;
+        private CustomerRepository _customerRepository;
+        private BranchRepository _branchRepository;
 
-        // GET: Customers
-        public async Task<ActionResult> Index()
+        public CustomersController()
         {
-            var customer = db.Customer.Include(c => c.Branch);
-            return View(await customer.ToListAsync());
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _customerRepository = new CustomerRepository(_entities);
+            _branchRepository = new BranchRepository(_entities);
         }
 
-        // GET: Customers/Details/5
-        public async Task<ActionResult> Details(int? id)
+        // GET: Customeres
+        public ActionResult Index(CustomerSearch model)
         {
-            if (id == null)
+            var result = _customerRepository.Search(model);
+            int pageSize = model?.PageSize ?? _pageSize;
+            int pageNumber = (model?.Page ?? 1);
+
+            ViewBag.SearchModel = model;
+            CreateBrachViewBag(model.BranchId);
+            return View(result.ToPagedList(pageNumber, pageSize));
+        }
+
+        // GET: Customeres/NewOrEdit/5
+        public async Task<ActionResult> NewOrEdit(int id = 0)
+        {
+            var model = await _customerRepository.GetByIdAsync(id);
+            if (model == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                model = new Customer();
             }
-            Customer customer = await db.Customer.FindAsync(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(customer);
+            CreateBrachViewBag(CurrentUser.BranchId);
+            return View(model);
         }
 
-        // GET: Customers/Create
-        public ActionResult Create()
-        {
-            ViewBag.BranchId = new SelectList(db.Branch, "Id", "Name");
-            return View();
-        }
-
-        // POST: Customers/Create
+        // POST: Customeres/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,MaKH,TenKH,SDT,Address,Image,SoDo,Note,BranchId,CreateDate,CreateBy")] Customer customer)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenKH,Address,SDT,SoDo,BranchId")] Customer model, HttpPostedFileBase fileImage)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Customer.Add(customer);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+                if (ModelState.IsValid)
+                {
+                    if (fileImage != null)
+                    {
+                        var fileName = FileHelper.CreateFile(fileImage, UploadFolder.KhachHang);
+                        model.Image = fileName;
+                    }
 
-            ViewBag.BranchId = new SelectList(db.Branch, "Id", "Name", customer.BranchId);
-            return View(customer);
+                    if (model.Id == 0)
+                    {
+                        model.CreateBy = CurrentUserId;
+                        _customerRepository.Insert(model);
+                    }
+                    else
+                    {
+                        _customerRepository.Update(model);
+                    }                    
+                    await _customerRepository.SaveAsync();
+
+                    ShowMessageSuccess(Message.Update_Successfully);
+
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageError(Message.Update_Fail);
+
+                _log.Info(ex.ToString());
+            }
+            CreateBrachViewBag(model.BranchId);
+            return View(model);
         }
 
-        // GET: Customers/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        // GET: Customeres/Delete/5
+        public async Task<ActionResult> Delete(int id = 0)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = await db.Customer.FindAsync(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.BranchId = new SelectList(db.Branch, "Id", "Name", customer.BranchId);
-            return View(customer);
-        }
+                if (id == 0)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var obj = await _customerRepository.GetByIdAsync(id);
+                if (obj == null)
+                {
+                    return HttpNotFound();
+                }
+                _customerRepository.Delete(obj);
 
-        // POST: Customers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,MaKH,TenKH,SDT,Address,Image,SoDo,Note,BranchId,CreateDate,CreateBy")] Customer customer)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(customer).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            ViewBag.BranchId = new SelectList(db.Branch, "Id", "Name", customer.BranchId);
-            return View(customer);
-        }
+                await _customerRepository.SaveAsync();
 
-        // GET: Customers/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ShowMessageSuccess(Message.Update_Successfully);
             }
-            Customer customer = await db.Customer.FindAsync(id);
-            if (customer == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
-            }
-            return View(customer);
-        }
+                ShowMessageError(Message.Update_Fail);
 
-        // POST: Customers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Customer customer = await db.Customer.FindAsync(id);
-            db.Customer.Remove(customer);
-            await db.SaveChangesAsync();
+                _log.Info(ex.ToString());
+            }
             return RedirectToAction("Index");
+        }
+
+        private void CreateBrachViewBag(int selectedBranchId)
+        {
+            ViewBag.BranchId = new SelectList(_branchRepository.GetAll(), "Id", "Name", selectedBranchId);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                _branchRepository.Dispose();
+                _customerRepository.Dispose();
             }
             base.Dispose(disposing);
         }

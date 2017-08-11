@@ -241,6 +241,12 @@ D:\PROJECT\iClassic\iClassic\bin\Microsoft.Owin.Security.OAuth.xml
 D:\PROJECT\iClassic\iClassic\bin\Microsoft.Owin.Security.Google.xml
 D:\PROJECT\iClassic\iClassic\bin\Microsoft.Owin.Security.Twitter.xml
 D:\PROJECT\iClassic\iClassic\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-D:\PROJECT\iClassic\iClassic\obj\Debug\iClassic.csprojResolveAssemblyReference.cache
 D:\PROJECT\iClassic\iClassic\obj\Debug\iClassic.dll
 D:\PROJECT\iClassic\iClassic\obj\Debug\iClassic.pdb
+D:\PROJECT\iClassic\iClassic\bin\log4net.dll
+D:\PROJECT\iClassic\iClassic\bin\log4net.xml
+D:\PROJECT\iClassic\iClassic\bin\PagedList.dll
+D:\PROJECT\iClassic\iClassic\bin\PagedList.Mvc.dll
+D:\PROJECT\iClassic\iClassic\bin\PagedList.xml
+D:\PROJECT\iClassic\iClassic\bin\PagedList.Mvc.xml
+D:\PROJECT\iClassic\iClassic\obj\Debug\iClassic.csprojResolveAssemblyReference.cache

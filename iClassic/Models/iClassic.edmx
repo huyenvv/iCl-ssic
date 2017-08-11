@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="iClassicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="iClassicModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -47,6 +47,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
           <Property Name="SDT" Type="varchar" MaxLength="20" />
+          <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -106,6 +107,18 @@
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Customer_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Customer_Branch">
           <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
           <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
@@ -146,6 +159,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PhieuChi_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="PhieuChi" Type="Self.PhieuChi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhieuChi">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhieuSanXuat_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="PhieuSanXuat" Type="Self.PhieuSanXuat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhieuSanXuat">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PhieuSanXuat_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
           <End Role="PhieuSanXuat" Type="Self.PhieuSanXuat" Multiplicity="*" />
@@ -155,6 +192,18 @@
             </Principal>
             <Dependent Role="PhieuSanXuat">
               <PropertyRef Name="KhachHangId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhieuSua_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="PhieuSua" Type="Self.PhieuSua" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhieuSua">
+              <PropertyRef Name="CreateBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -179,6 +228,10 @@
           <EntitySet Name="PhieuChi" EntityType="Self.PhieuChi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhieuSanXuat" EntityType="Self.PhieuSanXuat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhieuSua" EntityType="Self.PhieuSua" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Customer_AspNetUsers" Association="Self.FK_Customer_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
           <AssociationSet Name="FK_Customer_Branch" Association="Self.FK_Customer_Branch">
             <End Role="Branch" EntitySet="Branch" />
             <End Role="Customer" EntitySet="Customer" />
@@ -191,33 +244,85 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
+          <AssociationSet Name="FK_PhieuChi_AspNetUsers" Association="Self.FK_PhieuChi_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PhieuChi" EntitySet="PhieuChi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhieuSanXuat_AspNetUsers" Association="Self.FK_PhieuSanXuat_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
+          </AssociationSet>
           <AssociationSet Name="FK_PhieuSanXuat_Customer" Association="Self.FK_PhieuSanXuat_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhieuSua_AspNetUsers" Association="Self.FK_PhieuSua_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PhieuSua" EntitySet="PhieuSua" />
           </AssociationSet>
           <AssociationSet Name="FK_PhieuSua_Customer" Association="Self.FK_PhieuSua_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="PhieuSua" EntitySet="PhieuSua" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="iClassicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="iClassicEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetRoles" EntityType="iClassicModel.AspNetRoles" />
+          <EntitySet Name="AspNetUsers" EntityType="iClassicModel.AspNetUsers" />
+          <EntitySet Name="Branch" EntityType="iClassicModel.Branch" />
+          <EntitySet Name="Customer" EntityType="iClassicModel.Customer" />
+          <EntitySet Name="PhieuChi" EntityType="iClassicModel.PhieuChi" />
+          <EntitySet Name="PhieuSanXuat" EntityType="iClassicModel.PhieuSanXuat" />
+          <EntitySet Name="PhieuSua" EntityType="iClassicModel.PhieuSua" />
+          <AssociationSet Name="FK_Customer_AspNetUsers" Association="iClassicModel.FK_Customer_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhieuChi_AspNetUsers" Association="iClassicModel.FK_PhieuChi_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PhieuChi" EntitySet="PhieuChi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhieuSanXuat_AspNetUsers" Association="iClassicModel.FK_PhieuSanXuat_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhieuSua_AspNetUsers" Association="iClassicModel.FK_PhieuSua_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PhieuSua" EntitySet="PhieuSua" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_Branch" Association="iClassicModel.FK_Customer_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhieuSanXuat_Customer" Association="iClassicModel.FK_PhieuSanXuat_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhieuSua_Customer" Association="iClassicModel.FK_PhieuSua_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="PhieuSua" EntitySet="PhieuSua" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="iClassicModel.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
         </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="BranchId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
@@ -230,18 +335,23 @@
           <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
           <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
-          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_Customer_AspNetUsers" FromRole="AspNetUsers" ToRole="Customer" />
+          <NavigationProperty Name="PhieuChi" Relationship="iClassicModel.FK_PhieuChi_AspNetUsers" FromRole="AspNetUsers" ToRole="PhieuChi" />
+          <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_AspNetUsers" FromRole="AspNetUsers" ToRole="PhieuSanXuat" />
+          <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_AspNetUsers" FromRole="AspNetUsers" ToRole="PhieuSua" />
+          <NavigationProperty Name="AspNetRoles" Relationship="iClassicModel.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
         </EntityType>
         <EntityType Name="Branch">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="SDT" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK_Customer_Branch" FromRole="Branch" ToRole="Customer" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_Customer_Branch" FromRole="Branch" ToRole="Customer" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -249,38 +359,40 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MaKH" Type="String" MaxLength="12" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="TenKH" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SDT" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TenKH" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SDT" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SoDo" Type="Int32" />
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BranchId" Type="Int32" Nullable="false" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreateBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Branch" Relationship="Self.FK_Customer_Branch" FromRole="Customer" ToRole="Branch" />
-          <NavigationProperty Name="PhieuSanXuat" Relationship="Self.FK_PhieuSanXuat_Customer" FromRole="Customer" ToRole="PhieuSanXuat" />
-          <NavigationProperty Name="PhieuSua" Relationship="Self.FK_PhieuSua_Customer" FromRole="Customer" ToRole="PhieuSua" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_Customer_AspNetUsers" FromRole="Customer" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Branch" Relationship="iClassicModel.FK_Customer_Branch" FromRole="Customer" ToRole="Branch" />
+          <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_Customer" FromRole="Customer" ToRole="PhieuSanXuat" />
+          <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="Customer" ToRole="PhieuSua" />
         </EntityType>
         <EntityType Name="PhieuChi">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MucChi" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MucChi" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="SoTien" Type="Double" Nullable="false" />
-          <Property Name="NguoiNhanPhieu" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NguoiNhanPhieu" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="ChiNhanhId" Type="Int32" Nullable="false" />
-          <Property Name="CreateBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_PhieuChi_AspNetUsers" FromRole="PhieuChi" ToRole="AspNetUsers" />
         </EntityType>
         <EntityType Name="PhieuSanXuat">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenSanPham" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MaVai" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TenSanPham" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MaVai" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="DonGia" Type="Double" Nullable="false" />
           <Property Name="SoLuong" Type="Int32" Nullable="false" />
           <Property Name="DatCoc" Type="Double" Nullable="false" />
@@ -288,27 +400,77 @@
           <Property Name="NgayLay" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="KhachHangId" Type="Int32" Nullable="false" />
-          <Property Name="CreateBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK_PhieuSanXuat_Customer" FromRole="PhieuSanXuat" ToRole="Customer" />
+          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_PhieuSanXuat_AspNetUsers" FromRole="PhieuSanXuat" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_PhieuSanXuat_Customer" FromRole="PhieuSanXuat" ToRole="Customer" />
         </EntityType>
         <EntityType Name="PhieuSua">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NoiDung" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NoiDung" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="NgayNhan" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="NgayTra" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="KhachHangId" Type="Int32" Nullable="false" />
-          <Property Name="CreateBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK_PhieuSua_Customer" FromRole="PhieuSua" ToRole="Customer" />
+          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_PhieuSua_AspNetUsers" FromRole="PhieuSua" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="PhieuSua" ToRole="Customer" />
         </EntityType>
+        <Association Name="FK_Customer_AspNetUsers">
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="iClassicModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhieuChi_AspNetUsers">
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="iClassicModel.PhieuChi" Role="PhieuChi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhieuChi">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhieuSanXuat_AspNetUsers">
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="iClassicModel.PhieuSanXuat" Role="PhieuSanXuat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhieuSanXuat">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhieuSua_AspNetUsers">
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="iClassicModel.PhieuSua" Role="PhieuSua" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhieuSua">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Customer_Branch">
-          <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
-          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <End Type="iClassicModel.Branch" Role="Branch" Multiplicity="1" />
+          <End Type="iClassicModel.Customer" Role="Customer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Branch">
               <PropertyRef Name="Id" />
@@ -319,8 +481,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PhieuSanXuat_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
-          <End Role="PhieuSanXuat" Type="Self.PhieuSanXuat" Multiplicity="*" />
+          <End Type="iClassicModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="iClassicModel.PhieuSanXuat" Role="PhieuSanXuat" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
               <PropertyRef Name="Id" />
@@ -331,8 +493,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PhieuSua_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
-          <End Role="PhieuSua" Type="Self.PhieuSua" Multiplicity="*" />
+          <End Type="iClassicModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="iClassicModel.PhieuSua" Role="PhieuSua" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
               <PropertyRef Name="Id" />
@@ -343,34 +505,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="AspNetUserRoles">
-          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+          <End Type="iClassicModel.AspNetRoles" Role="AspNetRoles" Multiplicity="*" />
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="iClassicEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" />
-          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
-          <EntitySet Name="Branch" EntityType="Self.Branch" />
-          <EntitySet Name="Customer" EntityType="Self.Customer" />
-          <EntitySet Name="PhieuChi" EntityType="Self.PhieuChi" />
-          <EntitySet Name="PhieuSanXuat" EntityType="Self.PhieuSanXuat" />
-          <EntitySet Name="PhieuSua" EntityType="Self.PhieuSua" />
-          <AssociationSet Name="FK_Customer_Branch" Association="Self.FK_Customer_Branch">
-            <End Role="Branch" EntitySet="Branch" />
-            <End Role="Customer" EntitySet="Customer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PhieuSanXuat_Customer" Association="Self.FK_PhieuSanXuat_Customer">
-            <End Role="Customer" EntitySet="Customer" />
-            <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PhieuSua_Customer" Association="Self.FK_PhieuSua_Customer">
-            <End Role="Customer" EntitySet="Customer" />
-            <End Role="PhieuSua" EntitySet="PhieuSua" />
-          </AssociationSet>
-          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
-            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -380,109 +517,110 @@
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="iClassicModel.AspNetRoles">
               <MappingFragment StoreEntitySet="AspNetRoles">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="iClassicModel.AspNetUsers">
               <MappingFragment StoreEntitySet="AspNetUsers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Branch">
             <EntityTypeMapping TypeName="iClassicModel.Branch">
               <MappingFragment StoreEntitySet="Branch">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
                 <ScalarProperty Name="SDT" ColumnName="SDT" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customer">
             <EntityTypeMapping TypeName="iClassicModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="MaKH" ColumnName="MaKH" />
-                <ScalarProperty Name="TenKH" ColumnName="TenKH" />
-                <ScalarProperty Name="SDT" ColumnName="SDT" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="SoDo" ColumnName="SoDo" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="SoDo" ColumnName="SoDo" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="SDT" ColumnName="SDT" />
+                <ScalarProperty Name="TenKH" ColumnName="TenKH" />
+                <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PhieuChi">
             <EntityTypeMapping TypeName="iClassicModel.PhieuChi">
               <MappingFragment StoreEntitySet="PhieuChi">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="MucChi" ColumnName="MucChi" />
-                <ScalarProperty Name="SoTien" ColumnName="SoTien" />
-                <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
-                <ScalarProperty Name="ChiNhanhId" ColumnName="ChiNhanhId" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ChiNhanhId" ColumnName="ChiNhanhId" />
+                <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
+                <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+                <ScalarProperty Name="MucChi" ColumnName="MucChi" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PhieuSanXuat">
             <EntityTypeMapping TypeName="iClassicModel.PhieuSanXuat">
               <MappingFragment StoreEntitySet="PhieuSanXuat">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
-                <ScalarProperty Name="MaVai" ColumnName="MaVai" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-                <ScalarProperty Name="DatCoc" ColumnName="DatCoc" />
-                <ScalarProperty Name="NgayThu" ColumnName="NgayThu" />
-                <ScalarProperty Name="NgayLay" ColumnName="NgayLay" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="NgayLay" ColumnName="NgayLay" />
+                <ScalarProperty Name="NgayThu" ColumnName="NgayThu" />
+                <ScalarProperty Name="DatCoc" ColumnName="DatCoc" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="MaVai" ColumnName="MaVai" />
+                <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PhieuSua">
             <EntityTypeMapping TypeName="iClassicModel.PhieuSua">
               <MappingFragment StoreEntitySet="PhieuSua">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
-                <ScalarProperty Name="NgayNhan" ColumnName="NgayNhan" />
-                <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
+                <ScalarProperty Name="NgayNhan" ColumnName="NgayNhan" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <AssociationSetMapping Name="AspNetUserRoles" TypeName="iClassicModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
-            <EndProperty Name="AspNetRoles">
-              <ScalarProperty Name="Id" ColumnName="RoleId" />
-            </EndProperty>
             <EndProperty Name="AspNetUsers">
               <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRoles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

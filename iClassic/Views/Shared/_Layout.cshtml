@@ -10,6 +10,8 @@
     <title>@ViewBag.Title - iClassic</title>
     <link href="@Url.Content("~/css/style.default.css")" rel="stylesheet">
     <link href="@Url.Content("~/css/font.helvetica-neue.css")" rel="stylesheet" />
+    @RenderSection("Styles", false)
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="../../js/html5shiv.js"></script>
@@ -138,7 +140,40 @@
     <script src="@Url.Content("~/js/jquery.cookies.js")"></script>
     <script src="@Url.Content("~/js/custom.js")"></script>
     <script src="@Url.Content("~/Scripts/iClassic.js")"></script>
+    @{
+        var searchModel = new iClassic.Models.SortPagingBase();
+        if (ViewBag.SearchModel != null)
+        {
+            searchModel = ViewBag.SearchModel as iClassic.Models.SortPagingBase;
+        }
+    }
+    <script>
+        jQuery(document).ready(function () {
+            "use strict";
+
+            $(".btnConfirm").click(function () {
+                var isConfirm = confirm("Bạn có chắc chắn muốn xóa bản ghi này?");
+                return isConfirm;
+            });
+
+            $(".sortField").click(function () {
+                var sortName = $(this).attr("data-sortName");
+                var sortOrder = sortName == '@searchModel.SortName'
+                                ? ('@((int)searchModel.SortOrder)' == '@((int)SortDirection.Ascending)'
+                                    ? '@((int)SortDirection.Descending)'
+                                    : '@((int)SortDirection.Ascending)'
+                                  )
+                                : '@((int)SortDirection.Ascending)';
+                $("#SortName").val(sortName);
+                $("#SortOrder").val(sortOrder);
+                $("#frmSearch").submit();
+            });
+
+            $("#btnSearch").click(function () {
+                $("#frmSearch").submit();
+            });
+        });
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
-

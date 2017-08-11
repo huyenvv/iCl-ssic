@@ -4,109 +4,110 @@
     <EntitySetMapping Name="AspNetRoles">
       <EntityTypeMapping TypeName="iClassicModel.AspNetRoles">
         <MappingFragment StoreEntitySet="AspNetRoles">
-          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="AspNetUsers">
       <EntityTypeMapping TypeName="iClassicModel.AspNetUsers">
         <MappingFragment StoreEntitySet="AspNetUsers">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Branch">
       <EntityTypeMapping TypeName="iClassicModel.Branch">
         <MappingFragment StoreEntitySet="Branch">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
           <ScalarProperty Name="SDT" ColumnName="SDT" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Customer">
       <EntityTypeMapping TypeName="iClassicModel.Customer">
         <MappingFragment StoreEntitySet="Customer">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="MaKH" ColumnName="MaKH" />
-          <ScalarProperty Name="TenKH" ColumnName="TenKH" />
-          <ScalarProperty Name="SDT" ColumnName="SDT" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="Image" ColumnName="Image" />
-          <ScalarProperty Name="SoDo" ColumnName="SoDo" />
-          <ScalarProperty Name="Note" ColumnName="Note" />
-          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
           <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="SoDo" ColumnName="SoDo" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="SDT" ColumnName="SDT" />
+          <ScalarProperty Name="TenKH" ColumnName="TenKH" />
+          <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="PhieuChi">
       <EntityTypeMapping TypeName="iClassicModel.PhieuChi">
         <MappingFragment StoreEntitySet="PhieuChi">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="MucChi" ColumnName="MucChi" />
-          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
-          <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
-          <ScalarProperty Name="ChiNhanhId" ColumnName="ChiNhanhId" />
-          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
           <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="ChiNhanhId" ColumnName="ChiNhanhId" />
+          <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
+          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+          <ScalarProperty Name="MucChi" ColumnName="MucChi" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="PhieuSanXuat">
       <EntityTypeMapping TypeName="iClassicModel.PhieuSanXuat">
         <MappingFragment StoreEntitySet="PhieuSanXuat">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
-          <ScalarProperty Name="MaVai" ColumnName="MaVai" />
-          <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-          <ScalarProperty Name="DatCoc" ColumnName="DatCoc" />
-          <ScalarProperty Name="NgayThu" ColumnName="NgayThu" />
-          <ScalarProperty Name="NgayLay" ColumnName="NgayLay" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
-          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
           <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="NgayLay" ColumnName="NgayLay" />
+          <ScalarProperty Name="NgayThu" ColumnName="NgayThu" />
+          <ScalarProperty Name="DatCoc" ColumnName="DatCoc" />
+          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+          <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+          <ScalarProperty Name="MaVai" ColumnName="MaVai" />
+          <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="PhieuSua">
       <EntityTypeMapping TypeName="iClassicModel.PhieuSua">
         <MappingFragment StoreEntitySet="PhieuSua">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
-          <ScalarProperty Name="NgayNhan" ColumnName="NgayNhan" />
-          <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
-          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
           <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
+          <ScalarProperty Name="NgayNhan" ColumnName="NgayNhan" />
+          <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <AssociationSetMapping Name="AspNetUserRoles" TypeName="iClassicModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
-      <EndProperty Name="AspNetRoles">
-        <ScalarProperty Name="Id" ColumnName="RoleId" />
-      </EndProperty>
       <EndProperty Name="AspNetUsers">
         <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+      <EndProperty Name="AspNetRoles">
+        <ScalarProperty Name="Id" ColumnName="RoleId" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace iClassic.Services.Base
@@ -26,10 +27,26 @@ namespace iClassic.Services.Base
             return query;
         }
 
+        public T Find(params object[] keys)
+        {
+            return _entities.Set<T>().Find(keys);
+        }
+
+        public async Task<T> FindAsync(params object[] keys)
+        {
+            return await _entities.Set<T>().FindAsync(keys);
+        }
+
         public T FirstOrDefault(Expression<Func<T, bool>> predicate)
         {
             var obj = GetAll().FirstOrDefault(predicate);
             return obj;
+        }
+
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            var obj = GetAll().FirstOrDefaultAsync(predicate);
+            return await obj;
         }
 
         public IQueryable<T> GetAll()
@@ -38,7 +55,7 @@ namespace iClassic.Services.Base
             return query;
         }
 
-        public void Insert(T entity)
+        public virtual void Insert(T entity)
         {
             _entities.Set<T>().Add(entity);
         }
@@ -48,7 +65,12 @@ namespace iClassic.Services.Base
             _entities.SaveChanges();
         }
 
-        public void Update(T entity)
+        public async Task SaveAsync()
+        {
+            await _entities.SaveChangesAsync();
+        }
+
+        public virtual void Update(T entity)
         {
             _entities.Entry(entity).State = EntityState.Modified;
         }
