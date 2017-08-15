@@ -249,4 +249,3 @@ D:\PROJECT\iClassic\iClassic\bin\PagedList.dll
 D:\PROJECT\iClassic\iClassic\bin\PagedList.Mvc.dll
 D:\PROJECT\iClassic\iClassic\bin\PagedList.xml
 D:\PROJECT\iClassic\iClassic\bin\PagedList.Mvc.xml
-D:\PROJECT\iClassic\iClassic\obj\Debug\iClassic.csprojResolveAssemblyReference.cache

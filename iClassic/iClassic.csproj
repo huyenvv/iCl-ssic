@@ -898,8 +898,8 @@
     <Content Include="Views\Branches\NewOrEdit.cshtml" />
     <Content Include="Views\Branches\Index.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
-    <Content Include="Views\Customers\Index.cshtml" />
-    <Content Include="Views\Customers\NewOrEdit.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Customer\NewOrEdit.cshtml" />
     <Content Include="Views\Manage\Employees.cshtml" />
     <Content Include="Views\Manage\AddEmployee.cshtml" />
     <Content Include="Views\Manage\EditEmployee.cshtml" />
