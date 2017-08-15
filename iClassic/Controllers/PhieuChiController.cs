@@ -11,21 +11,21 @@ using iClassic.Helper;
 namespace iClassic.Controllers
 {
     [Override.Authorize]
-    public class BranchesController : BaseController
+    public class PhieuChiController : BaseController
     {
         private readonly ILog _log;
-        private BranchRepository _branchRepository;
+        private PhieuChiRepository _PhieuChiRepository;
 
-        public BranchesController()
+        public PhieuChiController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _branchRepository = new BranchRepository(_entities);
+            _PhieuChiRepository = new PhieuChiRepository(_entities);
         }
 
-        // GET: Branches
-        public ActionResult Index(BranchSearch model)
+        // GET: PhieuChies
+        public ActionResult Index(PhieuChiSearch model)
         {
-            var result = _branchRepository.Search(model);
+            var result = _PhieuChiRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
@@ -33,24 +33,24 @@ namespace iClassic.Controllers
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Branches/NewOrEdit/5
+        // GET: PhieuChies/NewOrEdit/5
         public async Task<ActionResult> NewOrEdit(int id = 0)
         {
-            var model = await _branchRepository.GetByIdAsync(id);
+            var model = await _PhieuChiRepository.GetByIdAsync(id);
             if (model == null)
             {
-                return View(new Branch());
+                return View(new PhieuChi());
             }
 
             return View(model);
         }
 
-        // POST: Branches/Edit/5
+        // POST: PhieuChies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,Address,SDT")] Branch model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,Address,SDT")] PhieuChi model)
         {
             try
             {
@@ -58,13 +58,13 @@ namespace iClassic.Controllers
                 {
                     if (model.Id == 0)
                     {
-                        _branchRepository.Insert(model);
+                        _PhieuChiRepository.Insert(model);
                     }
                     else
                     {
-                        _branchRepository.Update(model);
+                        _PhieuChiRepository.Update(model);
                     }
-                    await _branchRepository.SaveAsync();
+                    await _PhieuChiRepository.SaveAsync();
 
                     ShowMessageSuccess(Message.Update_Successfully);
 
@@ -80,7 +80,7 @@ namespace iClassic.Controllers
             return View(model);
         }
 
-        // GET: Branches/Delete/5
+        // GET: PhieuChies/Delete/5
         public async Task<ActionResult> Delete(int id = 0)
         {
             try
@@ -89,14 +89,14 @@ namespace iClassic.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var obj = await _branchRepository.GetByIdAsync(id);
+                var obj = await _PhieuChiRepository.GetByIdAsync(id);
                 if (obj == null)
                 {
                     return HttpNotFound();
                 }
-                _branchRepository.Delete(obj);
+                _PhieuChiRepository.Delete(obj);
 
-                await _branchRepository.SaveAsync();
+                await _PhieuChiRepository.SaveAsync();
 
                 ShowMessageSuccess(Message.Update_Successfully);
             }
@@ -113,7 +113,7 @@ namespace iClassic.Controllers
         {
             if (disposing)
             {
-                _branchRepository.Dispose();
+                _PhieuChiRepository.Dispose();
             }
             base.Dispose(disposing);
         }

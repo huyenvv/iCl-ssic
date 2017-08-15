@@ -46,7 +46,7 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.SoDo)
-                        @Html.TextAreaFor(model => model.SoDo, new { @class = "form-control" })
+                        @Html.TextAreaFor(model => model.SoDo, new { @class = "form-control", rows = "5" })
                         @Html.ValidationMessageFor(model => model.SoDo, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
@@ -55,7 +55,7 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Note)
-                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control" })
+                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", rows="5" })
                         @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
                     </div>
                 </div>

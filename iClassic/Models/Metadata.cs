@@ -27,4 +27,9 @@ namespace iClassic.Models
     public partial class PhieuSua
     {
     }
+
+    [MetadataType(typeof(LoaiVaiMetadata))]
+    public partial class LoaiVai
+    {
+    }
 }

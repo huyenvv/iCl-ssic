@@ -68,7 +68,7 @@ namespace iClassic.Services.Implementation
                         list = list.OrderBy(m => m.SoDo);
                         break;
                     case "CREATEDATE":
-                        list = list.OrderBy(m => m.CreateDate);
+                        list = list.OrderBy(m => m.Created);
                         break;
                     default:
                         list = list.OrderBy(m => m.Id);
@@ -95,7 +95,7 @@ namespace iClassic.Services.Implementation
                         list = list.OrderByDescending(m => m.SoDo);
                         break;
                     case "CREATEDATE":
-                        list = list.OrderByDescending(m => m.CreateDate);
+                        list = list.OrderByDescending(m => m.Created);
                         break;
                     default:
                         list = list.OrderByDescending(m => m.Id);
@@ -107,7 +107,7 @@ namespace iClassic.Services.Implementation
 
         public override void Insert(Customer model)
         {
-            model.CreateDate = DateTime.Now;
+            model.Created = DateTime.Now;
             base.Insert(model);
         }
 

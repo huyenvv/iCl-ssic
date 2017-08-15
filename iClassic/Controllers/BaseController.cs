@@ -1,5 +1,6 @@
 ﻿using iClassic.Helper;
 using iClassic.Models;
+using iClassic.Services.Implementation;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace iClassic.Controllers
         public iClassicEntities _entities;
         public int _pageSize = 10;
         private AspNetUsers _currentUser;
+        private BranchRepository _branchRepository;
         public BaseController()
         {
             _entities = new iClassicEntities();
+            _branchRepository = new BranchRepository(_entities);
         }
 
         public AspNetUsers CurrentUser
@@ -47,6 +50,11 @@ namespace iClassic.Controllers
         public void ShowMessageSuccess(string message)
         {
             SessionHelpers.Set(Constant.SESSION_MessageSuccess, message);
-        }     
+        }
+
+        public void CreateBrachViewBag(int selectedBranchId)
+        {
+            ViewBag.BranchId = new SelectList(_branchRepository.GetAll(), "Id", "Name", selectedBranchId);
+        }
     }
 }

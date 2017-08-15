@@ -7,28 +7,25 @@ using iClassic.Services.Implementation;
 using PagedList;
 using log4net;
 using iClassic.Helper;
-using System.Web;
 
 namespace iClassic.Controllers
 {
     [Override.Authorize]
-    public class CustomersController : BaseController
+    public class LoaiVaiController : BaseController
     {
         private readonly ILog _log;
-        private CustomerRepository _customerRepository;
-        private BranchRepository _branchRepository;
+        private LoaiVaiRepository _LoaiVaiRepository;
 
-        public CustomersController()
+        public LoaiVaiController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _customerRepository = new CustomerRepository(_entities);
-            _branchRepository = new BranchRepository(_entities);
+            _LoaiVaiRepository = new LoaiVaiRepository(_entities);
         }
 
-        // GET: Customeres
-        public ActionResult Index(CustomerSearch model)
+        // GET: LoaiVaies
+        public ActionResult Index(LoaiVaiSearch model)
         {
-            var result = _customerRepository.Search(model);
+            var result = _LoaiVaiRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
@@ -37,45 +34,39 @@ namespace iClassic.Controllers
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Customeres/NewOrEdit/5
+        // GET: LoaiVaies/NewOrEdit/5
         public async Task<ActionResult> NewOrEdit(int id = 0)
         {
-            var model = await _customerRepository.GetByIdAsync(id);
+            var model = await _LoaiVaiRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new Customer();
+                return View(new LoaiVai());
             }
-            CreateBrachViewBag(CurrentUser.BranchId);
+            CreateBrachViewBag(model.BranchId);
             return View(model);
         }
 
-        // POST: Customeres/Edit/5
+        // POST: LoaiVaies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenKH,Address,SDT,SoDo,BranchId")] Customer model, HttpPostedFileBase fileImage)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,SoTien,MaVai,Note,BranchId")] LoaiVai model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (fileImage != null)
-                    {
-                        var fileName = FileHelper.CreateFile(fileImage, UploadFolder.KhachHang);
-                        model.Image = fileName;
-                    }
-
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
-                        _customerRepository.Insert(model);
+                        _LoaiVaiRepository.Insert(model);
                     }
                     else
                     {
-                        _customerRepository.Update(model);
-                    }                    
-                    await _customerRepository.SaveAsync();
+                        _LoaiVaiRepository.Update(model);
+                    }
+                    await _LoaiVaiRepository.SaveAsync();
 
                     ShowMessageSuccess(Message.Update_Successfully);
 
@@ -92,7 +83,7 @@ namespace iClassic.Controllers
             return View(model);
         }
 
-        // GET: Customeres/Delete/5
+        // GET: LoaiVaies/Delete/5
         public async Task<ActionResult> Delete(int id = 0)
         {
             try
@@ -101,14 +92,14 @@ namespace iClassic.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var obj = await _customerRepository.GetByIdAsync(id);
+                var obj = await _LoaiVaiRepository.GetByIdAsync(id);
                 if (obj == null)
                 {
                     return HttpNotFound();
                 }
-                _customerRepository.Delete(obj);
+                _LoaiVaiRepository.Delete(obj);
 
-                await _customerRepository.SaveAsync();
+                await _LoaiVaiRepository.SaveAsync();
 
                 ShowMessageSuccess(Message.Update_Successfully);
             }
@@ -121,17 +112,11 @@ namespace iClassic.Controllers
             return RedirectToAction("Index");
         }
 
-        private void CreateBrachViewBag(int selectedBranchId)
-        {
-            ViewBag.BranchId = new SelectList(_branchRepository.GetAll(), "Id", "Name", selectedBranchId);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _branchRepository.Dispose();
-                _customerRepository.Dispose();
+                _LoaiVaiRepository.Dispose();
             }
             base.Dispose(disposing);
         }

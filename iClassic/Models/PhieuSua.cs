@@ -21,7 +21,7 @@ namespace iClassic.Models
         public int Status { get; set; }
         public int KhachHangId { get; set; }
         public string CreateBy { get; set; }
-        public System.DateTime CreateDate { get; set; }
+        public System.DateTime Created { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Customer Customer { get; set; }

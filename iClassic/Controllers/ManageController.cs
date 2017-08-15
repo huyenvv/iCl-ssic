@@ -7,23 +7,34 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using iClassic.Models;
+using iClassic.Helper;
+using PagedList;
+using iClassic.Services.Implementation;
+using log4net;
+using System.Net;
 
 namespace iClassic.Controllers
 {
-    [Override.Authorize]
+    [Override.Authorize(RoleList.Admin)]
     public class ManageController : BaseController
     {
+        private readonly ILog _log;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private UsersRepository _userRepository;
 
         public ManageController()
         {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _userRepository = new UsersRepository(_entities);
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             UserManager = userManager;
             SignInManager = signInManager;
+            _userRepository = new UsersRepository(_entities);
         }
 
         public ApplicationSignInManager SignInManager
@@ -32,9 +43,9 @@ namespace iClassic.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -322,6 +333,176 @@ namespace iClassic.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
+        public ActionResult Employees(EmployeeSearch model)
+        {
+            var result = _userRepository.Search(model);
+            int pageSize = model?.PageSize ?? _pageSize;
+            int pageNumber = (model?.Page ?? 1);
+
+            ViewBag.SearchModel = model;
+            CreateBrachViewBag(model.BranchId);
+            return View(result.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult AddEmployee()
+        {
+            CreateBrachViewBag(0);
+            return View(new EmployeeModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddEmployee(EmployeeModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.UserName,
+                        Email = string.IsNullOrWhiteSpace(model.Email) ? "Empty@iclassic.vn" : model.Email,
+                        PhoneNumber = model.PhoneNumber,
+                        Name = model.Name,
+                        BranchId = CurrentUser.BranchId
+                    };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        result = await UserManager.AddToRoleAsync(user.Id, RoleList.Employee);
+                        if (result.Succeeded)
+                        {
+                            ShowMessageSuccess(Message.Update_Successfully);
+                            return RedirectToAction("Employees");
+                        }
+                        await UserManager.DeleteAsync(user);
+                    }
+
+                    AddErrors(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Info(ex.ToString());
+
+                ShowMessageError(Message.Update_Fail);
+            }
+            CreateBrachViewBag(model.BranchId);
+            return View(model);
+        }
+
+        public async Task<ActionResult> EditEmployee(string id)
+        {
+            var obj = await UserManager.FindByIdAsync(id);
+            if (obj == null || UserManager.IsInRole(obj.Id, RoleList.Admin))
+            {
+                return HttpNotFound();
+            }
+            CreateBrachViewBag(0);
+            return View(obj.ToModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditEmployee(EmployeeEditModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = await UserManager.FindByIdAsync(model.Id);
+
+                    user.UserName = model.UserName;
+                    user.Email = string.IsNullOrWhiteSpace(model.Email) ? "Empty@iclassic.vn" : model.Email;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.Name = model.Name;
+                    user.BranchId = model.BranchId;
+                    user.IsActive = model.IsActive;
+
+                    var result = await UserManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        ShowMessageSuccess(Message.Update_Successfully);
+                        return RedirectToAction("Employees");
+                    }
+
+                    AddErrors(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Info(ex.ToString());
+
+                ShowMessageError(Message.Update_Fail);
+            }
+            CreateBrachViewBag(model.BranchId);
+            return View(model);
+        }
+
+        public async Task<ActionResult> SetPasswordEmployee(string id)
+        {
+            var obj = await UserManager.FindByIdAsync(id);
+            if (obj == null || UserManager.IsInRole(obj.Id, RoleList.Admin))
+            {
+                return HttpNotFound();
+            }
+            return View(new ChangePassword { Id = obj.Id, Name = obj.Name });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SetPasswordEmployee(ChangePassword model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = await UserManager.FindByIdAsync(model.Id);
+                    var token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                    var result = await UserManager.ResetPasswordAsync(user.Id, token, model.Password);
+                    if (result.Succeeded)
+                    {
+                        ShowMessageSuccess(Message.Update_Successfully);
+                        return RedirectToAction("Employees");
+                    }
+
+                    AddErrors(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Info(ex.ToString());
+
+                ShowMessageError(Message.Update_Fail);
+            }
+            return View(model);
+        }
+
+        public async Task<ActionResult> DeleteEmployee(string id = "")
+        {
+            try
+            {
+                if (id == "")
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var obj = await UserManager.FindByIdAsync(id);
+                if (obj == null || UserManager.IsInRole(obj.Id, RoleList.Admin))
+                {
+                    return HttpNotFound();
+                }
+                await UserManager.DeleteAsync(obj);
+
+                ShowMessageSuccess(Message.Delete_Successfully);
+            }
+            catch (Exception ex)
+            {
+                ShowMessageError(Message.Update_Fail);
+
+                _log.Info(ex.ToString());
+            }
+            return RedirectToAction("Employees");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)
@@ -333,7 +514,7 @@ namespace iClassic.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -349,6 +530,22 @@ namespace iClassic.Controllers
         {
             foreach (var error in result.Errors)
             {
+                if (error.Contains("Passwords must have at least one"))
+                {
+                    ModelState.AddModelError("", "Mật khẩu phải chứa ít nhất 1 kí tự hoa, 1 kí tự số và 1 kí tự đặc biệt.");
+                    continue;
+                }
+                if (error.Contains("Name") && error.Contains("is already taken"))
+                {
+                    ModelState.AddModelError("", "Tài khoản đã có người sử dụng");
+                    continue;
+                }
+                if (error.Contains("Email") && error.Contains("is invalid"))
+                {
+                    ModelState.AddModelError("", "Sai định dạng email");
+                    continue;
+                }
+
                 ModelState.AddModelError("", error);
             }
         }
@@ -384,6 +581,6 @@ namespace iClassic.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

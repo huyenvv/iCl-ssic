@@ -1,5 +1,18 @@
-﻿<a href="javascript:document.getElementById('logoutForm').submit()"><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
-@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-{
-    @Html.AntiForgeryToken()    
+﻿@using iClassic.Controllers
+@{
+    var user = ((BaseController)ViewContext.Controller).CurrentUser;
 }
+<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    @user.Name
+    <span class="caret"></span>
+</button>
+<ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+    <li><a href="@Url.Action("Settings","Account")"><i class="glyphicon glyphicon-cog"></i>Tài khoản</a></li>
+    <li>
+        <a href="javascript:document.getElementById('logoutForm').submit()"><i class="glyphicon glyphicon-log-out"></i> Đăng xuất</a>
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+        {
+            @Html.AntiForgeryToken()
+        }
+    </li>
+</ul>

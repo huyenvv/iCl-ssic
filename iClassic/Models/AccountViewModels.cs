@@ -80,6 +80,8 @@ namespace iClassic.Models
         public string ConfirmPassword { get; set; }
     }
 
+
+
     public class ResetPasswordViewModel
     {
         [Required]
@@ -107,5 +109,20 @@ namespace iClassic.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+
+    public class ChangePassword
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        [Required(ErrorMessage = "Bạn chưa nhập {0}")]
+        [StringLength(100, ErrorMessage = "{0} phải chưa đủ {2} kí tự.", MinimumLength = 6)]
+        [DataType(DataType.Password, ErrorMessage = "{0} phải chứa ít nhất 1 kí tự hoa, 1 kí tự số và 1 kí tự đặc biệt.")]
+        [Display(Name = "Mật khẩu")]
+        public string Password { get; set; }
+
+        [Display(Name = "Nhập lại mật khẩu")]
+        [Compare("Password", ErrorMessage = "Mật khẩu không khớp.")]
+        public string ConfirmPassword { get; set; }
     }
 }

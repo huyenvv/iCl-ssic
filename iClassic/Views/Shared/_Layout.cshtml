@@ -34,31 +34,21 @@
                 </a>
             </div><!-- logopanel -->
             <div class="leftpanelinner">
-                <!-- This is only visible to small devices -->
-                <div class="visible-xs hidden-sm hidden-md hidden-lg">
-                    <div class="media userlogged">
-                        <img alt="" src="images/photos/loggeduser.png" class="media-object">
-                        <div class="media-body">
-                            <h4>John Doe</h4>
-                            <span>"Life is so..."</span>
-                        </div>
-                    </div>
-                    <h5 class="sidebartitle actitle">Account</h5>
-                    <ul class="nav nav-pills nav-stacked nav-bracket mb30">
-                        <li><a href=""><i class="fa fa-cog"></i> <span>Change Password</span></a></li>
-                        <li>@Html.Partial("_LoginPartial")</li>
-                    </ul>
-                </div>
                 <h5 class="sidebartitle">Navigation</h5>
                 <ul class="nav nav-pills nav-stacked nav-bracket" id="LeftMenu">
                     <li><a href="@Url.Action("Index", "Home")" data-href="Home/Index"><i class="fa fa-home"></i> <span>Trang chủ</span></a></li>
-                    <li><a href="@Url.Action("Index", "Customers")" data-href="Index"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
-                    <li><a href="@Url.Action("Contact", "Home")"><i class="fa fa-dollar"></i> <span>Phiếu sản xuất</span></a></li>
-                    <li><a href="@Url.Action("About", "Home")"><i class="fa fa-cog"></i> <span>Phiếu sửa chữa</span></a></li>
-                    <li><a href="@Url.Action("About", "Home")"><i class="fa fa-dollar"></i> <span>Phiếu chi</span></a></li>
-                    <li><a href="@Url.Action("About", "Home")"><i class="fa fa-dollar"></i> <span>Thống kê</span></a></li>
-                    <li><a href="@Url.Action("Index", "Branches")" data-href="Index"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
-                    <li><a href="@Url.Action("About", "Home")"><i class="fa fa-user"></i> <span>Nhân viên</span></a></li>
+                    <li><a href="@Url.Action("Index", "PhieuSanXuat")" data-href="Index"><i class="fa fa-dollar"></i> <span>Phiếu sản xuất</span></a></li>
+                    <li><a href="@Url.Action("Index", "PhieuSua")" data-href="Index"><i class="fa fa-cog"></i> <span>Phiếu sửa chữa</span></a></li>
+                    <li><a href="@Url.Action("Index", "PhieuChi")" data-href="Index"><i class="fa fa-dollar"></i> <span>Phiếu chi</span></a></li>
+                    
+                    @if (User.IsInRole(RoleList.Admin))
+                    {
+                        <li><a href="@Url.Action("Index", "Customer")" data-href="Index"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
+                        <li><a href="@Url.Action("Index", "LoaiVai")" data-href="Index"><i class="fa fa-bars"></i> <span>Loại vải</span></a></li>
+                        <li><a href="@Url.Action("Index", "Branch")" data-href="Index"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
+                        <li><a href="@Url.Action("Employees", "Manage")"><i class="fa fa-user"></i> <span>Nhân viên</span></a></li>
+                        <li><a href="@Url.Action("Index", "Statistic")" data-href="Index"><i class="fa fa-bar-chart-o"></i> <span>Thống kê</span></a></li>
+                    }
                 </ul>
             </div><!-- leftpanelinner -->
         </div><!-- leftpanel -->
@@ -69,19 +59,7 @@
                     <ul class="headermenu">
                         <li>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                    <img src="images/photos/loggeduser.png" alt="" />
-                                    John Doe
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                    <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
-                                    <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Account Settings</a></li>
-                                    <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
-                                    <li>
-                                        @Html.Partial("_LoginPartial")
-                                    </li>
-                                </ul>
+                                @Html.Partial("_LoginPartial")
                             </div>
                         </li>
                     </ul>

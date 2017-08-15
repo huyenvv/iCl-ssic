@@ -20,7 +20,7 @@ namespace iClassic.Models
         public string NguoiNhanPhieu { get; set; }
         public int ChiNhanhId { get; set; }
         public string CreateBy { get; set; }
-        public System.DateTime CreateDate { get; set; }
+        public System.DateTime Created { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
     }

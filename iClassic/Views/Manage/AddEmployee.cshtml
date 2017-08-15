@@ -1,0 +1,69 @@
+﻿@using iClassic.Models;
+@model EmployeeModel
+@{
+    ViewBag.Class = "fa fa-user";
+    ViewBag.Title = "Thêm mới nhân viên";
+    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Employees") + "'>Nhân viên</a>" +
+                            "<span>Thêm mới</span>";
+}
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row mb10">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BranchId)
+                        @Html.DropDownList("BranchId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.BranchId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="UserName">Tên tài khoản <span class="asterisk">*</span></label>
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Tên tài khoản" })
+                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">E-mail</label>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "E-mail" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="Họ tên">Họ tên</label>
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Họ tên" })
+                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Mật khẩu <span class="asterisk">*</span></label>
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Mật khẩu" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="ConfirmPassword">Nhập lại mật khẩu <span class="asterisk">*</span></label>
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Nhập lại mật khẩu" })
+                        <div class="text-warning">Mật khẩu phải chứa ít nhất 1 kí tự hoa, 1 kí tự số và 1 kí tự đặc biệt.</div>
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div><!-- panel-body -->
+    </div><!-- panel -->
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-lightblue">Save</button>
+            <a href="@Url.Action("Employees")" class="btn btn-default">Quay lại</a>
+        </div>
+    </div>
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -30,7 +30,7 @@ namespace iClassic.Models
         public Nullable<int> SoDo { get; set; }
         public string Note { get; set; }
         public int BranchId { get; set; }
-        public System.DateTime CreateDate { get; set; }
+        public System.DateTime Created { get; set; }
         public string CreateBy { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
