@@ -139,7 +139,7 @@ namespace iClassic.Models
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Bạn chưa nhập {0}")]
-        [StringLength(100, ErrorMessage = "{0} phải chưa đủ {2} kí tự.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "{0} chưa đủ {2} kí tự.", MinimumLength = 6)]
         [Display(Name = "Mật khẩu cũ")]
         public string OldPassword { get; set; }
     }

@@ -538,6 +538,12 @@ namespace iClassic.Controllers
                     continue;
                 }
 
+                if (error.Contains("Incorrect password"))
+                {
+                    ModelState.AddModelError("", "Mật khẩu cũ không đúng.");
+                    continue;
+                }
+
                 ModelState.AddModelError("", error);
             }
         }
