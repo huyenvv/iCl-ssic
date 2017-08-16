@@ -82,7 +82,7 @@
     <Property Name="MucChi" Type="nvarchar" MaxLength="500" Nullable="false" />
     <Property Name="SoTien" Type="float" Nullable="false" />
     <Property Name="NguoiNhanPhieu" Type="nvarchar" MaxLength="500" Nullable="false" />
-    <Property Name="ChiNhanhId" Type="int" Nullable="false" />
+    <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
   </EntityType>

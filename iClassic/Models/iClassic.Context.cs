@@ -30,8 +30,8 @@ namespace iClassic.Models
         public virtual DbSet<Branch> Branch { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<LoaiVai> LoaiVai { get; set; }
-        public virtual DbSet<PhieuChi> PhieuChi { get; set; }
         public virtual DbSet<PhieuSanXuat> PhieuSanXuat { get; set; }
         public virtual DbSet<PhieuSua> PhieuSua { get; set; }
+        public virtual DbSet<PhieuChi> PhieuChi { get; set; }
     }
 }

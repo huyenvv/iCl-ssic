@@ -31,58 +31,56 @@ namespace iClassic.Services.Implementation
         {
             var list = GetAll();
 
-            //if (!string.IsNullOrWhiteSpace(model.SearchText))
-            //{
-            //    model.SearchText = model.SearchText.ToUpper();
-            //    list = list.Where(m => m.Name.ToUpper().Contains(model.SearchText) ||
-            //            m.Address.ToUpper().Contains(model.SearchText) ||
-            //            m.Id.ToString().ToUpper().Contains(model.SearchText) ||
-            //            m.SDT.ToUpper().Contains(model.SearchText));
-            //}
+            if (!string.IsNullOrWhiteSpace(model.SearchText))
+            {
+                model.SearchText = model.SearchText.ToUpper();
+                list = list.Where(m => m.MucChi.ToUpper().Contains(model.SearchText) ||
+                        m.NguoiNhanPhieu.ToUpper().Contains(model.SearchText));
+            }
 
-            //var sortNameUpper = !string.IsNullOrEmpty(model.SortName) ? model.SortName.ToUpper() : "";
-            //if (model.SortOrder == SortDirection.Ascending)
-            //{
-            //    switch (sortNameUpper)
-            //    {
-            //        case "ID":
-            //            list = list.OrderBy(m => m.Id);
-            //            break;
-            //        case "ADDRESS":
-            //            list = list.OrderBy(m => m.Address);
-            //            break;
-            //        case "NAME":
-            //            list = list.OrderBy(m => m.Name);
-            //            break;
-            //        case "SDT":
-            //            list = list.OrderBy(m => m.Address);
-            //            break;
-            //        default:
-            //            list = list.OrderBy(m => m.Created);
-            //            break;
-            //    }
-            //}
-            //else
-            //{
-            //    switch (sortNameUpper)
-            //    {
-            //        case "ID":
-            //            list = list.OrderByDescending(m => m.Id);
-            //            break;
-            //        case "ADDRESS":
-            //            list = list.OrderByDescending(m => m.Address);
-            //            break;
-            //        case "NAME":
-            //            list = list.OrderByDescending(m => m.Name);
-            //            break;
-            //        case "SDT":
-            //            list = list.OrderByDescending(m => m.Address);
-            //            break;
-            //        default:
-            //            list = list.OrderByDescending(m => m.Created);
-            //            break;
-            //    }
-            //}
+            var sortNameUpper = !string.IsNullOrEmpty(model.SortName) ? model.SortName.ToUpper() : "";
+            if (model.SortOrder == SortDirection.Ascending)
+            {
+                switch (sortNameUpper)
+                {
+                    case "MUCCHI":
+                        list = list.OrderBy(m => m.Id);
+                        break;
+                    case "SOTIEN":
+                        list = list.OrderBy(m => m.SoTien);
+                        break;
+                    case "NGUOINHANPHIEU":
+                        list = list.OrderBy(m => m.NguoiNhanPhieu);
+                        break;
+                    case "CREATED":
+                        list = list.OrderBy(m => m.Created);
+                        break;
+                    default:
+                        list = list.OrderBy(m => m.Created);
+                        break;
+                }
+            }
+            else
+            {
+                switch (sortNameUpper)
+                {
+                    case "MUCCHI":
+                        list = list.OrderByDescending(m => m.Id);
+                        break;
+                    case "SOTIEN":
+                        list = list.OrderByDescending(m => m.SoTien);
+                        break;
+                    case "NGUOINHANPHIEU":
+                        list = list.OrderByDescending(m => m.NguoiNhanPhieu);
+                        break;
+                    case "CREATED":
+                        list = list.OrderByDescending(m => m.Created);
+                        break;
+                    default:
+                        list = list.OrderByDescending(m => m.Created);
+                        break;
+                }
+            }
             return list;
         }
 
@@ -95,9 +93,10 @@ namespace iClassic.Services.Implementation
         public override void Update(PhieuChi model)
         {
             var obj = GetById(model.Id);
-            //obj.Address = model.Address;
-            //obj.Name = model.Name;
-            //obj.SDT = model.SDT;
+            obj.MucChi = model.MucChi;
+            obj.SoTien = model.SoTien;
+            obj.NguoiNhanPhieu = model.NguoiNhanPhieu;
+            obj.BranchId = model.BranchId;
             base.Update(obj);
         }
     }

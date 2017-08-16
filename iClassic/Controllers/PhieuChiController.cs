@@ -14,34 +14,36 @@ namespace iClassic.Controllers
     public class PhieuChiController : BaseController
     {
         private readonly ILog _log;
-        private PhieuChiRepository _PhieuChiRepository;
+        private PhieuChiRepository _phieuChiRepository;
 
         public PhieuChiController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _PhieuChiRepository = new PhieuChiRepository(_entities);
+            _phieuChiRepository = new PhieuChiRepository(_entities);
         }
 
         // GET: PhieuChies
         public ActionResult Index(PhieuChiSearch model)
         {
-            var result = _PhieuChiRepository.Search(model);
+            var result = _phieuChiRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
+            CreateBrachViewBag(model.BranchId);
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: PhieuChies/NewOrEdit/5
         public async Task<ActionResult> NewOrEdit(int id = 0)
         {
-            var model = await _PhieuChiRepository.GetByIdAsync(id);
+            var model = await _phieuChiRepository.GetByIdAsync(id);
             if (model == null)
             {
-                return View(new PhieuChi());
+                model = new PhieuChi();
             }
 
+            CreateBrachViewBag(model.BranchId);
             return View(model);
         }
 
@@ -50,7 +52,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,Address,SDT")] PhieuChi model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,MucChi,SoTien,NguoiNhanPhieu,ChiNhanhId")] PhieuChi model)
         {
             try
             {
@@ -58,13 +60,14 @@ namespace iClassic.Controllers
                 {
                     if (model.Id == 0)
                     {
-                        _PhieuChiRepository.Insert(model);
+                        model.CreateBy = CurrentUserId;
+                        _phieuChiRepository.Insert(model);
                     }
                     else
                     {
-                        _PhieuChiRepository.Update(model);
+                        _phieuChiRepository.Update(model);
                     }
-                    await _PhieuChiRepository.SaveAsync();
+                    await _phieuChiRepository.SaveAsync();
 
                     ShowMessageSuccess(Message.Update_Successfully);
 
@@ -77,6 +80,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
+            CreateBrachViewBag(model.BranchId);
             return View(model);
         }
 
@@ -89,14 +93,14 @@ namespace iClassic.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var obj = await _PhieuChiRepository.GetByIdAsync(id);
+                var obj = await _phieuChiRepository.GetByIdAsync(id);
                 if (obj == null)
                 {
                     return HttpNotFound();
                 }
-                _PhieuChiRepository.Delete(obj);
+                _phieuChiRepository.Delete(obj);
 
-                await _PhieuChiRepository.SaveAsync();
+                await _phieuChiRepository.SaveAsync();
 
                 ShowMessageSuccess(Message.Update_Successfully);
             }
@@ -113,7 +117,7 @@ namespace iClassic.Controllers
         {
             if (disposing)
             {
-                _PhieuChiRepository.Dispose();
+                _phieuChiRepository.Dispose();
             }
             base.Dispose(disposing);
         }

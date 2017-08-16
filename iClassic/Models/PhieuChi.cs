@@ -18,7 +18,7 @@ namespace iClassic.Models
         public string MucChi { get; set; }
         public double SoTien { get; set; }
         public string NguoiNhanPhieu { get; set; }
-        public int ChiNhanhId { get; set; }
+        public int BranchId { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime Created { get; set; }
     

@@ -13,17 +13,17 @@ namespace iClassic.Models
     {
     }
 
-    //[MetadataType(typeof(BranchMetadata))]
+    [MetadataType(typeof(PhieuChiMetadata))]
     public partial class PhieuChi
-    {
+    {        
     }
 
-    //[MetadataType(typeof(BranchMetadata))]
+    [MetadataType(typeof(PhieuSanXuatMetadata))]
     public partial class PhieuSanXuat
     {
     }
 
-    //[MetadataType(typeof(BranchMetadata))]
+    [MetadataType(typeof(PhieuSuaMetadata))]
     public partial class PhieuSua
     {
     }

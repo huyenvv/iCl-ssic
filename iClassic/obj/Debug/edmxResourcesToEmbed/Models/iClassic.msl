@@ -72,19 +72,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PhieuChi">
-      <EntityTypeMapping TypeName="iClassicModel.PhieuChi">
-        <MappingFragment StoreEntitySet="PhieuChi">
-          <ScalarProperty Name="Created" ColumnName="Created" />
-          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-          <ScalarProperty Name="ChiNhanhId" ColumnName="ChiNhanhId" />
-          <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
-          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
-          <ScalarProperty Name="MucChi" ColumnName="MucChi" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="PhieuSanXuat">
       <EntityTypeMapping TypeName="iClassicModel.PhieuSanXuat">
         <MappingFragment StoreEntitySet="PhieuSanXuat">
@@ -125,5 +112,18 @@
         <ScalarProperty Name="Id" ColumnName="RoleId" />
       </EndProperty>
     </AssociationSetMapping>
+    <EntitySetMapping Name="PhieuChi">
+      <EntityTypeMapping TypeName="iClassicModel.PhieuChi">
+        <MappingFragment StoreEntitySet="PhieuChi">
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
+          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+          <ScalarProperty Name="MucChi" ColumnName="MucChi" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

@@ -270,6 +270,9 @@
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Metadata\AspNetUsersMetadata.cs" />
+    <Compile Include="Models\Metadata\PhieuChiMetadata.cs" />
+    <Compile Include="Models\Metadata\PhieuSanXuatMetadata.cs" />
+    <Compile Include="Models\Metadata\PhieuSuaMetadata.cs" />
     <Compile Include="Models\PhieuSanXuatSearch.cs" />
     <Compile Include="Models\LoaiVaiSearch.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -898,8 +901,8 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Branches\NewOrEdit.cshtml" />
-    <Content Include="Views\Branches\Index.cshtml" />
+    <Content Include="Views\Branch\NewOrEdit.cshtml" />
+    <Content Include="Views\Branch\Index.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Customer\NewOrEdit.cshtml" />
@@ -915,6 +918,9 @@
     <Content Include="Views\PhieuSua\Index.cshtml" />
     <Content Include="Views\Account\Settings.cshtml" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\PhieuChi\NewOrEdit.cshtml" />
+    <Content Include="Views\PhieuSua\NewOrEdit.cshtml" />
+    <Content Include="Views\PhieuSanXuat\NewOrEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

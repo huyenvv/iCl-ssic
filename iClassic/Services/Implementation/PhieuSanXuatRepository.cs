@@ -31,58 +31,107 @@ namespace iClassic.Services.Implementation
         {
             var list = GetAll();
 
-            //if (!string.IsNullOrWhiteSpace(model.SearchText))
-            //{
-            //    model.SearchText = model.SearchText.ToUpper();
-            //    list = list.Where(m => m.Name.ToUpper().Contains(model.SearchText) ||
-            //            m.Address.ToUpper().Contains(model.SearchText) ||
-            //            m.Id.ToString().ToUpper().Contains(model.SearchText) ||
-            //            m.SDT.ToUpper().Contains(model.SearchText));
-            //}
+            if (!string.IsNullOrWhiteSpace(model.SearchText))
+            {
+                model.SearchText = model.SearchText.ToUpper();
+                list = list.Where(m => m.TenSanPham.ToUpper().Contains(model.SearchText) ||
+                        m.Customer.TenKH.ToUpper().Contains(model.SearchText) ||
+                        m.Customer.SDT.ToUpper().Contains(model.SearchText) ||
+                        m.LoaiVai.MaVai.ToUpper().Contains(model.SearchText) ||
+                        m.LoaiVai.Name.ToUpper().Contains(model.SearchText));
+            }
 
-            //var sortNameUpper = !string.IsNullOrEmpty(model.SortName) ? model.SortName.ToUpper() : "";
-            //if (model.SortOrder == SortDirection.Ascending)
-            //{
-            //    switch (sortNameUpper)
-            //    {
-            //        case "ID":
-            //            list = list.OrderBy(m => m.Id);
-            //            break;
-            //        case "ADDRESS":
-            //            list = list.OrderBy(m => m.Address);
-            //            break;
-            //        case "NAME":
-            //            list = list.OrderBy(m => m.Name);
-            //            break;
-            //        case "SDT":
-            //            list = list.OrderBy(m => m.Address);
-            //            break;
-            //        default:
-            //            list = list.OrderBy(m => m.Created);
-            //            break;
-            //    }
-            //}
-            //else
-            //{
-            //    switch (sortNameUpper)
-            //    {
-            //        case "ID":
-            //            list = list.OrderByDescending(m => m.Id);
-            //            break;
-            //        case "ADDRESS":
-            //            list = list.OrderByDescending(m => m.Address);
-            //            break;
-            //        case "NAME":
-            //            list = list.OrderByDescending(m => m.Name);
-            //            break;
-            //        case "SDT":
-            //            list = list.OrderByDescending(m => m.Address);
-            //            break;
-            //        default:
-            //            list = list.OrderByDescending(m => m.Created);
-            //            break;
-            //    }
-            //}
+            if (model.Status.HasValue)
+            {
+                list = list.Where(m => m.Status == model.Status);
+            }
+
+            if (model.FromDate.HasValue)
+            {
+                list = list.Where(m => model.FromDate <= m.NgayThu ||
+                                       model.FromDate <= m.NgayLay
+                );
+            }
+            if (model.ToDate.HasValue)
+            {
+                list = list.Where(m => m.NgayThu <= model.ToDate ||
+                                       m.NgayLay <= model.ToDate
+                );
+            }
+
+            var sortNameUpper = !string.IsNullOrEmpty(model.SortName) ? model.SortName.ToUpper() : "";
+            if (model.SortOrder == SortDirection.Ascending)
+            {
+                switch (sortNameUpper)
+                {
+                    case "DONGIA":
+                        list = list.OrderBy(m => m.DonGia);
+                        break;
+                    case "DATCOC":
+                        list = list.OrderBy(m => m.DatCoc);
+                        break;
+                    case "KHACHHANGID":
+                        list = list.OrderBy(m => m.Customer.TenKH);
+                        break;
+                    case "MAVAIID":
+                        list = list.OrderBy(m => m.LoaiVai.Name);
+                        break;
+                    case "SOLUONG":
+                        list = list.OrderBy(m => m.SoLuong);
+                        break;
+                    case "TENSANPHAM":
+                        list = list.OrderBy(m => m.TenSanPham);
+                        break;
+                    case "STATUS":
+                        list = list.OrderBy(m => m.Status);
+                        break;
+                    case "NGAYTHU":
+                        list = list.OrderBy(m => m.NgayThu);
+                        break;
+                    case "NGAYLAY":
+                        list = list.OrderBy(m => m.NgayLay);
+                        break;
+                    default:
+                        list = list.OrderBy(m => m.Created);
+                        break;
+                }
+            }
+            else
+            {
+                switch (sortNameUpper)
+                {
+                    case "DONGIA":
+                        list = list.OrderByDescending(m => m.DonGia);
+                        break;
+                    case "DATCOC":
+                        list = list.OrderByDescending(m => m.DatCoc);
+                        break;
+                    case "KHACHHANGID":
+                        list = list.OrderByDescending(m => m.Customer.TenKH);
+                        break;
+                    case "MAVAIID":
+                        list = list.OrderByDescending(m => m.LoaiVai.Name);
+                        break;
+                    case "SOLUONG":
+                        list = list.OrderByDescending(m => m.SoLuong);
+                        break;
+                    case "TENSANPHAM":
+                        list = list.OrderByDescending(m => m.TenSanPham);
+                        break;
+                    case "STATUS":
+                        list = list.OrderByDescending(m => m.Status);
+                        break;
+                    case "NGAYTHU":
+                        list = list.OrderByDescending(m => m.NgayThu);
+                        break;
+                    case "NGAYLAY":
+                        list = list.OrderByDescending(m => m.NgayLay);
+                        break;
+                    default:
+                        list = list.OrderByDescending(m => m.Created);
+                        break;
+                }
+            }
             return list;
         }
 
