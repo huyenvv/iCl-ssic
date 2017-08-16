@@ -11,7 +11,7 @@ using System.Web;
 
 namespace iClassic.Controllers
 {
-    [Override.Authorize]
+    [Override.Authorize(RoleList.Admin, RoleList.SupperAdmin)]
     public class CustomerController : BaseController
     {
         private readonly ILog _log;

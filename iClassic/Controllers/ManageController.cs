@@ -15,7 +15,7 @@ using System.Net;
 
 namespace iClassic.Controllers
 {
-    [Override.Authorize(RoleList.Admin)]
+    [Override.Authorize(RoleList.Admin, RoleList.SupperAdmin)]
     public class ManageController : BaseController
     {
         private readonly ILog _log;
@@ -413,7 +413,7 @@ namespace iClassic.Controllers
                     var user = await UserManager.FindByIdAsync(model.Id);
 
                     user.UserName = model.UserName;
-                    user.Email = string.IsNullOrWhiteSpace(model.Email) ? "Empty@iclassic.vn" : model.Email;
+                    user.Email = string.IsNullOrWhiteSpace(model.Email) ? user.UserName + "@iclassic.vn" : model.Email;
                     user.PhoneNumber = model.PhoneNumber;
                     user.Name = model.Name;
                     user.BranchId = model.BranchId;

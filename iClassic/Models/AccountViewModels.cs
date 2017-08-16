@@ -125,4 +125,22 @@ namespace iClassic.Models
         [Compare("Password", ErrorMessage = "Mật khẩu không khớp.")]
         public string ConfirmPassword { get; set; }
     }
+
+    public class ChangePasswordAccount
+    {
+        [Required(ErrorMessage = "Bạn chưa nhập {0}")]
+        [StringLength(100, ErrorMessage = "{0} phải chứa đủ {2} kí tự.", MinimumLength = 6)]
+        [DataType(DataType.Password, ErrorMessage = "{0} phải chứa ít nhất 1 kí tự hoa, 1 kí tự số và 1 kí tự đặc biệt.")]
+        [Display(Name = "Mật khẩu mới")]
+        public string NewPassword { get; set; }
+
+        [Display(Name = "Nhập lại mật khẩu mới")]
+        [Compare("NewPassword", ErrorMessage = "Mật khẩu mới không khớp.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Bạn chưa nhập {0}")]
+        [StringLength(100, ErrorMessage = "{0} phải chưa đủ {2} kí tự.", MinimumLength = 6)]
+        [Display(Name = "Mật khẩu cũ")]
+        public string OldPassword { get; set; }
+    }
 }

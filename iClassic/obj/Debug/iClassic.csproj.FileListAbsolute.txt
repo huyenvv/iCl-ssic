@@ -249,3 +249,9 @@ D:\PROJECT\iClassic\iClassic\bin\PagedList.dll
 D:\PROJECT\iClassic\iClassic\bin\PagedList.Mvc.dll
 D:\PROJECT\iClassic\iClassic\bin\PagedList.xml
 D:\PROJECT\iClassic\iClassic\bin\PagedList.Mvc.xml
+D:\PROJECTS\iClassic\iClassic\bin\log4net.dll
+D:\PROJECTS\iClassic\iClassic\bin\PagedList.dll
+D:\PROJECTS\iClassic\iClassic\bin\PagedList.Mvc.dll
+D:\PROJECTS\iClassic\iClassic\bin\log4net.xml
+D:\PROJECTS\iClassic\iClassic\bin\PagedList.xml
+D:\PROJECTS\iClassic\iClassic\bin\PagedList.Mvc.xml

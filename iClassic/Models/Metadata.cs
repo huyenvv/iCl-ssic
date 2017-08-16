@@ -32,4 +32,9 @@ namespace iClassic.Models
     public partial class LoaiVai
     {
     }
+
+    [MetadataType(typeof(AspNetUsersMetadata))]
+    public partial class AspNetUsers
+    {
+    }
 }

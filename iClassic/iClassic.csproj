@@ -269,6 +269,7 @@
     <Compile Include="Models\LoaiVai.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Metadata\AspNetUsersMetadata.cs" />
     <Compile Include="Models\PhieuSanXuatSearch.cs" />
     <Compile Include="Models\LoaiVaiSearch.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -910,6 +911,8 @@
     <Content Include="Views\PhieuChi\Index.cshtml" />
     <Content Include="Views\PhieuSanXuat\Index.cshtml" />
     <Content Include="Views\PhieuSua\Index.cshtml" />
+    <Content Include="Views\Account\Settings.cshtml" />
+    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
