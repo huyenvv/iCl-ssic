@@ -109,6 +109,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NoiDung" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="SoTien" Type="float" Nullable="false" />
     <Property Name="NgayNhan" Type="datetime" Nullable="false" />
     <Property Name="NgayTra" Type="datetime" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />

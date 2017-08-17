@@ -164,6 +164,7 @@
     <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
     <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_PhieuSua_AspNetUsers" FromRole="PhieuSua" ToRole="AspNetUsers" />
     <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="PhieuSua" ToRole="Customer" />
+    <Property Name="SoTien" Type="Double" Nullable="false" />
   </EntityType>
   <Association Name="FK_Customer_AspNetUsers">
     <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />

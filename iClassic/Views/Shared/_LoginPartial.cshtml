@@ -1,9 +1,5 @@
-﻿@using iClassic.Controllers
-@{
-    var user = ((BaseController)ViewContext.Controller).CurrentUser;
-}
-<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    @user.Name
+﻿<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    @User.Identity.Name
     <span class="caret"></span>
 </button>
 <ul class="dropdown-menu dropdown-menu-usermenu pull-right">

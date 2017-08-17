@@ -125,6 +125,7 @@ namespace iClassic.Services.Implementation
         {
             var obj = GetById(model.Id);
             obj.KhachHangId = model.KhachHangId;
+            obj.SoTien = model.SoTien;
             obj.NgayNhan = model.NgayNhan;
             obj.NgayTra = model.NgayTra;
             obj.NoiDung = model.NoiDung;

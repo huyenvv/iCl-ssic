@@ -93,6 +93,7 @@
     <EntitySetMapping Name="PhieuSua">
       <EntityTypeMapping TypeName="iClassicModel.PhieuSua">
         <MappingFragment StoreEntitySet="PhieuSua">
+          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
           <ScalarProperty Name="Created" ColumnName="Created" />
           <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
           <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />

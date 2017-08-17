@@ -39,9 +39,9 @@ namespace iClassic.Controllers
             var model = await _PhieuSuaRepository.GetByIdAsync(id);
             if (model == null)
             {
-                return View(new PhieuSua());
+                model = new PhieuSua();
             }
-
+            CreateCustomerViewBag(model.Id);
             return View(model);
         }
 
@@ -78,6 +78,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
+            CreateCustomerViewBag(model.Id);
             return View(model);
         }
 

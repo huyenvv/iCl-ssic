@@ -16,10 +16,12 @@ namespace iClassic.Controllers
         public int _pageSize = 10;
         private AspNetUsers _currentUser;
         private BranchRepository _branchRepository;
+        private CustomerRepository _customerRepository;
         public BaseController()
         {
             _entities = new iClassicEntities();
             _branchRepository = new BranchRepository(_entities);
+            _customerRepository = new CustomerRepository(_entities);
         }
 
         public AspNetUsers CurrentUser
@@ -40,7 +42,7 @@ namespace iClassic.Controllers
             {
                 return User.Identity.GetUserId();
             }
-        }       
+        }
 
         public void ShowMessageError(string message)
         {
@@ -52,9 +54,15 @@ namespace iClassic.Controllers
             SessionHelpers.Set(Constant.SESSION_MessageSuccess, message);
         }
 
-        public void CreateBrachViewBag(int selectedBranchId)
+        public void CreateBrachViewBag(int selectedId)
         {
-            ViewBag.BranchId = new SelectList(_branchRepository.GetAll(), "Id", "Name", selectedBranchId);
+            ViewBag.BranchId = new SelectList(_branchRepository.GetAll(), "Id", "Name", selectedId);
+        }
+
+        public void CreateCustomerViewBag(int selectedId)
+        {
+            var data = _customerRepository.GetAll().Select(m => new { m.Id, Title = m.TenKH + " (" + m.SDT + ")" });
+            ViewBag.KhachHangId = new SelectList(data, "Id", "Title", selectedId);
         }
     }
 }
