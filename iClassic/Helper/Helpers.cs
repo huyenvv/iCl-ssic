@@ -98,5 +98,16 @@ namespace iClassic.Helper
             }
             return id;
         }
+        public static HashSet<KeyValuePair<int, string>> GetTicketStatusList()
+        {
+            var result = new HashSet<KeyValuePair<int, string>>();
+            var list = Enum.GetValues(typeof(TicketStatus));
+            foreach (int enumItem in list)
+            {
+                var keyValueItem = new KeyValuePair<int, string>(enumItem, ((TicketStatus)enumItem).GetDescription());
+                result.Add(keyValueItem);
+            }
+            return result;
+        }
     }
 }

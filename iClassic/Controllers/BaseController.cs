@@ -4,6 +4,7 @@ using iClassic.Services.Implementation;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -63,6 +64,16 @@ namespace iClassic.Controllers
         {
             var data = _customerRepository.GetAll().Select(m => new { m.Id, Title = m.TenKH + " (" + m.SDT + ")" });
             ViewBag.KhachHangId = new SelectList(data, "Id", "Title", selectedId);
+        }
+
+        public int SoNgayTraHang
+        {
+            get
+            {
+                int value;
+                int.TryParse(ConfigurationSettings.AppSettings["SoNgayTraHang"], out value);
+                return value;
+            }
         }
     }
 }

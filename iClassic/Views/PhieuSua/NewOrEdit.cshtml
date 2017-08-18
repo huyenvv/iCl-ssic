@@ -1,4 +1,5 @@
-﻿@model iClassic.Models.PhieuSua
+﻿@using iClassic.Helper;
+@model iClassic.Models.PhieuSua
 
 @{
     ViewBag.Class = "fa fa-dollar";
@@ -36,7 +37,7 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.NoiDung)
-                        @Html.EditorFor(model => model.NoiDung, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.TextAreaFor(model => model.NoiDung, new { @class = "form-control", rows = "4" })
                         @Html.ValidationMessageFor(model => model.NoiDung, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
@@ -51,17 +52,33 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Status)
-                        @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                        <select name="Status" class="form-control">
+                            @foreach (var item in Helpers.GetTicketStatusList())
+                            {
+                                <option value="@item.Key" @(item.Key == Model.Status ? "selected" : "")>@item.Value</option>
+                            }
+                        </select>
                         @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <button class="btn btn-lightblue" type="submit">Lưu</button>
+    <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 }
 
 @section Scripts {
+    <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
+    <script>
+        function beforeSubmit() {
+            var sotienObj = $("#SoTien");
+            var value = sotienObj.val().replace(/,/g, '');
+            sotienObj.val(value);
+        }
+        $(function () {
+            $('#SoTien').maskMoney({ precision: 0});
+        })
+    </script>
     @Scripts.Render("~/bundles/jqueryval")
 }

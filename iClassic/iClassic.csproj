@@ -224,6 +224,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\Constant.cs" />
+    <Compile Include="Helper\Enums.cs" />
     <Compile Include="Helper\Extensions.cs" />
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\Helpers.cs" />
@@ -857,6 +858,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.maskMoney.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />

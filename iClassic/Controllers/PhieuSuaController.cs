@@ -39,7 +39,7 @@ namespace iClassic.Controllers
             var model = await _PhieuSuaRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new PhieuSua();
+                model = new PhieuSua { NgayNhan = DateTime.Now, NgayTra = DateTime.Now.AddDays(SoNgayTraHang) };
             }
             CreateCustomerViewBag(model.Id);
             return View(model);
@@ -50,7 +50,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,SoTien,MaVai,Note")] PhieuSua model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,KhachHangId,SoTien,NoiDung,NgayNhan,NgayTra,Status")] PhieuSua model)
         {
             try
             {
