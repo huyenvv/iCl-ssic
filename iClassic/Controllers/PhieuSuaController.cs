@@ -39,7 +39,7 @@ namespace iClassic.Controllers
             var model = await _PhieuSuaRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new PhieuSua { NgayNhan = DateTime.Now, NgayTra = DateTime.Now.AddDays(SoNgayTraHang) };
+                model = new PhieuSua { NgayNhan = DateTime.Now, NgayTra = DateTime.Now.AddDays(SoNgayTraSauKhiSua) };
             }
             CreateCustomerViewBag(model.Id);
             return View(model);

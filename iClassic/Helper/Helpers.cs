@@ -109,5 +109,24 @@ namespace iClassic.Helper
             }
             return result;
         }
+        public static string DrawStatusTicket(int status)
+        {
+            var statusEnum = (TicketStatus)status;
+            var className = "";
+            switch (statusEnum)
+            {
+                case TicketStatus.DaXuLy:
+                    className = "warning";
+                    break;
+                case TicketStatus.DaTraChoKhach:
+                    className = "success";
+                    break;
+                default:
+                    className = "danger";
+                    break;
+            }
+
+            return "<span class='label label-" + className + "'>" + statusEnum.GetDescription() + "</span>";
+        }
     }
 }

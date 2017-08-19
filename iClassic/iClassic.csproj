@@ -307,6 +307,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fileinput.min.css" />
@@ -318,6 +319,7 @@
     <Content Include="fonts\weathericons-regular-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\logo.png" />
     <Content Include="images\calendar-arrow.png" />
     <Content Include="images\chosen-sprite%402x.png" />
     <Content Include="images\chosen-sprite.png" />
@@ -394,7 +396,6 @@
     <Content Include="images\loaders\loader9.gif" />
     <Content Include="images\loading.gif" />
     <Content Include="images\locked.png" />
-    <Content Include="images\logo.png" />
     <Content Include="images\logo1.png" />
     <Content Include="favicon.ico" />
     <Content Include="images\minus%402x.png" />
@@ -821,6 +822,7 @@
     </Content>
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -866,6 +868,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -923,6 +926,7 @@
     <Content Include="Views\PhieuChi\NewOrEdit.cshtml" />
     <Content Include="Views\PhieuSua\NewOrEdit.cshtml" />
     <Content Include="Views\PhieuSanXuat\NewOrEdit.cshtml" />
+    <Content Include="Views\PhieuSanXuat\PrintPhieuHen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

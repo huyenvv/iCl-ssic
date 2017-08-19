@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="~/images/icon.png" type="image/png">
+    <link rel="shortcut icon" href="~/images/logo.png" type="image/png">
     <title>@ViewBag.Title - iClassic</title>
     <link href="@Url.Content("~/css/style.default.css")" rel="stylesheet">
     <link href="@Url.Content("~/css/font.helvetica-neue.css")" rel="stylesheet" />
@@ -21,11 +21,6 @@
         @Scripts.Render("~/bundles/modernizr")*@
 </head>
 <body>
-    <!-- Preloader -->
-    <div id="preloader">
-        <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
-    </div>
-
     <section>
         <div class="leftpanel">
             <div class="logopanel">
@@ -37,17 +32,17 @@
                 <h5 class="sidebartitle">Navigation</h5>
                 <ul class="nav nav-pills nav-stacked nav-bracket" id="LeftMenu">
                     <li><a href="@Url.Action("Index", "Home")" data-href="Home/Index"><i class="fa fa-home"></i> <span>Trang chủ</span></a></li>
-                    <li><a href="@Url.Action("Index", "PhieuSanXuat")" data-href="Index"><i class="fa fa-dollar"></i> <span>Phiếu sản xuất</span></a></li>
-                    <li><a href="@Url.Action("Index", "PhieuSua")" data-href="Index"><i class="fa fa-cog"></i> <span>Phiếu sửa chữa</span></a></li>
-                    <li><a href="@Url.Action("Index", "PhieuChi")" data-href="Index"><i class="fa fa-dollar"></i> <span>Phiếu chi</span></a></li>
-                    
+                    <li><a href="@Url.Action("Index", "PhieuSanXuat")" data-href="Index/PhieuSanXuat/NewOrEdit"><i class="fa fa-dollar"></i> <span>Phiếu sản xuất</span></a></li>
+                    <li><a href="@Url.Action("Index", "PhieuSua")" data-href="Index/PhieuSua/NewOrEdit"><i class="fa fa-cog"></i> <span>Phiếu sửa chữa</span></a></li>
+                    <li><a href="@Url.Action("Index", "PhieuChi")" data-href="Index/PhieuChi/NewOrEdit"><i class="fa fa-dollar"></i> <span>Phiếu chi</span></a></li>
+
                     @if (User.IsInRole(RoleList.Admin))
                     {
-                        <li><a href="@Url.Action("Index", "Customer")" data-href="Index"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
-                        <li><a href="@Url.Action("Index", "LoaiVai")" data-href="Index"><i class="fa fa-bars"></i> <span>Loại vải</span></a></li>
-                        <li><a href="@Url.Action("Index", "Branch")" data-href="Index"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
+                        <li><a href="@Url.Action("Index", "Customer")" data-href="Index/Customer/NewOrEdit"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
+                        <li><a href="@Url.Action("Index", "LoaiVai")" data-href="Index/LoaiVai/NewOrEdit"><i class="fa fa-bars"></i> <span>Loại vải</span></a></li>
+                        <li><a href="@Url.Action("Index", "Branch")" data-href="Index/Branch/NewOrEdit"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
                         <li><a href="@Url.Action("Employees", "Manage")"><i class="fa fa-user"></i> <span>Nhân viên</span></a></li>
-                        <li><a href="@Url.Action("Index", "Statistic")" data-href="Index"><i class="fa fa-bar-chart-o"></i> <span>Thống kê</span></a></li>
+                        <li><a href="@Url.Action("Index", "Statistic")" data-href="Index/Statistic/NewOrEdit"><i class="fa fa-bar-chart-o"></i> <span>Thống kê</span></a></li>
                     }
                 </ul>
             </div><!-- leftpanelinner -->

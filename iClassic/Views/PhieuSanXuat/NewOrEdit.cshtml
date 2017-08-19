@@ -1,10 +1,13 @@
-﻿@model iClassic.Models.PhieuChi
+﻿@using iClassic.Helper;
+@model iClassic.Models.PhieuSanXuat
 
 @{
+    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
     ViewBag.Class = "fa fa-dollar";
-    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Phiếu chi</a>" +
-                          "<span>Thêm mới</span>";
-    ViewBag.Title = "Thêm mới";
+    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Phiếu sản xuất</a>" +
+                          "<span>"+ViewBag.Title+"</span>";
+
+    var loaivai = ViewBag.MaVaiId as IQueryable<iClassic.Models.LoaiVai>;
 }
 
 <div class="row mb10 mt10">
@@ -25,33 +28,109 @@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.Id)
                     <div class="form-group">
-                        @Html.LabelFor(model => model.BranchId)
-                        @Html.DropDownList("BranchId", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.BranchId, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.KhachHangId)
+                        @Html.DropDownList("KhachHangId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
+                        <a href="@Url.Action("NewOrEdit","Customer")">+ Thêm mới khách hàng</a>
+                        @Html.ValidationMessageFor(model => model.KhachHangId, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.MucChi)
-                        @Html.EditorFor(model => model.MucChi, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.MucChi, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.TenSanPham)
+                        @Html.EditorFor(model => model.TenSanPham, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TenSanPham, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.SoTien)
-                        @Html.EditorFor(model => model.SoTien, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.SoTien, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.MaVaiId)
+                        <select name="MaVaiId" id="MaVaiId" class="select2" , data-placeholder="Nhập tên hoặc mã vải...">
+                            @foreach (var item in loaivai)
+                            {
+                                <option value="@item.Id" data-money="@item.SoTien" @(item.Id == Model.MaVaiId ? "selected" : "")>
+                                    @item.Name (@item.MaVai)
+                                </option>
+                            }
+                        </select>
+                        <label class="text-warning">Giá tiền: <strong id="GiaTienVai"></strong></label>
+                        @Html.ValidationMessageFor(model => model.MaVaiId, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.NguoiNhanPhieu)
-                        @Html.TextAreaFor(model => model.NguoiNhanPhieu, new { @class = "form-control", rows = "5" })
-                        @Html.ValidationMessageFor(model => model.NguoiNhanPhieu, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.DonGia)
+                        @Html.EditorFor(model => model.DonGia, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DonGia, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatCoc)
+                        @Html.EditorFor(model => model.DatCoc, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatCoc, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SoLuong)
+                        @Html.EditorFor(model => model.SoLuong, new { htmlAttributes = new { @class = "form-control", min = "1" } })
+                        @Html.ValidationMessageFor(model => model.SoLuong, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NgayThu)
+                        <input type="text" name="NgayThu" value="@Model.NgayThu.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                        @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NgayLay)
+                        <input type="text" name="NgayLay" value="@Model.NgayLay.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                        @Html.ValidationMessageFor(model => model.NgayLay, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Status)
+                        <select name="Status" class="form-control">
+                            @foreach (var item in Helpers.GetTicketStatusList())
+                            {
+                                <option value="@item.Key" @(item.Key == Model.Status ? "selected" : "")>@item.Value</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <button class="btn btn-lightblue" type="submit">Lưu</button>
+    <button class="btn btn-lightblue" type="submit" onsubmit="beforeSubmit()">Lưu</button>
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 }
 
+@section Styles {
+    <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" />
+}
+
 @section Scripts {
+    <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/moment.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
+    <script>
+        function beforeSubmit() {
+            sotienObj = $("#DonGia");
+            var value = sotienObj.val().replace(/,/g, '');
+            sotienObj.val(value);
+
+            var sotienObj = $("#DatCoc");
+            var value = sotienObj.val().replace(/,/g, '');
+            sotienObj.val(value);
+        }
+
+        function showSoTienLoaiVai() {
+            var sotien = $("#MaVaiId option:selected").attr("data-money");
+            $("#GiaTienVai").html(sotien.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' ₫');
+        }
+        $(function () {
+            showSoTienLoaiVai();
+            $('#DonGia').maskMoney({ precision: 0 });
+            $('#DatCoc').maskMoney({ precision: 0 });
+
+            $("#MaVaiId").change(function () {
+                showSoTienLoaiVai();
+            });
+
+            $('.datepicker').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm:ss',
+                //maxDate: moment()
+            });
+        });
+    </script>
     @Scripts.Render("~/bundles/jqueryval")
 }

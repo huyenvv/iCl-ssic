@@ -2,10 +2,10 @@
 @model iClassic.Models.PhieuSua
 
 @{
+    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
     ViewBag.Class = "fa fa-dollar";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Phiếu sửa chữa</a>" +
-                          "<span>Thêm mới</span>";
-    ViewBag.Title = "Thêm mới";
+                          "<span>"+ViewBag.Title+"</span>";
 }
 
 <div class="row mb10 mt10">
@@ -42,12 +42,12 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.NgayNhan)
-                        @Html.EditorFor(model => model.NgayNhan, new { htmlAttributes = new { @class = "form-control" } })
+                        <input type="text" name="NgayNhan" value="@Model.NgayNhan.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
                         @Html.ValidationMessageFor(model => model.NgayNhan, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.NgayTra)
-                        @Html.EditorFor(model => model.NgayTra, new { htmlAttributes = new { @class = "form-control" } })
+                        <input type="text" name="NgayTra" value="@Model.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
                         @Html.ValidationMessageFor(model => model.NgayTra, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
@@ -68,8 +68,14 @@
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 }
 
+@section Styles {
+    <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" />
+}
+
 @section Scripts {
     <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/moment.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
     <script>
         function beforeSubmit() {
             var sotienObj = $("#SoTien");
@@ -77,7 +83,12 @@
             sotienObj.val(value);
         }
         $(function () {
-            $('#SoTien').maskMoney({ precision: 0});
+            $('#SoTien').maskMoney({ precision: 0 });
+
+            $('.datepicker').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm:ss',
+                //maxDate: moment()
+            });
         })
     </script>
     @Scripts.Render("~/bundles/jqueryval")

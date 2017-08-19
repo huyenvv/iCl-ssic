@@ -66,12 +66,21 @@ namespace iClassic.Controllers
             ViewBag.KhachHangId = new SelectList(data, "Id", "Title", selectedId);
         }
 
-        public int SoNgayTraHang
+        public int SoNgayTraSauKhiSua
         {
             get
             {
                 int value;
-                int.TryParse(ConfigurationSettings.AppSettings["SoNgayTraHang"], out value);
+                int.TryParse(ConfigurationSettings.AppSettings["SoNgayTraSauKhiSua"], out value);
+                return value;
+            }
+        }
+        public int SoNgayThuSauKhiLam
+        {
+            get
+            {
+                int value;
+                int.TryParse(ConfigurationSettings.AppSettings["SoNgayThuSauKhiLam"], out value);
                 return value;
             }
         }

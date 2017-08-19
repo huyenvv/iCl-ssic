@@ -1,10 +1,11 @@
 ﻿@model iClassic.Models.LoaiVai
 
 @{
+    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
     ViewBag.Class = "fa fa-map-marker";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Loại vải</a>" +
-                          "<span>Thêm mới</span>";
-    ViewBag.Title = "Thêm mới";
+                          "<span>"+ViewBag.Title+"</span>";
+
 }
 
 <div class="row mb10 mt10">
@@ -48,10 +49,21 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-lightblue" type="submit">Lưu</button>
+    <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 }
 
 @section Scripts {
+    <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
+    <script>
+        function beforeSubmit() {
+            var sotienObj = $("#SoTien");
+            var value = sotienObj.val().replace(/,/g, '');
+            sotienObj.val(value);
+        }
+        $(function () {
+            $('#SoTien').maskMoney({ precision: 0});
+        })
+    </script>
     @Scripts.Render("~/bundles/jqueryval")
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
@@ -15,11 +16,13 @@ namespace iClassic.Controllers
     {
         private readonly ILog _log;
         private PhieuSanXuatRepository _phieuSanXuatRepository;
+        private LoaiVaiRepository _loaiVaiRepository;
 
         public PhieuSanXuatController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _phieuSanXuatRepository = new PhieuSanXuatRepository(_entities);
+            _loaiVaiRepository = new LoaiVaiRepository(_entities);
         }
 
         // GET: PhieuSanXuates
@@ -39,9 +42,10 @@ namespace iClassic.Controllers
             var model = await _phieuSanXuatRepository.GetByIdAsync(id);
             if (model == null)
             {
-                return View(new PhieuSanXuat());
+                model = new PhieuSanXuat { NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam), NgayLay = DateTime.Now.AddDays(SoNgayThuSauKhiLam), SoLuong = 1 };
             }
-
+            CreateCustomerViewBag(model.KhachHangId);
+            CreateLoaiVaiViewBag(model.MaVaiId);
             return View(model);
         }
 
@@ -50,7 +54,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,SoTien,MaVai,Note")] PhieuSanXuat model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenSanPham,MaVaiId,DonGia,SoLuong,DatCoc,NgayThu,NgayLay,Status,KhachHangId")] PhieuSanXuat model)
         {
             try
             {
@@ -78,6 +82,8 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
+            CreateCustomerViewBag(model.KhachHangId);
+            CreateLoaiVaiViewBag(model.MaVaiId);
             return View(model);
         }
 
@@ -110,11 +116,23 @@ namespace iClassic.Controllers
             return RedirectToAction("Index");
         }
 
+        public ViewResult PrintPhieuHen()
+        {
+            var list = _entities.Customer.AsQueryable();
+            return View(list);
+        }
+
+        private void CreateLoaiVaiViewBag(int maVaiId)
+        {
+            ViewBag.MaVaiId = _loaiVaiRepository.GetAll();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 _phieuSanXuatRepository.Dispose();
+                _loaiVaiRepository.Dispose();
             }
             base.Dispose(disposing);
         }

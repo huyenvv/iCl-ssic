@@ -1,4 +1,5 @@
-﻿@using iClassic.Models;
+﻿@using iClassic.Helper;
+@using iClassic.Models;
 @using PagedList.Mvc;
 @model PagedList.IPagedList<PhieuSua>
 
@@ -23,8 +24,16 @@
     @Html.Hidden("SortOrder", searchModel.SortOrder)
     <div class="row">
         <div class="col-md-3">
+            <select name="Status" class="form-control" onchange="this.form.submit();">
+                @foreach (var item in Helpers.GetTicketStatusList())
+                {
+                    <option value="@item.Key" @(item.Key == searchModel.Status ? "selected" : "")>@item.Value</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
             <div class="input-group">
-                <input type="text" class="form-control" name="SearchText" placeholder="Search" value="@searchModel.SearchText">
+                <input type="text" class="form-control" name="SearchText" placeholder="Tìm kiếm" value="@searchModel.SearchText">
                 <span class="input-group-addon" id="btnSearch"><i class="fa fa-search"></i></span>
             </div>
         </div>
@@ -70,7 +79,7 @@
                         @Html.DisplayFor(modelItem => item.NoiDung)
                     </td>
                     <td>
-                        @item.SoTien.ToString("N0")
+                        @item.SoTien.ToString("N0") ₫
                     </td>
                     <td>
                         @item.NgayNhan.ToString("dd/MM/yyyy HH:mm:ss")
@@ -79,7 +88,7 @@
                         @item.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status)
+                        @Html.Raw(Helpers.DrawStatusTicket(item.Status))
                     </td>
                     <td>
                         <a href="@Url.Action("NewOrEdit", new { id = item.Id })" class="btn btn-xs btn-primary">Sửa</a>
@@ -98,6 +107,7 @@
         new
         {
             page,
+            searchModel.Status,
             searchModel.SearchText,
             searchModel.SortOrder,
             searchModel.PageSize

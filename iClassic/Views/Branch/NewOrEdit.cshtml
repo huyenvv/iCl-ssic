@@ -1,10 +1,11 @@
 ﻿@model iClassic.Models.Branch
 
 @{
+    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
     ViewBag.Class = "fa fa-map-marker";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Chi nhánh</a>" +
-                          "<span>Thêm mới</span>";
-    ViewBag.Title = "Thêm mới";
+                          "<span>"+ViewBag.Title+"</span>";
+
 }
 
 <div class="row mb10 mt10">
