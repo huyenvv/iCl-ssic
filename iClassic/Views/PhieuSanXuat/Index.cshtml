@@ -107,7 +107,7 @@
                         @Html.Raw(Helpers.DrawStatusTicket(item.Status))
                     </td>
                     <td>
-                        <a href="@Url.Action("PrintPhieuHen", new { id=1})" target="_blank">In Phiếu Hẹn</a>
+                        <a href="@Url.Action("PrintPhieuHen", new { id=1})" target="_blank" class="btn btn-xs btn-primary">In Phiếu</a>
                         <a href="@Url.Action("NewOrEdit", new { id = item.Id })" class="btn btn-xs btn-primary">Sửa</a>
                         <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
                     </td>
