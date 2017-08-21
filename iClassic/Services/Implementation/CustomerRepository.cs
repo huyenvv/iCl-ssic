@@ -64,9 +64,9 @@ namespace iClassic.Services.Implementation
                     case "ADDRESS":
                         list = list.OrderBy(m => m.Address);
                         break;
-                    case "SODO":
-                        list = list.OrderBy(m => m.SoDo);
-                        break;
+                    //case "SODO":
+                    //    list = list.OrderBy(m => m.SoDo);
+                    //    break;
                     case "CREATEDATE":
                         list = list.OrderBy(m => m.Created);
                         break;
@@ -91,9 +91,9 @@ namespace iClassic.Services.Implementation
                     case "ADDRESS":
                         list = list.OrderByDescending(m => m.Address);
                         break;
-                    case "SODO":
-                        list = list.OrderByDescending(m => m.SoDo);
-                        break;
+                    //case "SODO":
+                    //    list = list.OrderByDescending(m => m.SoDo);
+                    //    break;
                     case "CREATEDATE":
                         list = list.OrderByDescending(m => m.Created);
                         break;
@@ -117,7 +117,9 @@ namespace iClassic.Services.Implementation
             obj.TenKH = model.TenKH;
             obj.SDT = model.SDT;
             obj.Address = model.Address;
-            obj.SoDo = model.SoDo;
+            obj.SoDoSuit = model.SoDoSuit;
+            obj.SoDoQuan = model.SoDoQuan;
+            obj.SoDoSoMi = model.SoDoSoMi;
             if (!string.IsNullOrWhiteSpace(model.Image))
             {
                 obj.Image = model.Image;

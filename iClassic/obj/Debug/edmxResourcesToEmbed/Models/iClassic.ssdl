@@ -55,7 +55,9 @@
     <Property Name="SDT" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="Address" Type="nvarchar" MaxLength="500" />
     <Property Name="Image" Type="nvarchar(max)" />
-    <Property Name="SoDo" Type="int" />
+    <Property Name="SoDoSuit" Type="nvarchar" MaxLength="500" />
+    <Property Name="SoDoSoMi" Type="nvarchar" MaxLength="500" />
+    <Property Name="SoDoQuan" Type="nvarchar" MaxLength="500" />
     <Property Name="Note" Type="nvarchar(max)" />
     <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
