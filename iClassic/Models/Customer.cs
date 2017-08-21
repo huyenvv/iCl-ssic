@@ -27,7 +27,9 @@ namespace iClassic.Models
         public string SDT { get; set; }
         public string Address { get; set; }
         public string Image { get; set; }
-        public Nullable<int> SoDo { get; set; }
+        public string SoDoSuit { get; set; }
+        public string SoDoSoMi { get; set; }
+        public string SoDoQuan { get; set; }
         public string Note { get; set; }
         public int BranchId { get; set; }
         public System.DateTime Created { get; set; }

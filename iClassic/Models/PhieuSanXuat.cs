@@ -28,7 +28,7 @@ namespace iClassic.Models
         public System.DateTime Created { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
-        public virtual Customer Customer { get; set; }
         public virtual LoaiVai LoaiVai { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }
