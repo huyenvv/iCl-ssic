@@ -29,19 +29,13 @@
                         @Html.LabelFor(model => model.Name)
                         @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                    </div>
-                    @*<div class="form-group">
-                            @Html.LabelFor(model => model.Note)
-                            @Html.TextAreaFor(model => model.Note, new { @class = "form-control", row = "5" })
-                            @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
-                        </div>*@
+                    </div>                    
                     <div class="form-group">
                         <div class="table-responsive mt10">
                             <table id="listAddProductTypeField" class="table table-dark">
                                 <thead>
                                     <tr>
                                         <th>Tên số đo</th>
-                                        @*<th>Ghi chú</th>*@
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -54,10 +48,7 @@
                                                 <td>
                                                     <input type="hidden" name="ProductTyeField[@i].Id" value="@Model.ProductTyeField.ElementAt(i).Id" />
                                                     <input type="text" name="ProductTyeField[@i].Name" value="@Model.ProductTyeField.ElementAt(i).Name" class="form-control" />
-                                                </td>
-                                                @*<td>
-                                                        <input type="text" name="ProductTyeField[@i].Note" value="@Model.ProductTyeField.ElementAt(i).Note" class="form-control" />
-                                                    </td>*@
+                                                </td>                                                
                                                 <td class="pt14">
                                                     <a href="javascript:void(0)" class="text-danger" onclick="btnRemoveProductTypeFieldClick(this);"><i class="fa fa-times"></i></a>
                                                 </td>
@@ -111,9 +102,6 @@
                 html += "       <input type='hidden' name='ProductTyeField[" + index + "].Id' value='0' class = \"form-control\"/>";
                 html += "       <input type='text' name='ProductTyeField[" + index + "].Name' class = \"form-control\"/>";
                 html += "   </td>";
-                //html += "   <td>";
-                //html += "       <input type='text' name='ProductTyeField[" + index + "].Note' class = \"form-control\"/>";
-                //html += "   </td>";
                 html += "   <td class='pt14'>";
                 html += "       <a href=\"javascript:void(0)\" class=\"text-danger\" onclick=\"btnRemoveProductTypeFieldClick(this);\"><i class=\"fa fa-times\"></i></a>";
                 html += "   </td>";

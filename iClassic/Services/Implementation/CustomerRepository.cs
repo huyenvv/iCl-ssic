@@ -124,6 +124,12 @@ namespace iClassic.Services.Implementation
             }
             obj.Note = model.Note;
             obj.BranchId = model.BranchId;
+
+            var lisUpdate = model.ProductTypeValue.Where(m => obj.ProductTypeValue.Any(n => n.ProductTypeFieldId == m.ProductTypeFieldId));
+            lisUpdate.ToList().ForEach(t => {
+                var objForUpdate = obj.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == t.ProductTypeFieldId);
+                objForUpdate.Value = t.Value;
+            });
             base.Update(obj);
         }
     }

@@ -23,9 +23,6 @@ namespace iClassic.Models.Metadata
         [Display(Name = "Chi nhánh")]
         public string BranchId { get; set; }
 
-        [Display(Name = "Số đo")]
-        public string SoDo { get; set; }
-
         [Display(Name = "Ghi chú")]
         public string Note { get; set; }        
     }

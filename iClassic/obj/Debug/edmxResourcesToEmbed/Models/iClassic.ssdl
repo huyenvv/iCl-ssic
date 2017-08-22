@@ -293,7 +293,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_ProductTypeValue_Customer">
-    <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+    <End Role="Customer" Type="Self.Customer" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="ProductTypeValue" Type="Self.ProductTypeValue" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Customer">

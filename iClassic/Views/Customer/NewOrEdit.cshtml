@@ -1,11 +1,12 @@
-﻿@model iClassic.Models.Customer
+﻿@using iClassic.Models;
+@model Customer
 
 @{
     ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
     ViewBag.Class = "fa fa-user";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Khách hàng</a>" +
-                          "<span>"+ViewBag.Title+"</span>";
-
+                          "<span>" + ViewBag.Title + "</span>";
+    var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
 }
 
 <div class="row mb10 mt10">
@@ -54,21 +55,61 @@
                         @Html.TextAreaFor(model => model.Note, new { @class = "form-control", rows = "5" })
                         @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
                     </div>
-                    <div class="form-group">
-                        @*@Html.LabelFor(model => model.SoDo)
-                        @Html.TextAreaFor(model => model.SoDo, new { @class = "form-control", rows = "5" })
-                        @Html.ValidationMessageFor(model => model.SoDo, "", new { @class = "text-danger" })*@
-                    </div>                    
                 </div>
+            </div>
+            <div class="row">
+                @{
+                    var index = 0;
+                    foreach (var productType in listProductType)
+                    {
+                        <div class="col-md-4 col-xs-6">
+                            <div class="table-responsive mt10">
+                                <table class="table table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">
+                                                @productType.Name
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (productType.ProductTyeField.Any())
+                                        {                                            
+                                            foreach (var productTypeField in productType.ProductTyeField.ToArray())
+                                            {
+                                                var productTypeValue = Model.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == productTypeField.Id);
+                                                <tr>
+                                                    <td>@productTypeField.Name</td>
+                                                    <td>
+                                                        <input type="hidden" name="ProductTypeValue[@index].ProductTypeFieldId" value="@productTypeField.Id" />
+                                                        <input type="text" name="ProductTypeValue[@index].Value" value="@(productTypeValue != null ? productTypeValue.Value : "")" class="form-control" />
+                                                    </td>
+                                                </tr>
+                                                index = index + 1;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                }
+
             </div>
         </div>
     </div>
     <button class="btn btn-lightblue" type="submit">Lưu</button>
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
-}
+                    }
 
 @section Styles{
     <link href="@Url.Content("~/Content/fileinput.min.css")" rel="stylesheet" />
+    <style>
+        .table > tbody > tr > td {
+            padding: 2px 0 0 2px;
+        }
+    </style>
+
 }
 @section scripts{
     <script src="@Url.Content("~/Scripts/fileinput.min.js")"></script>

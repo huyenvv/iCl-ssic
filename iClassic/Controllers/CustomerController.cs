@@ -17,12 +17,14 @@ namespace iClassic.Controllers
         private readonly ILog _log;
         private CustomerRepository _customerRepository;
         private BranchRepository _branchRepository;
+        private ProductTypeRepository _productTypeRepository;
 
         public CustomerController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _customerRepository = new CustomerRepository(_entities);
             _branchRepository = new BranchRepository(_entities);
+            _productTypeRepository = new ProductTypeRepository(_entities);
         }
 
         // GET: Customeres
@@ -46,15 +48,18 @@ namespace iClassic.Controllers
                 model = new Customer();
             }
             CreateBrachViewBag(CurrentUser.BranchId);
+            CreateListProductTypeViewBag();
             return View(model);
         }
+
+        
 
         // POST: Customeres/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenKH,Address,SDT,SoDo,BranchId")] Customer model, HttpPostedFileBase fileImage)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenKH,Address,SDT,ProductTypeValue,BranchId,Note")] Customer model, HttpPostedFileBase fileImage)
         {
             try
             {
@@ -89,6 +94,7 @@ namespace iClassic.Controllers
                 _log.Info(ex.ToString());
             }
             CreateBrachViewBag(model.BranchId);
+            CreateListProductTypeViewBag();
             return View(model);
         }
 
@@ -119,7 +125,12 @@ namespace iClassic.Controllers
                 _log.Info(ex.ToString());
             }
             return RedirectToAction("Index");
-        }        
+        }
+
+        private void CreateListProductTypeViewBag()
+        {
+            ViewBag.ProductTypeList = _productTypeRepository.GetAll();
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -127,6 +138,7 @@ namespace iClassic.Controllers
             {
                 _branchRepository.Dispose();
                 _customerRepository.Dispose();
+                _productTypeRepository.Dispose();
             }
             base.Dispose(disposing);
         }
