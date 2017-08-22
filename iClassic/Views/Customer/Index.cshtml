@@ -53,9 +53,9 @@
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Address">Địa chỉ</a>
             </th>
-            <th>
+            @*<th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="SoDo">Số đo</a>
-            </th>
+            </th>*@
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="CreateDate">Ngày tạo</a>
             </th>
@@ -82,9 +82,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Address)
                     </td>
-                    <td>
+                    @*<td>
                         @Html.DisplayFor(modelItem => item.SoDo)
-                    </td>
+                    </td>*@
                     <td>
                         @item.Created.ToString("dd/MM/yyyy HH:mm:ss")
                     </td>

@@ -37,4 +37,9 @@ namespace iClassic.Models
     public partial class AspNetUsers
     {
     }
+
+    [MetadataType(typeof(ProductTypeMetadata))]
+    public partial class ProductType
+    {
+    }
 }

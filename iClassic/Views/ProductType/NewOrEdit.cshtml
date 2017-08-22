@@ -1,0 +1,125 @@
+﻿@model iClassic.Models.ProductType
+
+@{
+    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
+    ViewBag.Class = "fa fa-list-ol";
+    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Sản phẩm</a>" +
+                          "<span>" + ViewBag.Title + "</span>";
+
+}
+
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name)
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.Note)
+                            @Html.TextAreaFor(model => model.Note, new { @class = "form-control", row = "5" })
+                            @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                        </div>*@
+                    <div class="form-group">
+                        <div class="table-responsive mt10">
+                            <table id="listAddProductTypeField" class="table table-dark">
+                                <thead>
+                                    <tr>
+                                        <th>Tên số đo</th>
+                                        @*<th>Ghi chú</th>*@
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ProductTyeField != null)
+                                    {
+                                        for (int i = 0; i < Model.ProductTyeField.Count; i++)
+                                        {
+                                            <tr class="hasId">
+                                                <td>
+                                                    <input type="hidden" name="ProductTyeField[@i].Id" value="@Model.ProductTyeField.ElementAt(i).Id" />
+                                                    <input type="text" name="ProductTyeField[@i].Name" value="@Model.ProductTyeField.ElementAt(i).Name" class="form-control" />
+                                                </td>
+                                                @*<td>
+                                                        <input type="text" name="ProductTyeField[@i].Note" value="@Model.ProductTyeField.ElementAt(i).Note" class="form-control" />
+                                                    </td>*@
+                                                <td class="pt14">
+                                                    <a href="javascript:void(0)" class="text-danger" onclick="btnRemoveProductTypeFieldClick(this);"><i class="fa fa-times"></i></a>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <a href="javascript:void(0)" id="btnAddProductTypeField">+ Thêm mới</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-lightblue" type="submit">Lưu</button>
+    <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
+}
+@section Styles{
+    <style>
+        table#listAddProductTypeField tbody tr td {
+            padding: 5px;
+            padding-left: 0;
+            padding-bottom: 0;
+        }
+
+            table#listAddProductTypeField tbody tr td.pt14 {
+                padding-top: 14px;
+            }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function btnRemoveProductTypeFieldClick(e) {
+            var tr = $(e).parents("tr");
+
+            if (!cfmDelete()) return false;
+            
+            $(e).parents("tr").remove();
+        }
+        $(function () {
+            $("#btnAddProductTypeField").click(function () {
+                var tableBody = $('#listAddProductTypeField tbody');
+                var index = tableBody.find('tr').length;
+                var html = "";
+                html += "<tr>";
+                html += "   <td>";
+                html += "       <input type='hidden' name='ProductTyeField[" + index + "].Id' value='0' class = \"form-control\"/>";
+                html += "       <input type='text' name='ProductTyeField[" + index + "].Name' class = \"form-control\"/>";
+                html += "   </td>";
+                //html += "   <td>";
+                //html += "       <input type='text' name='ProductTyeField[" + index + "].Note' class = \"form-control\"/>";
+                //html += "   </td>";
+                html += "   <td class='pt14'>";
+                html += "       <a href=\"javascript:void(0)\" class=\"text-danger\" onclick=\"btnRemoveProductTypeFieldClick(this);\"><i class=\"fa fa-times\"></i></a>";
+                html += "   </td>";
+                html += "</tr>";
+                tableBody.append(html);
+            });
+        });
+    </script>
+}

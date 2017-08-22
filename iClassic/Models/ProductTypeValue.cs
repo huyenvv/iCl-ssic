@@ -12,19 +12,14 @@ namespace iClassic.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PhieuSua
+    public partial class ProductTypeValue
     {
         public int Id { get; set; }
-        public string NoiDung { get; set; }
-        public double SoTien { get; set; }
-        public System.DateTime NgayNhan { get; set; }
-        public System.DateTime NgayTra { get; set; }
-        public int Status { get; set; }
-        public int KhachHangId { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime Created { get; set; }
+        public string Value { get; set; }
+        public int ProductTypeFieldId { get; set; }
+        public int CustomerId { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual ProductTyeField ProductTyeField { get; set; }
     }
 }

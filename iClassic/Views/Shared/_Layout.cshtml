@@ -36,12 +36,16 @@
                     <li><a href="@Url.Action("Index", "PhieuSua")" data-href="Index/PhieuSua/NewOrEdit"><i class="fa fa-cog"></i> <span>Phiếu sửa chữa</span></a></li>
                     <li><a href="@Url.Action("Index", "PhieuChi")" data-href="Index/PhieuChi/NewOrEdit"><i class="fa fa-dollar"></i> <span>Phiếu chi</span></a></li>
 
-                    @if (User.IsInRole(RoleList.Admin))
+                    @if (User.IsInRole(RoleList.SupperAdmin) || User.IsInRole(RoleList.Admin))
                     {
                         <li><a href="@Url.Action("Index", "Customer")" data-href="Index/Customer/NewOrEdit"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
                         <li><a href="@Url.Action("Index", "LoaiVai")" data-href="Index/LoaiVai/NewOrEdit"><i class="fa fa-bars"></i> <span>Loại vải</span></a></li>
                         <li><a href="@Url.Action("Index", "Branch")" data-href="Index/Branch/NewOrEdit"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
                         <li><a href="@Url.Action("Employees", "Manage")"><i class="fa fa-user"></i> <span>Nhân viên</span></a></li>
+                        if (User.IsInRole(RoleList.SupperAdmin))
+                        {
+                            <li><a href="@Url.Action("Index", "ProductType")" data-href="Index/ProductType/NewOrEdit"><i class="fa fa-list-ol"></i> <span>Sản phẩm</span></a></li>
+                        }
                         <li><a href="@Url.Action("Index", "Statistic")" data-href="Index/Statistic/NewOrEdit"><i class="fa fa-bar-chart-o"></i> <span>Thống kê</span></a></li>
                     }
                 </ul>
@@ -122,12 +126,15 @@
         }
     }
     <script>
+        function cfmDelete() {
+            var isConfirm = confirm("Bạn có chắc chắn muốn xóa bản ghi này?");
+            return isConfirm;
+        }
         jQuery(document).ready(function () {
             "use strict";
 
             $(".btnConfirm").click(function () {
-                var isConfirm = confirm("Bạn có chắc chắn muốn xóa bản ghi này?");
-                return isConfirm;
+                return cfmDelete();
             });
 
             $(".sortField").click(function () {

@@ -117,9 +117,7 @@ namespace iClassic.Services.Implementation
             obj.TenKH = model.TenKH;
             obj.SDT = model.SDT;
             obj.Address = model.Address;
-            obj.SoDoSuit = model.SoDoSuit;
-            obj.SoDoQuan = model.SoDoQuan;
-            obj.SoDoSoMi = model.SoDoSoMi;
+            
             if (!string.IsNullOrWhiteSpace(model.Image))
             {
                 obj.Image = model.Image;

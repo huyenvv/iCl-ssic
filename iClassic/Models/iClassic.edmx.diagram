@@ -5,25 +5,31 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="adf06491c88c4bb8a265b6624547db2f" Name="Diagram1">
-        <EntityTypeShape EntityType="iClassicModel.AspNetRoles" Width="1.5" PointX="0.75" PointY="8" />
-        <EntityTypeShape EntityType="iClassicModel.AspNetUsers" Width="1.5" PointX="3" PointY="6.375" />
-        <EntityTypeShape EntityType="iClassicModel.Branch" Width="1.5" PointX="6" PointY="9.75" />
-        <EntityTypeShape EntityType="iClassicModel.LoaiVai" Width="1.5" PointX="5.25" PointY="13.75" />
-        <EntityTypeShape EntityType="iClassicModel.PhieuSanXuat" Width="1.5" PointX="10.5" PointY="11.5" />
-        <EntityTypeShape EntityType="iClassicModel.PhieuSua" Width="1.5" PointX="10.5" PointY="7.375" />
+        <EntityTypeShape EntityType="iClassicModel.AspNetRoles" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="iClassicModel.AspNetUsers" Width="1.5" PointX="3" PointY="8" />
+        <EntityTypeShape EntityType="iClassicModel.Branch" Width="1.5" PointX="6" PointY="11.5" />
+        <EntityTypeShape EntityType="iClassicModel.Customer" Width="1.5" PointX="8.25" PointY="8.625" />
+        <EntityTypeShape EntityType="iClassicModel.LoaiVai" Width="1.5" PointX="5.25" PointY="7.5" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuChi" Width="1.5" PointX="5.25" PointY="15.75" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuSanXuat" Width="1.5" PointX="13.5" PointY="8.375" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuSua" Width="1.5" PointX="10.5" PointY="9" />
+        <AssociationConnector Association="iClassicModel.FK_Customer_AspNetUsers" />
         <AssociationConnector Association="iClassicModel.FK_LoaiVai_AspNetUsers" />
+        <AssociationConnector Association="iClassicModel.FK_PhieuChi_AspNetUsers" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_AspNetUsers" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSua_AspNetUsers" />
-        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_LoaiVai" />
-        <AssociationConnector Association="iClassicModel.AspNetUserRoles" />
-        <EntityTypeShape EntityType="iClassicModel.PhieuChi" Width="1.5" PointX="5.25" PointY="5.625" />
-        <AssociationConnector Association="iClassicModel.FK_PhieuChi_AspNetUsers" />
-        <EntityTypeShape EntityType="iClassicModel.Customer" Width="1.5" PointX="8.25" PointY="7" />
-        <AssociationConnector Association="iClassicModel.FK_Customer_AspNetUsers" />
         <AssociationConnector Association="iClassicModel.FK_Customer_Branch" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Customer" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSua_Customer" />
-      </Diagram>
+        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_LoaiVai" />
+        <AssociationConnector Association="iClassicModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="iClassicModel.ProductType" Width="1.5" PointX="6" PointY="4.625" />
+        <EntityTypeShape EntityType="iClassicModel.ProductTypeValue" Width="1.5" PointX="10.5" PointY="5.5" />
+        <AssociationConnector Association="iClassicModel.FK_ProductTypeValue_Customer" />
+        <EntityTypeShape EntityType="iClassicModel.ProductTyeField" Width="1.5" PointX="8.25" PointY="4.375" />
+        <AssociationConnector Association="iClassicModel.FK_ProductTyeField_ProductType" />
+        <AssociationConnector Association="iClassicModel.FK_ProductTypeValue_ProductTyeField" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

@@ -41,6 +41,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Customer">
+      <EntityTypeMapping TypeName="iClassicModel.Customer">
+        <MappingFragment StoreEntitySet="Customer">
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="SDT" ColumnName="SDT" />
+          <ScalarProperty Name="TenKH" ColumnName="TenKH" />
+          <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="LoaiVai">
       <EntityTypeMapping TypeName="iClassicModel.LoaiVai">
         <MappingFragment StoreEntitySet="LoaiVai">
@@ -51,6 +67,19 @@
           <ScalarProperty Name="SoTien" ColumnName="SoTien" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="MaVai" ColumnName="MaVai" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhieuChi">
+      <EntityTypeMapping TypeName="iClassicModel.PhieuChi">
+        <MappingFragment StoreEntitySet="PhieuChi">
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
+          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+          <ScalarProperty Name="MucChi" ColumnName="MucChi" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -76,13 +105,13 @@
     <EntitySetMapping Name="PhieuSua">
       <EntityTypeMapping TypeName="iClassicModel.PhieuSua">
         <MappingFragment StoreEntitySet="PhieuSua">
-          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
           <ScalarProperty Name="Created" ColumnName="Created" />
           <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
           <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
           <ScalarProperty Name="NgayNhan" ColumnName="NgayNhan" />
+          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
           <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
@@ -96,34 +125,31 @@
         <ScalarProperty Name="Id" ColumnName="RoleId" />
       </EndProperty>
     </AssociationSetMapping>
-    <EntitySetMapping Name="PhieuChi">
-      <EntityTypeMapping TypeName="iClassicModel.PhieuChi">
-        <MappingFragment StoreEntitySet="PhieuChi">
-          <ScalarProperty Name="Created" ColumnName="Created" />
-          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-          <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
-          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
-          <ScalarProperty Name="MucChi" ColumnName="MucChi" />
+    <EntitySetMapping Name="ProductType">
+      <EntityTypeMapping TypeName="iClassicModel.ProductType">
+        <MappingFragment StoreEntitySet="ProductType">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Customer">
-      <EntityTypeMapping TypeName="iClassicModel.Customer">
-        <MappingFragment StoreEntitySet="Customer">
-          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-          <ScalarProperty Name="Created" ColumnName="Created" />
-          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+    <EntitySetMapping Name="ProductTypeValue">
+      <EntityTypeMapping TypeName="iClassicModel.ProductTypeValue">
+        <MappingFragment StoreEntitySet="ProductTypeValue">
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="ProductTypeFieldId" ColumnName="ProductTypeFieldId" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductTyeField">
+      <EntityTypeMapping TypeName="iClassicModel.ProductTyeField">
+        <MappingFragment StoreEntitySet="ProductTyeField">
+          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
           <ScalarProperty Name="Note" ColumnName="Note" />
-          <ScalarProperty Name="SoDoQuan" ColumnName="SoDoQuan" />
-          <ScalarProperty Name="SoDoSoMi" ColumnName="SoDoSoMi" />
-          <ScalarProperty Name="SoDoSuit" ColumnName="SoDoSuit" />
-          <ScalarProperty Name="Image" ColumnName="Image" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="SDT" ColumnName="SDT" />
-          <ScalarProperty Name="TenKH" ColumnName="TenKH" />
-          <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
