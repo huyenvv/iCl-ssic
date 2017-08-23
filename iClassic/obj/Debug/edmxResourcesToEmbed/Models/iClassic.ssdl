@@ -53,6 +53,7 @@
     <Property Name="MaKH" Type="nvarchar" MaxLength="12" StoreGeneratedPattern="Computed" />
     <Property Name="TenKH" Type="nvarchar" MaxLength="200" Nullable="false" />
     <Property Name="SDT" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="KenhQC" Type="nvarchar" MaxLength="200" />
     <Property Name="Address" Type="nvarchar" MaxLength="500" />
     <Property Name="Image" Type="nvarchar(max)" />
     <Property Name="Note" Type="nvarchar(max)" />

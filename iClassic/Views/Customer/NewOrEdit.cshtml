@@ -46,9 +46,14 @@
                         @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
                     </div>
-                    <div class="form-group">
+                    @*<div class="form-group">
                         <label>Ảnh đại diện</label>
                         <input type="file" name="fileImage" accept="image/*" class="form-control file" data-show-preview="false" data-show-upload="false" />
+                    </div>*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.KenhQC)
+                        @Html.EditorFor(model => model.KenhQC, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.KenhQC, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Note)
@@ -60,9 +65,10 @@
             <div class="row">
                 @{
                     var index = 0;
+                    var column = 12 / listProductType.Count();
                     foreach (var productType in listProductType)
                     {
-                        <div class="col-md-4 col-xs-6">
+                        <div class="col-sm-@column col-xs-6">
                             <div class="table-responsive mt10">
                                 <table class="table table-dark">
                                     <thead>
@@ -74,7 +80,7 @@
                                     </thead>
                                     <tbody>
                                         @if (productType.ProductTyeField.Any())
-                                        {                                            
+                                        {
                                             foreach (var productTypeField in productType.ProductTyeField.ToArray())
                                             {
                                                 var productTypeValue = Model.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == productTypeField.Id);

@@ -9,11 +9,11 @@ namespace iClassic.Models.Metadata
         [Display(Name = "Mã khách hàng")]
         public string MaKH { get; set; }
 
-        [Required(ErrorMessage = "Bạn phải nhập \"Tên khách hàng\"")]
+        [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Tên khách hàng")]
         public string TenKH { get; set; }
 
-        [Required(ErrorMessage = "Bạn phải nhập \"Số điện thoại\"")]
+        [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Số điện thoại")]
         public string SDT { get; set; }
 
@@ -24,6 +24,9 @@ namespace iClassic.Models.Metadata
         public string BranchId { get; set; }
 
         [Display(Name = "Ghi chú")]
-        public string Note { get; set; }        
+        public string Note { get; set; }
+
+        [Display(Name = "Kênh quảng cáo?")]
+        public string KenhQC { get; set; }  
     }
 }

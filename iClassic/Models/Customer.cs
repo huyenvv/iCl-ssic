@@ -32,6 +32,7 @@ namespace iClassic.Models
         public int BranchId { get; set; }
         public System.DateTime Created { get; set; }
         public string CreateBy { get; set; }
+        public string KenhQC { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Branch Branch { get; set; }

@@ -58,6 +58,7 @@
           <Property Name="MaKH" Type="nvarchar" MaxLength="12" StoreGeneratedPattern="Computed" />
           <Property Name="TenKH" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="SDT" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="KenhQC" Type="nvarchar" MaxLength="200" />
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
           <Property Name="Image" Type="nvarchar(max)" />
           <Property Name="Note" Type="nvarchar(max)" />
@@ -690,6 +691,7 @@
           <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_Customer" FromRole="Customer" ToRole="PhieuSanXuat" />
           <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="Customer" ToRole="PhieuSua" />
           <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_Customer" FromRole="Customer" ToRole="ProductTypeValue" />
+          <Property Name="KenhQC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProductTypeValue">
           <Key>
@@ -914,6 +916,7 @@
           <EntitySetMapping Name="Customer">
             <EntityTypeMapping TypeName="iClassicModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="KenhQC" ColumnName="KenhQC" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />

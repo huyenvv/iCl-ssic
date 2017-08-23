@@ -291,6 +291,7 @@
     <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_Customer" FromRole="Customer" ToRole="PhieuSanXuat" />
     <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="Customer" ToRole="PhieuSua" />
     <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_Customer" FromRole="Customer" ToRole="ProductTypeValue" />
+    <Property Name="KenhQC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="ProductTypeValue">
     <Key>
