@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
+using iClassic.Helper;
 
 namespace iClassic.Services.Implementation
 {
@@ -133,6 +134,12 @@ namespace iClassic.Services.Implementation
                 }
             }
             return list;
+        }
+
+        public int Count(TicketStatus status)
+        {
+            var stt = (byte)status;
+            return Where(m => m.Status == stt).Count();
         }
 
         public override void Insert(PhieuSanXuat model)

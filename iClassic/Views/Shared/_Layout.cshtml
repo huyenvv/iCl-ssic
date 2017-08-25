@@ -46,7 +46,14 @@
                         {
                             <li><a href="@Url.Action("Index", "ProductType")" data-href="Index/ProductType/NewOrEdit"><i class="fa fa-list-ol"></i> <span>Sản phẩm</span></a></li>
                         }
-                        <li><a href="@Url.Action("Index", "Statistic")" data-href="Index/Statistic/NewOrEdit"><i class="fa fa-bar-chart-o"></i> <span>Thống kê</span></a></li>
+                        <li class="nav-parent">
+                            <a href=""><i class="fa fa-bar-chart-o"></i> <span>Thống kê</span></a>
+                            <ul class="children">
+                                <li><a href="@Url.Action("Index", "Statistic")"  data-href="Index/Statistic/NewOrEdit"><i class="fa fa-caret-right"></i>Tổng quan</a></li>
+                                <li><a href="@Url.Action("Profit", "Statistic")"><i class="fa fa-caret-right"></i>Doanh thu</a></li>
+                                <li><a href="@Url.Action("CustomerVip", "Statistic")"><i class="fa fa-caret-right"></i>Khách hàng thường xuyên</a></li>
+                            </ul>
+                        </li>
                     }
                 </ul>
             </div><!-- leftpanelinner -->

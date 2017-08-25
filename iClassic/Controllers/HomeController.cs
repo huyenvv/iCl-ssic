@@ -1,18 +1,37 @@
-﻿using iClassic.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
+using System.Threading.Tasks;
+using System.Net;
 using System.Web.Mvc;
+using iClassic.Models;
+using iClassic.Services.Implementation;
+using PagedList;
+using log4net;
+using iClassic.Helper;
 
 namespace iClassic.Controllers
 {
     [Override.Authorize]
     public class HomeController : BaseController
     {
+        private readonly ILog _log;
+        private PhieuSuaRepository _phieuSuaRepository;
+        private PhieuSanXuatRepository _phieuSanXuatRepository;
+
+        public HomeController()
+        {
+            _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _phieuSuaRepository = new PhieuSuaRepository(_entities);
+            _phieuSanXuatRepository = new PhieuSanXuatRepository(_entities);
+        }
         public ActionResult Index()
         {
-            return View(new DashboardModel() { GraphData = string.Empty });
+            var model = new DashboardModel();
+            model.ChuaMay = _phieuSanXuatRepository.Count(TicketStatus.ChuaXuLy);
+            model.DaMayChuaTra = _phieuSanXuatRepository.Count(TicketStatus.DaXuLy);
+
+            model.ChuaSua = _phieuSuaRepository.Count(TicketStatus.ChuaXuLy);
+            model.DaSuaChuaTra = _phieuSuaRepository.Count(TicketStatus.DaXuLy);
+            return View(model);
         }
 
         public ActionResult About()

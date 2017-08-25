@@ -12,7 +12,5 @@ namespace iClassic.Models
 
         public int ChuaSua { get; set; }
         public int DaSuaChuaTra { get; set; }
-
-        public string GraphData { get; set; }
     }
 }

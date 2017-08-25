@@ -1,4 +1,6 @@
-﻿@model iClassic.Models.DashboardModel
+﻿@using iClassic.Models;
+@using iClassic.Helper;
+@model DashboardModel
 @{
     ViewBag.Title = "Trang chủ";
     ViewBag.Class = "fa fa-home";
@@ -12,7 +14,9 @@
             </div>
             <div class="panel-body text-center">
                 <h3 class="today">
-                    <a href="#">Chưa sản xuất xong: <strong class="text-danger">10</strong></a>
+                    <a href="@Url.Action("Index","PhieuSanXuat", new {Status = (byte)TicketStatus.ChuaXuLy })">
+                        Chưa sản xuất xong: <strong class="text-danger">@Model.ChuaMay</strong>
+                    </a>
                 </h3>
             </div><!-- panel-body -->
         </div><!-- panel -->
@@ -25,7 +29,9 @@
             </div>
             <div class="panel-body text-center">
                 <h3 class="today">
-                    <a href="#">Sản xuất xong chưa trả: <strong class="text-danger">20</strong></a>
+                    <a href="@Url.Action("Index","PhieuSanXuat", new {Status = (byte)TicketStatus.DaXuLy })">
+                        Sản xuất xong chưa trả: <strong class="text-danger">@Model.DaMayChuaTra</strong>
+                    </a>
                 </h3>
             </div><!-- panel-body -->
         </div><!-- panel -->
@@ -39,7 +45,9 @@
             </div>
             <div class="panel-body text-center">
                 <h3 class="today">
-                    <a href="#">Chưa sửa xong: <strong class="text-danger">10</strong></a>
+                    <a href="@Url.Action("Index","PhieuSua", new {Status = (byte)TicketStatus.ChuaXuLy })">
+                        Chưa sửa xong: <strong class="text-danger">@Model.ChuaSua</strong>
+                    </a>
                 </h3>
             </div><!-- panel-body -->
         </div><!-- panel -->
@@ -52,133 +60,12 @@
             </div>
             <div class="panel-body text-center">
                 <h3 class="today">
-                    <a href="#">Sửa xong chưa trả: <strong class="text-danger">20</strong></a>
+                    <a href="@Url.Action("Index","PhieuSua", new {Status = (byte)TicketStatus.DaXuLy })">
+                        Sửa xong chưa trả:
+                        <strong class="text-danger">@Model.DaSuaChuaTra</strong>
+                    </a>
                 </h3>
             </div><!-- panel-body -->
         </div><!-- panel -->
     </div>
 </div>
-<div class="panel panel-default boxStatistic">
-    <div class="panel-heading">
-        <h3 class="panel-title">Network Statistics </h3>
-    </div>
-    <div class="row">
-        <div class="col-md-3 col-sm-6">
-            <div class="col-md-12">
-                <select id="cboGraph" class="form-control input-sm">
-                    <option value="0">Today</option>
-                    <option value="1">Yesterday</option>
-                    <option value="2">Last 7 Days</option>
-                    <option value="3">This Month - @DateTime.Now.ToString("MMM")</option>
-                    <option value="4">Last Month - @DateTime.Now.AddMonths(-1).ToString("MMM")</option>
-                    <option value="5">Last Six Months</option>
-                    <option value="6">All Time</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="panel-body-nopadding relative">
-        <div class="text-center">
-            <h4>Earnings</h4>
-            <div id="legendChartMoney" class=""></div>
-        </div>
-        <div id="chartMoney" class="body-chart"></div>
-    </div>
-</div>
-
-@section Styles{
-    <link href="@Url.Content("~/Content/morris.css")" rel="stylesheet" />
-    <style>
-        .relative {
-            position: relative;
-        }
-
-        #legendChartActivity, #legendChartMoney {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-        }
-
-        .mbox {
-            display: inline-block;
-            width: 80px;
-            margin-left: 1px;
-            padding: 2px 0;
-            text-align: center;
-            color: #fff;
-        }
-
-        .panel-default > .panel-heading .badge {
-            background-color: #428BCA !important;
-            border-radius: 8px !important;
-        }
-    </style>
-}
-
-@section Scripts{
-    <script src="@Url.Content("~/Scripts/morris.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/raphael.min.js")"></script>
-    <script>
-
-        jQuery(document).ready(function () {
-
-            "use strict";
-
-            var delay = (function () {
-                var timer = 0;
-                return function (callback, ms) {
-                    clearTimeout(timer);
-                    timer = setTimeout(callback, ms);
-                };
-            })();
-
-            // Statistics Profit For  Network
-            var statsMoneyLabels = ['Revenue', 'Payout', 'Profit'];
-            var statsMoneyColors = ['#D9534F', '#428BCA', '#1CAF9A'];
-            var statsMoney = new Morris.Line({
-                // ID of the element in which to draw the chart.
-                element: 'chartMoney',
-                // Chart data records -- each entry in this array corresponds to a point on
-                // the chart.
-                //data: JSON.parse("@Model.GraphData".replace(/&quot;/g, '"')),
-                data: [{ "Time": "0", "Revenue": 2, "Payout": 0, "Profit": 0 }, { "Time": "1", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "2", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "3", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "4", "Revenue": 35, "Payout": 0, "Profit": 0 }, { "Time": "5", "Revenue": 9, "Payout": 0, "Profit": 0 }, { "Time": "6", "Revenue": 10, "Payout": 0, "Profit": 0 }, { "Time": "7", "Revenue": 1, "Payout": 0, "Profit": 0 }, { "Time": "8", "Revenue": 2, "Payout": 0, "Profit": 0 }, { "Time": "9", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "10", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "11", "Revenue": 5, "Payout": 0, "Profit": 0 }, { "Time": "12", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "13", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "14", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "15", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "16", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "17", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "18", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "19", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "20", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "21", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "22", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "23", "Revenue": 0, "Payout": 0, "Profit": 0 }],
-                preUnits: '$',
-                yLabelFormat: function (y) { return formatMoney(y); },
-                xkey: 'Time',
-                ykeys: ['Revenue', 'Payout', 'Profit'],
-                labels: statsMoneyLabels,
-                lineColors: statsMoneyColors,
-                lineWidth: '2px',
-                hideHover: true,
-                parseTime: false
-            });
-
-            statsMoneyLabels.forEach(function (label, i) {
-                var legendlabel = $('<span style="display: inline-block;">' + label + '</span>');
-                var legendItem = $('<div class="mbox"></div>').css('background-color', statsMoneyColors[i])
-                    .append(legendlabel);
-                $('#legendChartMoney').append(legendItem);
-            });
-
-            jQuery(window).resize(function () {
-                delay(function () {
-                    statsMoney.redraw();
-                }, 200);
-            }).trigger('resize');
-
-            $("#cboGraph").change(function () {
-                var $this = $(this);
-                var type = $this.val();
-                $(".boxStatistic").css("opacity", "0.5");
-                $this.attr("disabled", "disabled");
-                $.getJSON('@Url.Action("GetEarningsVolumes")?type=' + type, function (data) {
-                    if (data.Earnings && data.Earnings.length > 0) {
-                        statsMoney.setData(data.Earnings);
-                    }
-                    $(".boxStatistic").css("opacity", "1");
-                    $this.removeAttr("disabled");
-                });
-            });
-        });
-    </script>
-}
