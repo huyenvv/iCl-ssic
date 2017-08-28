@@ -17,4 +17,19 @@ namespace iClassic.Helper
         [Description("Đã trả cho khách")]
         DaTraChoKhach
     }
+
+    public enum ReportTypes
+    {        
+        ThisWeek,
+
+        ThisMonth,
+
+        LastMonth,
+
+
+
+        ThisYear,
+
+        
+    }
 }

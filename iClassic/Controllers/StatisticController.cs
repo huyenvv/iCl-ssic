@@ -13,6 +13,7 @@ namespace iClassic.Controllers
         // GET: Statistic
         public ActionResult Index()
         {
+
             return View();
         }
     }
