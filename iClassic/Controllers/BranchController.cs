@@ -10,7 +10,7 @@ using iClassic.Helper;
 
 namespace iClassic.Controllers
 {
-    [Override.Authorize(RoleList.Admin, RoleList.SupperAdmin)]
+    [Override.Authorize(RoleList.SupperAdmin)]
     public class BranchController : BaseController
     {
         private readonly ILog _log;

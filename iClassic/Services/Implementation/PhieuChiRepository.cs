@@ -29,7 +29,7 @@ namespace iClassic.Services.Implementation
 
         public IQueryable<PhieuChi> Search(PhieuChiSearch model)
         {
-            var list = GetAll();
+            var list = Where(m => m.BranchId == model.BranchId);
 
             if (!string.IsNullOrWhiteSpace(model.SearchText))
             {
@@ -84,9 +84,9 @@ namespace iClassic.Services.Implementation
             return list;
         }
 
-        public IQueryable<PhieuChi> GetByDateRange(DateTime? startDate, DateTime? endDate)
+        public IQueryable<PhieuChi> GetByDateRange(int branchId, DateTime? startDate, DateTime? endDate)
         {
-            return Where(m => (!startDate.HasValue || startDate <= m.Created) && (!endDate.HasValue || m.Created <= endDate));
+            return Where(m => m.BranchId == branchId && (!startDate.HasValue || startDate <= m.Created) && (!endDate.HasValue || m.Created <= endDate));
         }
 
         public override void Insert(PhieuChi model)

@@ -25,12 +25,13 @@ namespace iClassic.Controllers
         // GET: PhieuChies
         public ActionResult Index(PhieuChiSearch model)
         {
+            model.BranchId = GetPermissionBranchId(model.BranchId);
             var result = _phieuChiRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
@@ -43,7 +44,7 @@ namespace iClassic.Controllers
                 model = new PhieuChi();
             }
 
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
@@ -52,12 +53,13 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,MucChi,SoTien,NguoiNhanPhieu,ChiNhanhId")] PhieuChi model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,MucChi,SoTien,NguoiNhanPhieu,BranchId")] PhieuChi model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    model.BranchId = GetPermissionBranchId(model.BranchId);
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
@@ -80,7 +82,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
@@ -94,7 +96,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _phieuChiRepository.GetByIdAsync(id);
-                if (obj == null)
+                if (obj == null || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
                 {
                     return HttpNotFound();
                 }

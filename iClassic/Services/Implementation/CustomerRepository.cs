@@ -27,6 +27,11 @@ namespace iClassic.Services.Implementation
             return await FirstOrDefaultAsync(m => m.Id == id);
         }
 
+        public IQueryable<Customer> GetByBranchId(int branchId)
+        {
+            return Where(m => m.BranchId == branchId);
+        }
+
         public IQueryable<Customer> Search(CustomerSearch model)
         {
             var list = GetAll();

@@ -22,8 +22,10 @@ namespace iClassic.Services.Implementation
             _customerRepository = new CustomerRepository(entities);
         }
 
-        public ReportGraphResult[] Graph(ReportTypes type)
+        public ReportGraphResult[] Graph(StatisticSearch model)
         {
+            ReportTypes type = model.Type.HasValue ? model.Type.Value : ReportTypes.SevenDaysRecent;
+
             #region Build Date & Column
             var now = DateTime.Now;
             DateTime startDate = now.Date.AddDays(-6);
@@ -51,9 +53,9 @@ namespace iClassic.Services.Implementation
 
             #region Build Data
             var data = new ReportGraphResult[column];
-            var tongThuSanXuat = _phieuSanXuatRepository.GetByDateRange(startDate, now);
-            var tongThuSuachua = _phieuSuaRepository.GetByDateRange(startDate, now);
-            var tongChi = _phieuChiRepository.GetByDateRange(startDate, now);
+            var tongThuSanXuat = _phieuSanXuatRepository.GetByDateRange(model.BranchId, startDate, now);
+            var tongThuSuachua = _phieuSuaRepository.GetByDateRange(model.BranchId, startDate, now);
+            var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, startDate, now);
 
             for (int i = 1; i <= column; i++)
             {
@@ -78,7 +80,7 @@ namespace iClassic.Services.Implementation
                 var sanxuat = tongThuSanXuat.Where(m => startDate <= m.NgayLay && m.NgayLay <= endate).Sum(m => (float?)(m.DonGia + m.LoaiVai.SoTien) * m.SoLuong);
                 var suachua = tongThuSuachua.Where(m => startDate <= m.NgayTra && m.NgayTra <= endate).Sum(m => (float?)(m.SoTien));
                 var chi = tongChi.Where(m => startDate <= m.Created && m.Created <= endate).Sum(m => (float?)(m.SoTien));
-                item.Thu = (sanxuat + suachua) ?? 0;
+                item.Thu = (sanxuat ?? 0) + (suachua ?? 0);
                 item.Chi = chi ?? 0;
                 item.LoiNhuan = item.Thu - item.Chi;
                 #region item.Time
@@ -91,7 +93,7 @@ namespace iClassic.Services.Implementation
                         item.Time = startDate.ToString("yyyy");
                         break;
                     default:
-                        item.Time = startDate.ToString("dd");
+                        item.Time = startDate.ToString("dd/MM");
                         break;
                 }
                 #endregion
@@ -120,27 +122,27 @@ namespace iClassic.Services.Implementation
 
         public ReportProfit GetProfit(StatisticSearch model)
         {
-            var tongThuSanXuat = _phieuSanXuatRepository.GetByDateRange(model.StartDate, model.EndDate).Sum(m => (float?)(m.DonGia + m.LoaiVai.SoTien) * m.SoLuong);
-            var tongThuSuachua = _phieuSuaRepository.GetByDateRange(model.StartDate, model.EndDate).Sum(m => (float?)(m.SoTien));
-            var tongChi = _phieuChiRepository.GetByDateRange(model.StartDate, model.EndDate).Sum(m => (float?)(m.SoTien));
+            var tongThuSanXuat = _phieuSanXuatRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.DonGia + m.LoaiVai.SoTien) * m.SoLuong);
+            var tongThuSuachua = _phieuSuaRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.SoTien));
+            var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.SoTien));
 
             var profit = new ReportProfit();
-            profit.Thu = (tongThuSanXuat + tongThuSuachua) ?? 0;
+            profit.Thu = (tongThuSanXuat ?? 0) + (tongThuSuachua ?? 0);
             profit.Chi = tongChi ?? 0;
             profit.LoiNhuan = profit.Thu - profit.Chi;
             return profit;
         }
 
-        public IEnumerable<ReportCustomVip> GetCustomerVip(StatisticSearch model)
+        public IQueryable<ReportCustomVip> GetCustomerVip(StatisticSearch model)
         {
-            var allCustomers = _customerRepository.GetAll();
-            foreach (var item in allCustomers)
-            {
-                ReportCustomVip newItem = (ReportCustomVip)item;
-                newItem.SoLanSua = item.PhieuSua.Count;
-                newItem.SoLanMay = item.PhieuSanXuat.Count;
-                yield return newItem;
-            }
+            var allCustomers = _customerRepository.GetByBranchId(model.BranchId)
+                .Select(m => new ReportCustomVip
+                {
+                    Customer = m,
+                    SoLanMay = m.PhieuSanXuat.Count,
+                    SoLanSua = m.PhieuSua.Count
+                });
+            return allCustomers;
         }
     }
 }

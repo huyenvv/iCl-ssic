@@ -5,8 +5,9 @@ using System.Web;
 
 namespace iClassic.Models
 {
-    public class ReportCustomVip : Customer
+    public class ReportCustomVip
     {
+        public Customer Customer { get; set; }
         public int SoLanSua { get; set; }
         public int SoLanMay { get; set; }
     }

@@ -44,8 +44,8 @@ namespace iClassic.Controllers
             {
                 model = new PhieuSanXuat { NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam), NgayLay = DateTime.Now.AddDays(SoNgayThuSauKhiLam), SoLuong = 1 };
             }
-            CreateCustomerViewBag(model.KhachHangId);
-            CreateLoaiVaiViewBag(model.MaVaiId);
+            CreateCustomerViewBag(model.KhachHangId, CurrentUser.BranchId);
+            CreateLoaiVaiViewBag(model.MaVaiId, CurrentUser.BranchId);
             return View(model);
         }
 
@@ -82,8 +82,8 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateCustomerViewBag(model.KhachHangId);
-            CreateLoaiVaiViewBag(model.MaVaiId);
+            CreateCustomerViewBag(model.KhachHangId, CurrentUser.BranchId);
+            CreateLoaiVaiViewBag(model.MaVaiId, model.Customer.BranchId);
             return View(model);
         }
 
@@ -122,9 +122,9 @@ namespace iClassic.Controllers
             return View(list);
         }
 
-        private void CreateLoaiVaiViewBag(int maVaiId)
+        private void CreateLoaiVaiViewBag(int maVaiId, int branchId)
         {
-            ViewBag.MaVaiId = _loaiVaiRepository.GetAll();
+            ViewBag.MaVaiId = _loaiVaiRepository.GetByBranchId(branchId);
         }
 
         protected override void Dispose(bool disposing)

@@ -30,12 +30,13 @@ namespace iClassic.Controllers
         // GET: Customeres
         public ActionResult Index(CustomerSearch model)
         {
+            model.BranchId = GetPermissionBranchId(model.BranchId);
             var result = _customerRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
@@ -47,12 +48,13 @@ namespace iClassic.Controllers
             {
                 model = new Customer();
             }
-            CreateBrachViewBag(CurrentUser.BranchId);
+            var branchId = GetPermissionBranchId(model.BranchId);
+            CreateBranchViewBag(branchId);
             CreateListProductTypeViewBag();
             return View(model);
         }
 
-        
+
 
         // POST: Customeres/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -65,6 +67,7 @@ namespace iClassic.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    model.BranchId = GetPermissionBranchId(model.BranchId);
                     if (fileImage != null)
                     {
                         var fileName = FileHelper.CreateFile(fileImage, UploadFolder.KhachHang);
@@ -79,7 +82,7 @@ namespace iClassic.Controllers
                     else
                     {
                         _customerRepository.Update(model);
-                    }                    
+                    }
                     await _customerRepository.SaveAsync();
 
                     ShowMessageSuccess(Message.Update_Successfully);
@@ -93,7 +96,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             CreateListProductTypeViewBag();
             return View(model);
         }
@@ -108,7 +111,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _customerRepository.GetByIdAsync(id);
-                if (obj == null)
+                if (obj == null || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
                 {
                     return HttpNotFound();
                 }

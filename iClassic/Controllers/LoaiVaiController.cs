@@ -25,12 +25,14 @@ namespace iClassic.Controllers
         // GET: LoaiVaies
         public ActionResult Index(LoaiVaiSearch model)
         {
+            model.BranchId = GetPermissionBranchId(model.BranchId);
+
             var result = _LoaiVaiRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
@@ -42,7 +44,7 @@ namespace iClassic.Controllers
             {
                 return View(new LoaiVai());
             }
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
@@ -57,6 +59,7 @@ namespace iClassic.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    model.BranchId = GetPermissionBranchId(model.BranchId);
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
@@ -79,7 +82,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
@@ -93,7 +96,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _LoaiVaiRepository.GetByIdAsync(id);
-                if (obj == null)
+                if (obj == null || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
                 {
                     return HttpNotFound();
                 }

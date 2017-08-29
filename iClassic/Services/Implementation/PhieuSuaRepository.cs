@@ -116,16 +116,16 @@ namespace iClassic.Services.Implementation
             return list;
         }
 
-        public IQueryable<PhieuSua> GetByDateRange(DateTime? startDate, DateTime? endDate)
+        public IQueryable<PhieuSua> GetByDateRange(int branchId, DateTime? startDate, DateTime? endDate)
         {
             var statusDone = (byte)TicketStatus.DaTraChoKhach;
-            return Where(m => m.Status == statusDone && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
-        }
+            return Where(m => m.Customer.BranchId== branchId && m.Status == statusDone && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
+        }        
 
-        public int Count(TicketStatus status)
+        public int Count(int branchId, TicketStatus status)
         {
             var stt = (byte)status;
-            return Where(m => m.Status == stt).Count();
+            return Where(m => m.Customer.BranchId == branchId && m.Status == stt).Count();
         }
 
         public override void Insert(PhieuSua model)

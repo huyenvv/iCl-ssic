@@ -1,24 +1,33 @@
 ﻿@using iClassic.Helper;
 @using iClassic.Models;
 @using PagedList.Mvc;
-@model PagedList.IPagedList<Customer>
+@model PagedList.IPagedList<ReportCustomVip>
 
 @{
     ViewBag.Title = "Khách hàng thường xuyên";
     ViewBag.Class = "fa fa-bar-chart-o";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Thống kê</a>" +
                           "<span>" + ViewBag.Title + "</span>";
-    var searchModel = ViewBag.SearchModel as iClassic.Models.StatisticSearch;
+    var searchModel = ViewBag.SearchModel as StatisticSearch;
 }
+
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <a href="@Url.Action("NewOrEdit")" class="btn btn-lightblue btn-sm pull-right">In thống kê</a>
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
+    </div>
+</div>
 
 @using (Html.BeginForm(null, null, FormMethod.Get, new { role = "form", id = "frmSearch" }))
 {
     @Html.Hidden("SortName", searchModel.SortName)
     @Html.Hidden("SortOrder", searchModel.SortOrder)
     <div class="row">
-        @if (User.IsInRole(RoleList.Admin))
+        @if (User.IsInRole(RoleList.SupperAdmin))
         {
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 @Html.DropDownList("BranchId", null, htmlAttributes: new { @class = "form-control", onchange = "this.form.submit();" })
             </div>
         }
@@ -35,24 +44,14 @@
         <tr>
             <th>STT</th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="MaKH">Mã KH</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="KH">Khách hàng</a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="TenKH">Tên</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="SolanMay">Số lần may</a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="SDT">SĐT</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="SolanSua">Số lần sửa</a>
             </th>
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="Address">Địa chỉ</a>
-            </th>
-            @*<th>
-                    <a href="javascript:void(0)" class="sortField" data-sortName="SoDo">Số đo</a>
-                </th>*@
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="CreateDate">Ngày tạo</a>
-            </th>
-            <th></th>
         </tr>
 
         @{
@@ -64,26 +63,14 @@
                         @(stt++)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MaKH)
+                        @item.Customer.MaKH -
+                        @item.Customer.TenKH (@item.Customer.SDT)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TenKH)
+                        @Html.DisplayFor(modelItem => item.SoLanMay)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.SDT)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Address)
-                    </td>
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.SoDo)
-                        </td>*@
-                    <td>
-                        @item.Created.ToString("dd/MM/yyyy HH:mm:ss")
-                    </td>
-                    <td>
-                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })" class="btn btn-xs btn-primary">Sửa</a>
-                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
+                        @Html.DisplayFor(modelItem => item.SoLanSua)
                     </td>
                 </tr>
             }

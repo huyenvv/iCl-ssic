@@ -29,7 +29,7 @@ namespace iClassic.Services.Implementation
 
         public IQueryable<LoaiVai> Search(LoaiVaiSearch model)
         {
-            var list = GetAll();
+            var list = Where(m => m.BranchId == model.BranchId);
 
             if (!string.IsNullOrWhiteSpace(model.SearchText))
             {
@@ -99,6 +99,11 @@ namespace iClassic.Services.Implementation
             obj.Note = model.Note;
             obj.BranchId = model.BranchId;
             base.Update(obj);
+        }
+
+        public IQueryable<LoaiVai> GetByBranchId(int branchId)
+        {
+            return Where(m => m.BranchId == branchId);
         }
     }
 }

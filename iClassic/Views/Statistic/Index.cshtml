@@ -1,4 +1,5 @@
-﻿@model string
+﻿@using iClassic.Helper;
+@model string
 @{
     ViewBag.Title = "Thống kê";
     ViewBag.Class = "fa fa-bar-chart-o";
@@ -9,10 +10,16 @@
     <div class="panel-heading">
         <h3 class="panel-title">Biểu đồ thống kê</h3>
     </div>
-    <div class="row">
-        <div class="col-md-3 col-sm-6">
-            <div class="col-md-12">
-                <select id="cboGraph" class="form-control">                   
+    <div class="panel-body">
+        <div class="row">
+            @if (User.IsInRole(RoleList.SupperAdmin))
+            {
+                <div class="col-md-3 col-sm-6">
+                    @Html.DropDownList("BranchId", null, htmlAttributes: new { @class = "form-control", onchange = "this.form.submit();" })
+                </div>
+            }
+            <div class="col-md-3 col-sm-6">
+                <select id="cboGraph" class="form-control">
                     <option value="1">7 ngày gần nhất</option>
                     <option value="2">Tháng này - Tháng @DateTime.Now.ToString("MM")</option>
                     <option value="3">Tháng trước - Tháng @DateTime.Now.AddMonths(-1).ToString("MM")</option>
@@ -20,9 +27,9 @@
                     <option value="5">Từ khi thành lập</option>
                 </select>
             </div>
-        </div>
+        </div>        
     </div>
-    <div class="panel-body-nopadding relative">
+    <div class="relative">
         <div class="text-center">
             <h4>Lợi nhuận</h4>
             <div id="legendChartMoney" class=""></div>
@@ -85,7 +92,6 @@
                 // Chart data records -- each entry in this array corresponds to a point on
                 // the chart.
                 data: JSON.parse("@ViewBag.JsonData".replace(/&quot;/g, '"')),
-                //data: [{ "Time": "0", "Thu": 2, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "1", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "2", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "3", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "4", "Thu": 35, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "5", "Thu": 9, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "6", "Thu": 10, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "7", "Thu": 1, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "8", "Thu": 2, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "9", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "10", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "11", "Thu": 5, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "12", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "13", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "14", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "15", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "16", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "17", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "18", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "19", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "20", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "21", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "22", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "23", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }],
                 preUnits: '$',
                 yLabelFormat: function (y) { return formatMoney(y); },
                 xkey: 'Time',
@@ -110,18 +116,22 @@
                 }, 200);
             }).trigger('resize');
 
-            $("#cboGraph").change(function () {
-                var $this = $(this);
-                var type = $this.val();
+            function refreshDataGraph() {
+                var type = $("#cboGraph").val();
+                var branchId = $("#BranchId").val();
                 $(".boxStatistic").css("opacity", "0.5");
-                $this.attr("disabled", "disabled");
-                $.getJSON('@Url.Action("GetGraph")?type=' + type, function (data) {
+                $("#cboGraph, #BranchId").attr("disabled", "disabled");
+                $.getJSON('@Url.Action("GetGraph")?type=' + type + '&BranchId=' + branchId, function (data) {
                     if (data.Data && data.Data.length > 0) {
                         statsMoney.setData(JSON.parse(data.Data));
                     }
                     $(".boxStatistic").css("opacity", "1");
-                    $this.removeAttr("disabled");
+                    $("#cboGraph, #BranchId").removeAttr("disabled");
                 });
+            }
+
+            $("#cboGraph, #BranchId").change(function () {
+                refreshDataGraph();
             });
         });
     </script>

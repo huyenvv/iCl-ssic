@@ -45,6 +45,16 @@ namespace iClassic.Controllers
             }
         }
 
+        public int GetPermissionBranchId(int ? branchId)
+        {
+            if (!User.IsInRole(RoleList.SupperAdmin) || !branchId.HasValue || branchId == 0)
+            {
+                branchId = CurrentUser.BranchId;
+            }
+
+            return branchId.Value;
+        }
+
         public void ShowMessageError(string message)
         {
             SessionHelpers.Set(Constant.SESSION_MessageError, message);
@@ -55,14 +65,19 @@ namespace iClassic.Controllers
             SessionHelpers.Set(Constant.SESSION_MessageSuccess, message);
         }
 
-        public void CreateBrachViewBag(int selectedId)
+        public void CreateBranchViewBag(int selectedId)
         {
-            ViewBag.BranchId = new SelectList(_branchRepository.GetAll(), "Id", "Name", selectedId);
+            var listBranch = _branchRepository.GetAll();
+            if (!User.IsInRole(RoleList.SupperAdmin))
+            {
+                listBranch = listBranch.Where(m => m.Id == selectedId);
+            }
+            ViewBag.BranchId = new SelectList(listBranch, "Id", "Name", selectedId);
         }
 
-        public void CreateCustomerViewBag(int selectedId)
+        public void CreateCustomerViewBag(int selectedId, int branchId)
         {
-            var data = _customerRepository.GetAll().Select(m => new { m.Id, Title = m.TenKH + " (" + m.SDT + ")" });
+            var data = _customerRepository.GetByBranchId(branchId).Select(m => new { m.Id, Title = m.TenKH + " (" + m.SDT + ")" });
             ViewBag.KhachHangId = new SelectList(data, "Id", "Title", selectedId);
         }
 

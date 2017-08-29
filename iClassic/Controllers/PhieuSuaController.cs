@@ -41,7 +41,7 @@ namespace iClassic.Controllers
             {
                 model = new PhieuSua { NgayNhan = DateTime.Now, NgayTra = DateTime.Now.AddDays(SoNgayTraSauKhiSua) };
             }
-            CreateCustomerViewBag(model.Id);
+            CreateCustomerViewBag(model.Id, CurrentUser.BranchId);
             return View(model);
         }
 
@@ -78,7 +78,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateCustomerViewBag(model.Id);
+            CreateCustomerViewBag(model.Id, CurrentUser.BranchId);
             return View(model);
         }
 

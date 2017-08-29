@@ -335,18 +335,18 @@ namespace iClassic.Controllers
 
         public ActionResult Employees(EmployeeSearch model)
         {
+            model.BranchId = GetPermissionBranchId(model.BranchId);
             var result = _userRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult AddEmployee()
         {
-            CreateBrachViewBag(0);
             return View(new EmployeeModel());
         }
 
@@ -358,13 +358,14 @@ namespace iClassic.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    model.BranchId = GetPermissionBranchId(model.BranchId);
                     var user = new ApplicationUser
                     {
                         UserName = model.UserName,
                         Email = string.IsNullOrWhiteSpace(model.Email) ? "Empty@iclassic.vn" : model.Email,
                         PhoneNumber = model.PhoneNumber,
                         Name = model.Name,
-                        BranchId = CurrentUser.BranchId
+                        BranchId = model.BranchId
                     };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
@@ -387,18 +388,19 @@ namespace iClassic.Controllers
 
                 ShowMessageError(Message.Update_Fail);
             }
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
         public async Task<ActionResult> EditEmployee(string id)
         {
             var obj = await UserManager.FindByIdAsync(id);
-            if (obj == null || UserManager.IsInRole(obj.Id, RoleList.Admin))
+            if (obj == null || User.IsInRole(RoleList.Admin) && UserManager.IsInRole(obj.Id, RoleList.Admin) || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
             {
                 return HttpNotFound();
             }
-            CreateBrachViewBag(0);
+
+            CreateBranchViewBag(obj.BranchId);
             return View(obj.ToModel());
         }
 
@@ -410,6 +412,11 @@ namespace iClassic.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (User.IsInRole(RoleList.Admin) && UserManager.IsInRole(model.Id, RoleList.Admin))
+                        return HttpNotFound();
+
+                    model.BranchId = GetPermissionBranchId(model.BranchId);
+
                     var user = await UserManager.FindByIdAsync(model.Id);
 
                     user.UserName = model.UserName;
@@ -435,14 +442,14 @@ namespace iClassic.Controllers
 
                 ShowMessageError(Message.Update_Fail);
             }
-            CreateBrachViewBag(model.BranchId);
+            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
         public async Task<ActionResult> SetPasswordEmployee(string id)
         {
             var obj = await UserManager.FindByIdAsync(id);
-            if (obj == null || UserManager.IsInRole(obj.Id, RoleList.Admin))
+            if (obj == null || User.IsInRole(RoleList.Admin) && UserManager.IsInRole(obj.Id, RoleList.Admin) || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
             {
                 return HttpNotFound();
             }
@@ -455,8 +462,11 @@ namespace iClassic.Controllers
             try
             {
                 if (ModelState.IsValid)
-                {
+                {                   
                     var user = await UserManager.FindByIdAsync(model.Id);
+                    if (User.IsInRole(RoleList.Admin) && UserManager.IsInRole(model.Id, RoleList.Admin) || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != user.BranchId)
+                        return HttpNotFound();
+
                     var token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                     var result = await UserManager.ResetPasswordAsync(user.Id, token, model.Password);
                     if (result.Succeeded)
@@ -486,7 +496,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await UserManager.FindByIdAsync(id);
-                if (obj == null || UserManager.IsInRole(obj.Id, RoleList.Admin))
+                if (obj == null || User.IsInRole(RoleList.Admin) && UserManager.IsInRole(obj.Id, RoleList.Admin) || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
                 {
                     return HttpNotFound();
                 }

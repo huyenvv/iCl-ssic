@@ -11,6 +11,6 @@ namespace iClassic.Models
         public ReportTypes? Type { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-
+        public int BranchId { get; set; }
     }
 }
