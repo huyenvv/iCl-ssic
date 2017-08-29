@@ -1,0 +1,74 @@
+﻿@model iClassic.Models.ReportProfit
+
+@{
+    ViewBag.Title = "Doanh thu";
+    ViewBag.Class = "fa fa-bar-chart-o";
+    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Thống kê</a>" +
+                          "<span>" + ViewBag.Title + "</span>";
+    var searchModel = ViewBag.SearchModel as iClassic.Models.StatisticSearch;
+}
+
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" name="StartDate" placeholder="Từ ngày" value="@(searchModel.StartDate.HasValue?searchModel.StartDate.Value.ToString("dd/MM/yyyy"):"")" class="form-control datepicker" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="EndDate" placeholder="Đến ngày" value="@(searchModel.EndDate.HasValue?searchModel.EndDate.Value.ToString("dd/MM/yyyy"):"")" cla class="form-control datepicker" />
+                </div>
+                <button class="btn btn-lightblue" type="submit">Tìm kiếm</button>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-center">Thống kê thời gian từ ngày: @(searchModel.StartDate.HasValue?searchModel.StartDate.Value.ToString("dd/MM/yyyy"):"")
+                    đến ngày: @(searchModel.EndDate.HasValue ? searchModel.EndDate.Value.ToString("dd/MM/yyyy") : "")
+                    </h3>
+                    <h4>
+                        Tổng doanh thu:
+                        <strong class="text-primary">
+                            @Model.Thu.ToString("N0") ₫
+                        </strong>
+                    </h4>
+                    <h4>
+                        Tổng đã chi:
+                        <strong class="text-danger">
+                            @Model.Chi.ToString("N0") ₫
+                        </strong>
+                    </h4>
+                    <h4>
+                        Tổng lợi nhuận:
+                        <strong class="text-success">
+                            @Model.LoiNhuan.ToString("N0") ₫
+                        </strong>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>    
+}
+
+@section Styles{
+    <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" />
+}
+@section scripts{
+    <script src="@Url.Content("~/Scripts/moment.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
+    <script>
+        $(function () {
+            $('.datepicker').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        })
+    </script>
+}

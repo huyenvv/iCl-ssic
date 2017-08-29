@@ -1,25 +1,30 @@
-﻿<div class="panel panel-default boxStatistic">
+﻿@model string
+@{
+    ViewBag.Title = "Thống kê";
+    ViewBag.Class = "fa fa-bar-chart-o";
+    ViewBag.Breadcrumbs = ViewBag.Title;
+}
+
+<div class="panel panel-default boxStatistic">
     <div class="panel-heading">
-        <h3 class="panel-title">Network Statistics </h3>
+        <h3 class="panel-title">Biểu đồ thống kê</h3>
     </div>
     <div class="row">
         <div class="col-md-3 col-sm-6">
             <div class="col-md-12">
-                <select id="cboGraph" class="form-control input-sm">
-                    <option value="0">Today</option>
-                    <option value="1">Yesterday</option>
-                    <option value="2">Last 7 Days</option>
-                    <option value="3">This Month - @DateTime.Now.ToString("MMM")</option>
-                    <option value="4">Last Month - @DateTime.Now.AddMonths(-1).ToString("MMM")</option>
-                    <option value="5">Last Six Months</option>
-                    <option value="6">All Time</option>
+                <select id="cboGraph" class="form-control">                   
+                    <option value="1">7 ngày gần nhất</option>
+                    <option value="2">Tháng này - Tháng @DateTime.Now.ToString("MM")</option>
+                    <option value="3">Tháng trước - Tháng @DateTime.Now.AddMonths(-1).ToString("MM")</option>
+                    <option value="4">6 tháng gần nhất</option>
+                    <option value="5">Từ khi thành lập</option>
                 </select>
             </div>
         </div>
     </div>
     <div class="panel-body-nopadding relative">
         <div class="text-center">
-            <h4>Earnings</h4>
+            <h4>Lợi nhuận</h4>
             <div id="legendChartMoney" class=""></div>
         </div>
         <div id="chartMoney" class="body-chart"></div>
@@ -71,20 +76,20 @@
                 };
             })();
 
-            // Statistics Profit For  Network
-            var statsMoneyLabels = ['Revenue', 'Payout', 'Profit'];
-            var statsMoneyColors = ['#D9534F', '#428BCA', '#1CAF9A'];
+            // Statistics Lợi nhuận For  Network
+            var statsMoneyLabels = ['Thu', 'Chi', 'Lợi nhuận'];
+            var statsMoneyColors = ['#428BCA', '#D9534F', '#1CAF9A'];
             var statsMoney = new Morris.Line({
                 // ID of the element in which to draw the chart.
                 element: 'chartMoney',
                 // Chart data records -- each entry in this array corresponds to a point on
                 // the chart.
-                //data: JSON.parse("@@Model.GraphData".replace(/&quot;/g, '"')),
-                data: [{ "Time": "0", "Revenue": 2, "Payout": 0, "Profit": 0 }, { "Time": "1", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "2", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "3", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "4", "Revenue": 35, "Payout": 0, "Profit": 0 }, { "Time": "5", "Revenue": 9, "Payout": 0, "Profit": 0 }, { "Time": "6", "Revenue": 10, "Payout": 0, "Profit": 0 }, { "Time": "7", "Revenue": 1, "Payout": 0, "Profit": 0 }, { "Time": "8", "Revenue": 2, "Payout": 0, "Profit": 0 }, { "Time": "9", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "10", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "11", "Revenue": 5, "Payout": 0, "Profit": 0 }, { "Time": "12", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "13", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "14", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "15", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "16", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "17", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "18", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "19", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "20", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "21", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "22", "Revenue": 0, "Payout": 0, "Profit": 0 }, { "Time": "23", "Revenue": 0, "Payout": 0, "Profit": 0 }],
+                data: JSON.parse("@ViewBag.JsonData".replace(/&quot;/g, '"')),
+                //data: [{ "Time": "0", "Thu": 2, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "1", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "2", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "3", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "4", "Thu": 35, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "5", "Thu": 9, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "6", "Thu": 10, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "7", "Thu": 1, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "8", "Thu": 2, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "9", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "10", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "11", "Thu": 5, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "12", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "13", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "14", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "15", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "16", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "17", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "18", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "19", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "20", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "21", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "22", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }, { "Time": "23", "Thu": 0, "Chi": 0, "Lợi nhuận": 0 }],
                 preUnits: '$',
                 yLabelFormat: function (y) { return formatMoney(y); },
                 xkey: 'Time',
-                ykeys: ['Revenue', 'Payout', 'Profit'],
+                ykeys: ['Thu', 'Chi', 'Lợi nhuận'],
                 labels: statsMoneyLabels,
                 lineColors: statsMoneyColors,
                 lineWidth: '2px',
@@ -110,9 +115,9 @@
                 var type = $this.val();
                 $(".boxStatistic").css("opacity", "0.5");
                 $this.attr("disabled", "disabled");
-                $.getJSON('@Url.Action("GetEarningsVolumes")?type=' + type, function (data) {
-                    if (data.Earnings && data.Earnings.length > 0) {
-                        statsMoney.setData(data.Earnings);
+                $.getJSON('@Url.Action("GetGraph")?type=' + type, function (data) {
+                    if (data.Data && data.Data.length > 0) {
+                        statsMoney.setData(JSON.parse(data.Data));
                     }
                     $(".boxStatistic").css("opacity", "1");
                     $this.removeAttr("disabled");

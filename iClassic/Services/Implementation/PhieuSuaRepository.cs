@@ -116,6 +116,12 @@ namespace iClassic.Services.Implementation
             return list;
         }
 
+        public IQueryable<PhieuSua> GetByDateRange(DateTime? startDate, DateTime? endDate)
+        {
+            var statusDone = (byte)TicketStatus.DaTraChoKhach;
+            return Where(m => m.Status == statusDone && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
+        }
+
         public int Count(TicketStatus status)
         {
             var stt = (byte)status;

@@ -1,0 +1,107 @@
+﻿@using iClassic.Helper;
+@using iClassic.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Customer>
+
+@{
+    ViewBag.Title = "Khách hàng thường xuyên";
+    ViewBag.Class = "fa fa-bar-chart-o";
+    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Thống kê</a>" +
+                          "<span>" + ViewBag.Title + "</span>";
+    var searchModel = ViewBag.SearchModel as iClassic.Models.StatisticSearch;
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Get, new { role = "form", id = "frmSearch" }))
+{
+    @Html.Hidden("SortName", searchModel.SortName)
+    @Html.Hidden("SortOrder", searchModel.SortOrder)
+    <div class="row">
+        @if (User.IsInRole(RoleList.Admin))
+        {
+            <div class="col-md-3">
+                @Html.DropDownList("BranchId", null, htmlAttributes: new { @class = "form-control", onchange = "this.form.submit();" })
+            </div>
+        }
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="SearchText" placeholder="Tìm kiếm" value="@searchModel.SearchText">
+                <span class="input-group-addon" id="btnSearch"><i class="fa fa-search"></i></span>
+            </div>
+        </div>
+    </div>
+}
+<div class="table-responsive mt10">
+    <table class="table table-dark" cellspacing="0">
+        <tr>
+            <th>STT</th>
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="MaKH">Mã KH</a>
+            </th>
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="TenKH">Tên</a>
+            </th>
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="SDT">SĐT</a>
+            </th>
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Address">Địa chỉ</a>
+            </th>
+            @*<th>
+                    <a href="javascript:void(0)" class="sortField" data-sortName="SoDo">Số đo</a>
+                </th>*@
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="CreateDate">Ngày tạo</a>
+            </th>
+            <th></th>
+        </tr>
+
+        @{
+            var stt = 1;
+            foreach (var item in Model)
+            {
+                <tr class="stat even">
+                    <td class="ac">
+                        @(stt++)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaKH)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenKH)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SDT)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.SoDo)
+                        </td>*@
+                    <td>
+                        @item.Created.ToString("dd/MM/yyyy HH:mm:ss")
+                    </td>
+                    <td>
+                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })" class="btn btn-xs btn-primary">Sửa</a>
+                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new
+        {
+            page,
+            searchModel.BranchId,
+            searchModel.SearchText,
+            searchModel.SortOrder,
+            searchModel.PageSize
+        }))
+    </div>
+</div>

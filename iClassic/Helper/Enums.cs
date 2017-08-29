@@ -19,17 +19,15 @@ namespace iClassic.Helper
     }
 
     public enum ReportTypes
-    {        
-        ThisWeek,
+    {
+        SevenDaysRecent = 1,
 
-        ThisMonth,
+        ThisMonth = 2,
 
-        LastMonth,
+        LastMonth = 3,
 
+        SixMonthRecent = 4,
 
-
-        ThisYear,
-
-        
+        AllTime = 5,
     }
 }

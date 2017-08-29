@@ -84,6 +84,11 @@ namespace iClassic.Services.Implementation
             return list;
         }
 
+        public IQueryable<PhieuChi> GetByDateRange(DateTime? startDate, DateTime? endDate)
+        {
+            return Where(m => (!startDate.HasValue || startDate <= m.Created) && (!endDate.HasValue || m.Created <= endDate));
+        }
+
         public override void Insert(PhieuChi model)
         {
             model.Created = DateTime.Now;
