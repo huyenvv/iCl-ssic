@@ -67,7 +67,11 @@ namespace iClassic.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    model.BranchId = GetPermissionBranchId(model.BranchId);
+                    if (!IsValidBranch(model.BranchId))
+                    {
+                        return AccessDenied();
+                    }
+
                     if (fileImage != null)
                     {
                         var fileName = FileHelper.CreateFile(fileImage, UploadFolder.KhachHang);
@@ -111,7 +115,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _customerRepository.GetByIdAsync(id);
-                if (obj == null || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
+                if (obj == null || !IsValidBranch(obj.BranchId))
                 {
                     return HttpNotFound();
                 }

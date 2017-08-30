@@ -99,5 +99,19 @@ namespace iClassic.Controllers
                 return value;
             }
         }
+
+        public ActionResult AccessDenied()
+        {
+            return RedirectToAction("AccessDenied", "Account");
+        }
+
+        public bool IsValidBranch(int branchId)
+        {
+            if (User.IsInRole(RoleList.SupperAdmin) || CurrentUser.BranchId == branchId)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

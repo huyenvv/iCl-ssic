@@ -61,12 +61,7 @@ namespace iClassic.Controllers
 
         private void BranchPermisson(ref StatisticSearch model)
         {
-            if(model.BranchId == 0)
-            {
-                model.BranchId = CurrentUser.BranchId;
-            }
-
-            if (!User.IsInRole(RoleList.SupperAdmin))
+            if (!IsValidBranch(model.BranchId) || model.BranchId == 0)
             {
                 model.BranchId = CurrentUser.BranchId;
             }

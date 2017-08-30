@@ -43,7 +43,7 @@ namespace iClassic.Controllers
             if (model == null)
             {
                 model = new PhieuSanXuat { NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam), NgayLay = DateTime.Now.AddDays(SoNgayThuSauKhiLam), SoLuong = 1 };
-            }
+            }            
             CreateCustomerViewBag(model.KhachHangId, CurrentUser.BranchId);
             CreateLoaiVaiViewBag(model.MaVaiId, CurrentUser.BranchId);
             return View(model);
@@ -97,7 +97,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _phieuSanXuatRepository.GetByIdAsync(id);
-                if (obj == null)
+                if (obj == null || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.Customer.BranchId)
                 {
                     return HttpNotFound();
                 }

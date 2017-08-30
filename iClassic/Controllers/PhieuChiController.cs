@@ -59,7 +59,11 @@ namespace iClassic.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    model.BranchId = GetPermissionBranchId(model.BranchId);
+                    if (!IsValidBranch(model.BranchId))
+                    {
+                        return AccessDenied();
+                    }
+
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
@@ -96,7 +100,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _phieuChiRepository.GetByIdAsync(id);
-                if (obj == null || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
+                if (obj == null || !IsValidBranch(obj.BranchId))
                 {
                     return HttpNotFound();
                 }
