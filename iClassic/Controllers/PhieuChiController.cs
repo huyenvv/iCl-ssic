@@ -25,13 +25,12 @@ namespace iClassic.Controllers
         // GET: PhieuChies
         public ActionResult Index(PhieuChiSearch model)
         {
-            model.BranchId = GetPermissionBranchId(model.BranchId);
+            model.BranchId = CurrentBranchId;
             var result = _phieuChiRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
-            CreateBranchViewBag(model.BranchId);
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
@@ -41,10 +40,8 @@ namespace iClassic.Controllers
             var model = await _phieuChiRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new PhieuChi();
+                model = new PhieuChi { BranchId = CurrentBranchId };
             }
-
-            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
@@ -59,11 +56,7 @@ namespace iClassic.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (!IsValidBranch(model.BranchId))
-                    {
-                        return AccessDenied();
-                    }
-
+                    model.BranchId = CurrentBranchId;
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
@@ -86,7 +79,6 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 

@@ -41,14 +41,32 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Customer">
+      <EntityTypeMapping TypeName="iClassicModel.Customer">
+        <MappingFragment StoreEntitySet="Customer">
+          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="KenhQC" ColumnName="KenhQC" />
+          <ScalarProperty Name="SDT" ColumnName="SDT" />
+          <ScalarProperty Name="TenKH" ColumnName="TenKH" />
+          <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="LoaiVai">
       <EntityTypeMapping TypeName="iClassicModel.LoaiVai">
         <MappingFragment StoreEntitySet="LoaiVai">
           <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-          <ScalarProperty Name="Created" ColumnName="Created" />
           <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
           <ScalarProperty Name="Note" ColumnName="Note" />
-          <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+          <ScalarProperty Name="SoTienBanRa" ColumnName="SoTienBanRa" />
+          <ScalarProperty Name="SoTienNhapVao" ColumnName="SoTienNhapVao" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="MaVai" ColumnName="MaVai" />
           <ScalarProperty Name="Id" ColumnName="Id" />
@@ -72,14 +90,15 @@
       <EntityTypeMapping TypeName="iClassicModel.PhieuSanXuat">
         <MappingFragment StoreEntitySet="PhieuSanXuat">
           <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
           <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-          <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
           <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="NgayLay" ColumnName="NgayLay" />
+          <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
           <ScalarProperty Name="NgayThu" ColumnName="NgayThu" />
           <ScalarProperty Name="DatCoc" ColumnName="DatCoc" />
           <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-          <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+          <ScalarProperty Name="TienCong" ColumnName="TienCong" />
           <ScalarProperty Name="MaVaiId" ColumnName="MaVaiId" />
           <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
           <ScalarProperty Name="Id" ColumnName="Id" />
@@ -90,30 +109,13 @@
       <EntityTypeMapping TypeName="iClassicModel.PhieuSua">
         <MappingFragment StoreEntitySet="PhieuSua">
           <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
           <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-          <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
-          <ScalarProperty Name="NgayNhan" ColumnName="NgayNhan" />
           <ScalarProperty Name="SoTien" ColumnName="SoTien" />
           <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <AssociationSetMapping Name="AspNetUserRoles" TypeName="iClassicModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
-      <EndProperty Name="AspNetUsers">
-        <ScalarProperty Name="Id" ColumnName="UserId" />
-      </EndProperty>
-      <EndProperty Name="AspNetRoles">
-        <ScalarProperty Name="Id" ColumnName="RoleId" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <EntitySetMapping Name="ProductType">
-      <EntityTypeMapping TypeName="iClassicModel.ProductType">
-        <MappingFragment StoreEntitySet="ProductType">
-          <ScalarProperty Name="Note" ColumnName="Note" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -128,19 +130,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Customer">
-      <EntityTypeMapping TypeName="iClassicModel.Customer">
-        <MappingFragment StoreEntitySet="Customer">
-          <ScalarProperty Name="KenhQC" ColumnName="KenhQC" />
-          <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-          <ScalarProperty Name="Created" ColumnName="Created" />
-          <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+    <EntitySetMapping Name="ProductType">
+      <EntityTypeMapping TypeName="iClassicModel.ProductType">
+        <MappingFragment StoreEntitySet="ProductType">
           <ScalarProperty Name="Note" ColumnName="Note" />
-          <ScalarProperty Name="Image" ColumnName="Image" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="SDT" ColumnName="SDT" />
-          <ScalarProperty Name="TenKH" ColumnName="TenKH" />
-          <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -155,5 +149,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <AssociationSetMapping Name="AspNetUserRoles" TypeName="iClassicModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+      <EndProperty Name="AspNetUsers">
+        <ScalarProperty Name="Id" ColumnName="UserId" />
+      </EndProperty>
+      <EndProperty Name="AspNetRoles">
+        <ScalarProperty Name="Id" ColumnName="RoleId" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>

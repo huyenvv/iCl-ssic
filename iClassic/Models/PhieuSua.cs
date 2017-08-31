@@ -21,9 +21,11 @@ namespace iClassic.Models
         public int Status { get; set; }
         public int CustomerId { get; set; }
         public string CreateBy { get; set; }
+        public int BranchId { get; set; }
         public System.DateTime Created { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
+        public virtual Branch Branch { get; set; }
         public virtual Customer Customer { get; set; }
     }
 }

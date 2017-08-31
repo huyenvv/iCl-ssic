@@ -53,7 +53,7 @@
                 <a href="javascript:void(0)" class="sortField" data-sortName="LoaiVai">Loại vải</a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="DonGia">Đơn giá</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="TienCong">Tiền công</a>
             </th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="DatCoc">Đặt cọc</a>
@@ -65,7 +65,7 @@
                 <a href="javascript:void(0)" class="sortField" data-sortName="NgayThu">Ngày thử</a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="NgayLay">Ngày lấy</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="NgayTra">Ngày trả</a>
             </th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Status">Trạng thái</a>
@@ -89,7 +89,7 @@
                     </td>
                     <td>@item.LoaiVai.Name (@item.LoaiVai.MaVai)</td>
                     <td>
-                        @item.DonGia.ToString("N0") ₫
+                        @item.TienCong.ToString("N0") ₫
                     </td>
                     <td>
                         @item.DatCoc.ToString("N0") ₫
@@ -101,7 +101,7 @@
                         @item.NgayThu.ToString("dd/MM/yyyy HH:mm:ss")
                     </td>
                     <td>
-                        @item.NgayLay.ToString("dd/MM/yyyy HH:mm:ss")
+                        @item.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")
                     </td>
                     <td>
                         @Html.Raw(Helpers.DrawStatusTicket(item.Status))

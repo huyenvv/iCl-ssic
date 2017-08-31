@@ -5,7 +5,7 @@
     ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
     ViewBag.Class = "fa fa-dollar";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Phiếu sản xuất</a>" +
-                          "<span>"+ViewBag.Title+"</span>";
+                          "<span>" + ViewBag.Title + "</span>";
 
     var loaivai = ViewBag.MaVaiId as IQueryable<iClassic.Models.LoaiVai>;
 }
@@ -27,11 +27,12 @@
                 <div class="col-md-6">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.BranchId)
                     <div class="form-group">
-                        @Html.LabelFor(model => model.KhachHangId)
-                        @Html.DropDownList("KhachHangId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
+                        @Html.LabelFor(model => model.CustomerId)
+                        @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
                         <a href="@Url.Action("NewOrEdit","Customer")">+ Thêm mới khách hàng</a>
-                        @Html.ValidationMessageFor(model => model.KhachHangId, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.TenSanPham)
@@ -43,7 +44,7 @@
                         <select name="MaVaiId" id="MaVaiId" class="select2" , data-placeholder="Nhập tên hoặc mã vải...">
                             @foreach (var item in loaivai)
                             {
-                                <option value="@item.Id" data-money="@item.SoTien" @(item.Id == Model.MaVaiId ? "selected" : "")>
+                                <option value="@item.Id" data-money="@item.SoTienBanRa" @(item.Id == Model.MaVaiId ? "selected" : "")>
                                     @item.Name (@item.MaVai)
                                 </option>
                             }
@@ -52,15 +53,16 @@
                         @Html.ValidationMessageFor(model => model.MaVaiId, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.DonGia)
-                        @Html.EditorFor(model => model.DonGia, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DonGia, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.TienCong)
+                        @Html.EditorFor(model => model.TienCong, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TienCong, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.DatCoc)
                         @Html.EditorFor(model => model.DatCoc, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.DatCoc, "", new { @class = "text-danger" })
                     </div>
+                    <label class="text-danger">Còn thiếu: <strong id="TienConThieu"></strong></label>
                     <div class="form-group">
                         @Html.LabelFor(model => model.SoLuong)
                         @Html.EditorFor(model => model.SoLuong, new { htmlAttributes = new { @class = "form-control", min = "1" } })
@@ -72,9 +74,9 @@
                         @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.NgayLay)
-                        <input type="text" name="NgayLay" value="@Model.NgayLay.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
-                        @Html.ValidationMessageFor(model => model.NgayLay, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.NgayTra)
+                        <input type="text" name="NgayTra" value="@Model.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                        @Html.ValidationMessageFor(model => model.NgayTra, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Status)
@@ -104,7 +106,7 @@
     <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
     <script>
         function beforeSubmit() {
-            sotienObj = $("#DonGia");
+            sotienObj = $("#TienCong");
             var value = sotienObj.val().replace(/,/g, '');
             sotienObj.val(value);
 
@@ -119,16 +121,30 @@
         }
         $(function () {
             showSoTienLoaiVai();
-            $('#DonGia').maskMoney({ precision: 0 });
+            $('#TienCong').maskMoney({ precision: 0 });
             $('#DatCoc').maskMoney({ precision: 0 });
 
-            $("#MaVaiId").change(function () {
-                showSoTienLoaiVai();
-            });
+            //$("#MaVaiId").change(function () {
+            //    showSoTienLoaiVai();
+            //});
 
             $('.datepicker').datetimepicker({
                 format: 'DD/MM/YYYY HH:mm:ss',
                 //maxDate: moment()
+            });
+
+            $("#MaVaiId,#TienCong,#DatCoc,#SoLuong").change(function () {
+                if ($(this).has("#MaVaiId")) {
+                    showSoTienLoaiVai();
+                }
+
+                var tienvai = parseFloat($("#MaVaiId option:selected").attr("data-money")) | 0;
+                var tiencong = parseFloat($("#TienCong").val().replace(/,/g, '')) | 0;
+                var datcoc = parseFloat($("#DatCoc").val().replace(/,/g, '')) | 0;
+                var soluong = parseInt($("#SoLuong").val()) | 0;
+                var money = (tienvai + tiencong) * soluong - datcoc;
+
+                $("#TienConThieu").text(formatMoney(money));
             });
         });
     </script>

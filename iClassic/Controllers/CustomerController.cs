@@ -30,13 +30,12 @@ namespace iClassic.Controllers
         // GET: Customeres
         public ActionResult Index(CustomerSearch model)
         {
-            model.BranchId = GetPermissionBranchId(model.BranchId);
+            model.BranchId = CurrentBranchId;
             var result = _customerRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
-            CreateBranchViewBag(model.BranchId);
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
@@ -46,10 +45,8 @@ namespace iClassic.Controllers
             var model = await _customerRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new Customer();
+                model = new Customer() { BranchId = CurrentBranchId };
             }
-            var branchId = GetPermissionBranchId(model.BranchId);
-            CreateBranchViewBag(branchId);
             CreateListProductTypeViewBag();
             return View(model);
         }
@@ -100,7 +97,6 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateBranchViewBag(model.BranchId);
             CreateListProductTypeViewBag();
             return View(model);
         }

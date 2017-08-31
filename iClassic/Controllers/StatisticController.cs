@@ -22,49 +22,37 @@ namespace iClassic.Controllers
         // GET: Statistic
         public ActionResult Index(StatisticSearch model)
         {
-            BranchPermisson(ref model);
+            model.BranchId = CurrentBranchId;
             var jsonData = GetGraphJson(model);
             ViewBag.JsonData = jsonData;
-            CreateBranchViewBag(model.BranchId);
             return View();
         }
 
         // For call Ajax
         public JsonResult GetGraph(StatisticSearch model)
         {
-            BranchPermisson(ref model);
+            model.BranchId = CurrentBranchId;
             var jsonData = GetGraphJson(model);
             return Json(new { Data = jsonData }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Profit(StatisticSearch model)
         {
-            BranchPermisson(ref model);
+            model.BranchId = CurrentBranchId;
             var data = _reportServices.GetProfit(model);
-            CreateBranchViewBag(model.BranchId);
             ViewBag.SearchModel = model;
             return View(data);
         }
 
         public ActionResult CustomerVip(StatisticSearch model)
         {
-            BranchPermisson(ref model);
+            model.BranchId = CurrentBranchId;
             var data = _reportServices.GetCustomerVip(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
-            CreateBranchViewBag(model.BranchId);
             return View(data.OrderByDescending(m=>m.SoLanMay).ThenByDescending(m=>m.SoLanSua).ToPagedList(pageNumber, pageSize));
-        }
-
-
-        private void BranchPermisson(ref StatisticSearch model)
-        {
-            if (!IsValidBranch(model.BranchId) || model.BranchId == 0)
-            {
-                model.BranchId = CurrentUser.BranchId;
-            }
         }
 
         private string GetGraphJson(StatisticSearch model)

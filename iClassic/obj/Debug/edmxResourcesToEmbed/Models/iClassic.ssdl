@@ -57,8 +57,8 @@
     <Property Name="Address" Type="nvarchar" MaxLength="500" />
     <Property Name="Image" Type="nvarchar(max)" />
     <Property Name="Note" Type="nvarchar(max)" />
-    <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>
   <EntityType Name="LoaiVai">
@@ -68,10 +68,11 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="MaVai" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
-    <Property Name="SoTien" Type="float" Nullable="false" />
+    <Property Name="SoTienNhapVao" Type="float" Nullable="false" />
+    <Property Name="SoTienBanRa" Type="float" Nullable="false" />
     <Property Name="Note" Type="nvarchar" MaxLength="500" />
-    <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>
   <EntityType Name="PhieuChi">
@@ -93,14 +94,15 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="TenSanPham" Type="nvarchar" MaxLength="500" Nullable="false" />
     <Property Name="MaVaiId" Type="int" Nullable="false" />
-    <Property Name="DonGia" Type="float" Nullable="false" />
+    <Property Name="TienCong" Type="float" Nullable="false" />
     <Property Name="SoLuong" Type="int" Nullable="false" />
     <Property Name="DatCoc" Type="float" Nullable="false" />
     <Property Name="NgayThu" Type="datetime" Nullable="false" />
-    <Property Name="NgayLay" Type="datetime" Nullable="false" />
+    <Property Name="NgayTra" Type="datetime" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
-    <Property Name="KhachHangId" Type="int" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
     <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
   </EntityType>
   <EntityType Name="PhieuSua">
@@ -110,11 +112,11 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NoiDung" Type="nvarchar" MaxLength="500" Nullable="false" />
     <Property Name="SoTien" Type="float" Nullable="false" />
-    <Property Name="NgayNhan" Type="datetime" Nullable="false" />
     <Property Name="NgayTra" Type="datetime" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
-    <Property Name="KhachHangId" Type="int" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
     <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
   </EntityType>
   <EntityType Name="ProductTyeField">
@@ -143,6 +145,18 @@
     <Property Name="ProductTypeFieldId" Type="int" Nullable="false" />
     <Property Name="CustomerId" Type="int" Nullable="false" />
   </EntityType>
+  <Association Name="FK_AspNetUsers_Branch">
+    <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Branch">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUsers">
+        <PropertyRef Name="BranchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Customer_AspNetUsers">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
@@ -207,6 +221,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_LoaiVai_Branch">
+    <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+    <End Role="LoaiVai" Type="Self.LoaiVai" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Branch">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LoaiVai">
+        <PropertyRef Name="BranchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PhieuChi_AspNetUsers">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="PhieuChi" Type="Self.PhieuChi" Multiplicity="*" />
@@ -216,6 +242,18 @@
       </Principal>
       <Dependent Role="PhieuChi">
         <PropertyRef Name="CreateBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuChi_Branch">
+    <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+    <End Role="PhieuChi" Type="Self.PhieuChi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Branch">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PhieuChi">
+        <PropertyRef Name="BranchId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -231,6 +269,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PhieuSanXuat_Branch">
+    <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+    <End Role="PhieuSanXuat" Type="Self.PhieuSanXuat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Branch">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PhieuSanXuat">
+        <PropertyRef Name="BranchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PhieuSanXuat_Customer">
     <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
     <End Role="PhieuSanXuat" Type="Self.PhieuSanXuat" Multiplicity="*" />
@@ -239,7 +289,7 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="PhieuSanXuat">
-        <PropertyRef Name="KhachHangId" />
+        <PropertyRef Name="CustomerId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -267,6 +317,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PhieuSua_Branch">
+    <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+    <End Role="PhieuSua" Type="Self.PhieuSua" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Branch">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PhieuSua">
+        <PropertyRef Name="BranchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PhieuSua_Customer">
     <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
     <End Role="PhieuSua" Type="Self.PhieuSua" Multiplicity="*" />
@@ -275,7 +337,7 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="PhieuSua">
-        <PropertyRef Name="KhachHangId" />
+        <PropertyRef Name="CustomerId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -334,6 +396,10 @@
     <EntitySet Name="ProductTyeField" EntityType="Self.ProductTyeField" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductTypeValue" EntityType="Self.ProductTypeValue" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_AspNetUsers_Branch" Association="Self.FK_AspNetUsers_Branch">
+      <End Role="Branch" EntitySet="Branch" />
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+    </AssociationSet>
     <AssociationSet Name="FK_Customer_AspNetUsers" Association="Self.FK_Customer_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="Customer" EntitySet="Customer" />
@@ -354,12 +420,24 @@
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="LoaiVai" EntitySet="LoaiVai" />
     </AssociationSet>
+    <AssociationSet Name="FK_LoaiVai_Branch" Association="Self.FK_LoaiVai_Branch">
+      <End Role="Branch" EntitySet="Branch" />
+      <End Role="LoaiVai" EntitySet="LoaiVai" />
+    </AssociationSet>
     <AssociationSet Name="FK_PhieuChi_AspNetUsers" Association="Self.FK_PhieuChi_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="PhieuChi" EntitySet="PhieuChi" />
     </AssociationSet>
+    <AssociationSet Name="FK_PhieuChi_Branch" Association="Self.FK_PhieuChi_Branch">
+      <End Role="Branch" EntitySet="Branch" />
+      <End Role="PhieuChi" EntitySet="PhieuChi" />
+    </AssociationSet>
     <AssociationSet Name="FK_PhieuSanXuat_AspNetUsers" Association="Self.FK_PhieuSanXuat_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuSanXuat_Branch" Association="Self.FK_PhieuSanXuat_Branch">
+      <End Role="Branch" EntitySet="Branch" />
       <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
     </AssociationSet>
     <AssociationSet Name="FK_PhieuSanXuat_Customer" Association="Self.FK_PhieuSanXuat_Customer">
@@ -372,6 +450,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_PhieuSua_AspNetUsers" Association="Self.FK_PhieuSua_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="PhieuSua" EntitySet="PhieuSua" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuSua_Branch" Association="Self.FK_PhieuSua_Branch">
+      <End Role="Branch" EntitySet="Branch" />
       <End Role="PhieuSua" EntitySet="PhieuSua" />
     </AssociationSet>
     <AssociationSet Name="FK_PhieuSua_Customer" Association="Self.FK_PhieuSua_Customer">

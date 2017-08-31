@@ -31,9 +31,11 @@ namespace iClassic.Models
         public string Image { get; set; }
         public string Note { get; set; }
         public System.DateTime Created { get; set; }
+        public int BranchId { get; set; }
         public string CreateBy { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
+        public virtual Branch Branch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

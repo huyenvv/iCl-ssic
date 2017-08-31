@@ -25,6 +25,7 @@
                 <div class="col-md-6">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.BranchId)
                     <div class="form-group">
                         @Html.LabelFor(model => model.MaVai)
                         @Html.EditorFor(model => model.MaVai, new { htmlAttributes = new { @class = "form-control" } })
@@ -36,9 +37,14 @@
                         @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.SoTien)
-                        @Html.EditorFor(model => model.SoTien, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.SoTien, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.SoTienNhapVao)
+                        @Html.EditorFor(model => model.SoTienNhapVao, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SoTienNhapVao, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SoTienBanRa)
+                        @Html.EditorFor(model => model.SoTienBanRa, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SoTienBanRa, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Note)
@@ -57,12 +63,17 @@
     <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
     <script>
         function beforeSubmit() {
-            var sotienObj = $("#SoTien");
+            var sotienObj = $("#SoTienNhapVao");
+            var value = sotienObj.val().replace(/,/g, '');
+            sotienObj.val(value);
+
+            var sotienObj = $("#SoTienBanRa");
             var value = sotienObj.val().replace(/,/g, '');
             sotienObj.val(value);
         }
         $(function () {
-            $('#SoTien').maskMoney({ precision: 0});
+            $('#SoTienNhapVao').maskMoney({ precision: 0 });
+            $('#SoTienBanRa').maskMoney({ precision: 0 });
         })
     </script>
     @Scripts.Render("~/bundles/jqueryval")

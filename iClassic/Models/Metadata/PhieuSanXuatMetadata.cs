@@ -13,8 +13,8 @@ namespace iClassic.Models.Metadata
         public int MaVaiId { get; set; }
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Đơn giá")]
-        public double DonGia { get; set; }
+        [Display(Name = "Tiền công")]
+        public double TienCong { get; set; }
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Số lượng")]
@@ -29,8 +29,8 @@ namespace iClassic.Models.Metadata
         public System.DateTime NgayThu { get; set; }
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Ngày lấy")]
-        public System.DateTime NgayLay { get; set; }
+        [Display(Name = "Ngày trả")]
+        public System.DateTime NgayTra { get; set; }
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Trạng thái")]
@@ -38,6 +38,6 @@ namespace iClassic.Models.Metadata
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Khách hàng")]
-        public int KhachHangId { get; set; }
+        public int CustomerId { get; set; }
     }
 }

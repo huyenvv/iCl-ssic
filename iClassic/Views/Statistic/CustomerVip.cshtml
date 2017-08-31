@@ -25,12 +25,6 @@
     @Html.Hidden("SortName", searchModel.SortName)
     @Html.Hidden("SortOrder", searchModel.SortOrder)
     <div class="row">
-        @if (User.IsInRole(RoleList.SupperAdmin))
-        {
-            <div class="col-md-3 col-sm-6">
-                @Html.DropDownList("BranchId", null, htmlAttributes: new { @class = "form-control", onchange = "this.form.submit();" })
-            </div>
-        }
         <div class="col-md-3">
             <div class="input-group">
                 <input type="text" class="form-control" name="SearchText" placeholder="Tìm kiếm" value="@searchModel.SearchText">

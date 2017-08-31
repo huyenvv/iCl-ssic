@@ -37,6 +37,14 @@ namespace iClassic.Controllers
             }
         }
 
+        public int CurrentBranchId
+        {
+            get
+            {
+                return CurrentUser.BranchId;
+            }
+        }
+
         public string CurrentUserId
         {
             get
@@ -45,11 +53,11 @@ namespace iClassic.Controllers
             }
         }
 
-        public int GetPermissionBranchId(int ? branchId)
+        public int GetPermissionBranchId(int? branchId)
         {
             if (!User.IsInRole(RoleList.SupperAdmin) || !branchId.HasValue || branchId == 0)
             {
-                branchId = CurrentUser.BranchId;
+                branchId = CurrentBranchId;
             }
 
             return branchId.Value;
@@ -65,20 +73,20 @@ namespace iClassic.Controllers
             SessionHelpers.Set(Constant.SESSION_MessageSuccess, message);
         }
 
-        public void CreateBranchViewBag(int selectedId)
+        private void CreateBranchViewBag()
         {
             var listBranch = _branchRepository.GetAll();
             if (!User.IsInRole(RoleList.SupperAdmin))
             {
-                listBranch = listBranch.Where(m => m.Id == selectedId);
+                listBranch = listBranch.Where(m => m.Id == CurrentBranchId);
             }
-            ViewBag.BranchId = new SelectList(listBranch, "Id", "Name", selectedId);
+            ViewBag.BranchId = new SelectList(listBranch, "Id", "Name", CurrentBranchId);
         }
 
-        public void CreateCustomerViewBag(int selectedId, int branchId)
+        public void CreateCustomerViewBag(int selectedId)
         {
-            var data = _customerRepository.GetByBranchId(branchId).Select(m => new { m.Id, Title = m.TenKH + " (" + m.SDT + ")" });
-            ViewBag.KhachHangId = new SelectList(data, "Id", "Title", selectedId);
+            var data = _customerRepository.GetByBranchId(CurrentBranchId).Select(m => new { m.Id, Title = m.TenKH + " (" + m.SDT + ")" });
+            ViewBag.CustomerId = new SelectList(data, "Id", "Title", selectedId);
         }
 
         public int SoNgayTraSauKhiSua
@@ -107,7 +115,7 @@ namespace iClassic.Controllers
 
         public bool IsValidBranch(int branchId)
         {
-            if (User.IsInRole(RoleList.SupperAdmin) || CurrentUser.BranchId == branchId)
+            if (User.IsInRole(RoleList.SupperAdmin) || CurrentBranchId == branchId)
             {
                 return true;
             }

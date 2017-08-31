@@ -25,10 +25,11 @@
                 <div class="col-md-6">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.BranchId)
                     <div class="form-group">
-                        @Html.LabelFor(model => model.KhachHangId)
-                        @Html.DropDownList("KhachHangId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
-                        @Html.ValidationMessageFor(model => model.KhachHangId, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.CustomerId)
+                        @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
+                        @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.SoTien)
@@ -41,9 +42,9 @@
                         @Html.ValidationMessageFor(model => model.NoiDung, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.NgayNhan)
-                        <input type="text" name="NgayNhan" value="@Model.NgayNhan.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
-                        @Html.ValidationMessageFor(model => model.NgayNhan, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.Created)
+                        <input type="text" name="Created" value="@Model.Created.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                        @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.NgayTra)

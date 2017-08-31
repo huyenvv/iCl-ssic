@@ -26,11 +26,11 @@ namespace iClassic.Controllers
         public ActionResult Index()
         {
             var model = new DashboardModel();
-            model.ChuaMay = _phieuSanXuatRepository.Count(CurrentUser.BranchId, TicketStatus.ChuaXuLy);
-            model.DaMayChuaTra = _phieuSanXuatRepository.Count(CurrentUser.BranchId, TicketStatus.DaXuLy);
+            model.ChuaMay = _phieuSanXuatRepository.Count(CurrentBranchId, TicketStatus.ChuaXuLy);
+            model.DaMayChuaTra = _phieuSanXuatRepository.Count(CurrentBranchId, TicketStatus.DaXuLy);
 
-            model.ChuaSua = _phieuSuaRepository.Count(CurrentUser.BranchId, TicketStatus.ChuaXuLy);
-            model.DaSuaChuaTra = _phieuSuaRepository.Count(CurrentUser.BranchId, TicketStatus.DaXuLy);
+            model.ChuaSua = _phieuSuaRepository.Count(CurrentBranchId, TicketStatus.ChuaXuLy);
+            model.DaSuaChuaTra = _phieuSuaRepository.Count(CurrentBranchId, TicketStatus.DaXuLy);
             return View(model);
         }
 

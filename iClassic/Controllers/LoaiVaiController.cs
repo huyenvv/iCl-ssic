@@ -25,14 +25,13 @@ namespace iClassic.Controllers
         // GET: LoaiVaies
         public ActionResult Index(LoaiVaiSearch model)
         {
-            model.BranchId = GetPermissionBranchId(model.BranchId);
+            model.BranchId = CurrentBranchId;
 
             var result = _LoaiVaiRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
             ViewBag.SearchModel = model;
-            CreateBranchViewBag(model.BranchId);
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
@@ -42,9 +41,8 @@ namespace iClassic.Controllers
             var model = await _LoaiVaiRepository.GetByIdAsync(id);
             if (model == null)
             {
-                return View(new LoaiVai());
+                return View(new LoaiVai { BranchId = CurrentBranchId });
             }
-            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
@@ -53,13 +51,13 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,SoTien,MaVai,Note,BranchId")] LoaiVai model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,SoTienNhapVao,SoTienBanRa,MaVai,Note,BranchId")] LoaiVai model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    model.BranchId = GetPermissionBranchId(model.BranchId);
+                    model.BranchId = CurrentBranchId;
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
@@ -82,7 +80,6 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateBranchViewBag(model.BranchId);
             return View(model);
         }
 
@@ -96,7 +93,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _LoaiVaiRepository.GetByIdAsync(id);
-                if (obj == null || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.BranchId)
+                if (obj == null || !IsValidBranch(obj.BranchId))
                 {
                     return HttpNotFound();
                 }

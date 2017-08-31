@@ -10,7 +10,7 @@ namespace iClassic.Models.Metadata
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Ngày nhận")]
-        public System.DateTime NgayNhan { get; set; }
+        public System.DateTime Created { get; set; }
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Ngày trả")]
@@ -22,6 +22,6 @@ namespace iClassic.Models.Metadata
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Khách hàng")]
-        public int KhachHangId { get; set; }
+        public int CustomerId { get; set; }
     }
 }

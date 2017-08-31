@@ -25,6 +25,7 @@ namespace iClassic.Controllers
         // GET: PhieuSuaes
         public ActionResult Index(PhieuSuaSearch model)
         {
+            model.BranchId = CurrentBranchId;
             var result = _PhieuSuaRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
@@ -39,9 +40,14 @@ namespace iClassic.Controllers
             var model = await _PhieuSuaRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new PhieuSua { NgayNhan = DateTime.Now, NgayTra = DateTime.Now.AddDays(SoNgayTraSauKhiSua) };
+                model = new PhieuSua
+                {
+                    Created = DateTime.Now,
+                    NgayTra = DateTime.Now.AddDays(SoNgayTraSauKhiSua),
+                    BranchId = CurrentBranchId
+                };
             }
-            CreateCustomerViewBag(model.Id, CurrentUser.BranchId);
+            CreateCustomerViewBag(model.Id);
             return View(model);
         }
 
@@ -50,12 +56,13 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,KhachHangId,SoTien,NoiDung,NgayNhan,NgayTra,Status")] PhieuSua model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,CustomerId,SoTien,NoiDung,Created,NgayTra,Status,BranchId")] PhieuSua model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    model.BranchId = CurrentBranchId;
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
@@ -78,7 +85,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateCustomerViewBag(model.Id, CurrentUser.BranchId);
+            CreateCustomerViewBag(model.Id);
             return View(model);
         }
 
@@ -92,7 +99,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _PhieuSuaRepository.GetByIdAsync(id);
-                if (obj == null)
+                if (obj == null || !IsValidBranch(obj.BranchId))
                 {
                     return HttpNotFound();
                 }

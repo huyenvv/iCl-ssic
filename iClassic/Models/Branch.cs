@@ -18,6 +18,11 @@ namespace iClassic.Models
         public Branch()
         {
             this.AspNetUsers = new HashSet<AspNetUsers>();
+            this.Customer = new HashSet<Customer>();
+            this.LoaiVai = new HashSet<LoaiVai>();
+            this.PhieuChi = new HashSet<PhieuChi>();
+            this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
+            this.PhieuSua = new HashSet<PhieuSua>();
         }
     
         public int Id { get; set; }
@@ -28,5 +33,15 @@ namespace iClassic.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Customer> Customer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LoaiVai> LoaiVai { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuChi> PhieuChi { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
     }
 }

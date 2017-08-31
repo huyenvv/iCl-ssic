@@ -28,6 +28,7 @@ namespace iClassic.Controllers
         // GET: PhieuSanXuates
         public ActionResult Index(PhieuSanXuatSearch model)
         {
+            model.BranchId = CurrentBranchId;
             var result = _phieuSanXuatRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
@@ -42,10 +43,15 @@ namespace iClassic.Controllers
             var model = await _phieuSanXuatRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new PhieuSanXuat { NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam), NgayLay = DateTime.Now.AddDays(SoNgayThuSauKhiLam), SoLuong = 1 };
+                model = new PhieuSanXuat {
+                    NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
+                    NgayTra = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
+                    SoLuong = 1 ,
+                    BranchId = CurrentBranchId
+                };
             }            
-            CreateCustomerViewBag(model.KhachHangId, CurrentUser.BranchId);
-            CreateLoaiVaiViewBag(model.MaVaiId, CurrentUser.BranchId);
+            CreateCustomerViewBag(model.CustomerId);
+            CreateLoaiVaiViewBag(model.MaVaiId);
             return View(model);
         }
 
@@ -54,12 +60,13 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenSanPham,MaVaiId,DonGia,SoLuong,DatCoc,NgayThu,NgayLay,Status,KhachHangId")] PhieuSanXuat model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenSanPham,MaVaiId,TienCong,SoLuong,DatCoc,NgayThu,NgayTra,Status,CustomerId,BranchId")] PhieuSanXuat model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    model.BranchId = CurrentBranchId;
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
@@ -82,8 +89,8 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateCustomerViewBag(model.KhachHangId, CurrentUser.BranchId);
-            CreateLoaiVaiViewBag(model.MaVaiId, model.Customer.BranchId);
+            CreateCustomerViewBag(model.CustomerId);
+            CreateLoaiVaiViewBag(model.MaVaiId);
             return View(model);
         }
 
@@ -97,7 +104,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _phieuSanXuatRepository.GetByIdAsync(id);
-                if (obj == null || !User.IsInRole(RoleList.SupperAdmin) && CurrentUser.BranchId != obj.Customer.BranchId)
+                if (obj == null || !IsValidBranch(obj.BranchId))
                 {
                     return HttpNotFound();
                 }
@@ -122,9 +129,9 @@ namespace iClassic.Controllers
             return View(list);
         }
 
-        private void CreateLoaiVaiViewBag(int maVaiId, int branchId)
+        private void CreateLoaiVaiViewBag(int maVaiId)
         {
-            ViewBag.MaVaiId = _loaiVaiRepository.GetByBranchId(branchId);
+            ViewBag.MaVaiId = _loaiVaiRepository.GetByBranchId(CurrentBranchId);
         }
 
         protected override void Dispose(bool disposing)

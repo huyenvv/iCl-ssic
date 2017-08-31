@@ -77,7 +77,7 @@ namespace iClassic.Services.Implementation
                 }
                 #endregion
 
-                var sanxuat = tongThuSanXuat.Where(m => startDate <= m.NgayLay && m.NgayLay <= endate).Sum(m => (float?)(m.DonGia + m.LoaiVai.SoTien) * m.SoLuong);
+                var sanxuat = tongThuSanXuat.Where(m => startDate <= m.NgayTra && m.NgayTra <= endate).Sum(m => (float?)(m.TienCong + m.LoaiVai.SoTienBanRa) * m.SoLuong);
                 var suachua = tongThuSuachua.Where(m => startDate <= m.NgayTra && m.NgayTra <= endate).Sum(m => (float?)(m.SoTien));
                 var chi = tongChi.Where(m => startDate <= m.Created && m.Created <= endate).Sum(m => (float?)(m.SoTien));
                 item.Thu = (sanxuat ?? 0) + (suachua ?? 0);
@@ -122,7 +122,7 @@ namespace iClassic.Services.Implementation
 
         public ReportProfit GetProfit(StatisticSearch model)
         {
-            var tongThuSanXuat = _phieuSanXuatRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.DonGia + m.LoaiVai.SoTien) * m.SoLuong);
+            var tongThuSanXuat = _phieuSanXuatRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.TienCong + m.LoaiVai.SoTienBanRa) * m.SoLuong);
             var tongThuSuachua = _phieuSuaRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.SoTien));
             var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.SoTien));
 
