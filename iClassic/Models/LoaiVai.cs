@@ -23,9 +23,9 @@ namespace iClassic.Models
         public int Id { get; set; }
         public string MaVai { get; set; }
         public string Name { get; set; }
-        public double SoTien { get; set; }
+        public double SoTienNhapVao { get; set; }
+        public double SoTienBanRa { get; set; }
         public string Note { get; set; }
-        public int BranchId { get; set; }
         public System.DateTime Created { get; set; }
         public string CreateBy { get; set; }
     

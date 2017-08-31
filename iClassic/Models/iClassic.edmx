@@ -62,7 +62,6 @@
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
           <Property Name="Image" Type="nvarchar(max)" />
           <Property Name="Note" Type="nvarchar(max)" />
-          <Property Name="BranchId" Type="int" Nullable="false" />
           <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
@@ -73,9 +72,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MaVai" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="SoTien" Type="float" Nullable="false" />
+          <Property Name="SoTienNhapVao" Type="float" Nullable="false" />
+          <Property Name="SoTienBanRa" Type="float" Nullable="false" />
           <Property Name="Note" Type="nvarchar" MaxLength="500" />
-          <Property Name="BranchId" Type="int" Nullable="false" />
           <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
@@ -87,7 +86,6 @@
           <Property Name="MucChi" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="SoTien" Type="float" Nullable="false" />
           <Property Name="NguoiNhanPhieu" Type="nvarchar" MaxLength="500" Nullable="false" />
-          <Property Name="BranchId" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
@@ -98,13 +96,13 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenSanPham" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="MaVaiId" Type="int" Nullable="false" />
-          <Property Name="DonGia" Type="float" Nullable="false" />
+          <Property Name="TienCong" Type="float" Nullable="false" />
           <Property Name="SoLuong" Type="int" Nullable="false" />
           <Property Name="DatCoc" Type="float" Nullable="false" />
           <Property Name="NgayThu" Type="datetime" Nullable="false" />
-          <Property Name="NgayLay" Type="datetime" Nullable="false" />
+          <Property Name="NgayTra" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="KhachHangId" Type="int" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
@@ -115,10 +113,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NoiDung" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="SoTien" Type="float" Nullable="false" />
-          <Property Name="NgayNhan" Type="datetime" Nullable="false" />
           <Property Name="NgayTra" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="KhachHangId" Type="int" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
         </EntityType>
@@ -148,6 +145,18 @@
           <Property Name="ProductTypeFieldId" Type="int" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_AspNetUsers_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="BranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Customer_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
@@ -157,18 +166,6 @@
             </Principal>
             <Dependent Role="Customer">
               <PropertyRef Name="CreateBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Customer_Branch">
-          <End Role="Branch" Type="Self.Branch" Multiplicity="1" />
-          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Branch">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Customer">
-              <PropertyRef Name="BranchId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -244,7 +241,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PhieuSanXuat">
-              <PropertyRef Name="KhachHangId" />
+              <PropertyRef Name="CustomerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -280,7 +277,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PhieuSua">
-              <PropertyRef Name="KhachHangId" />
+              <PropertyRef Name="CustomerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -339,12 +336,12 @@
           <EntitySet Name="ProductTyeField" EntityType="Self.ProductTyeField" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTypeValue" EntityType="Self.ProductTypeValue" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AspNetUsers_Branch" Association="Self.FK_AspNetUsers_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
           <AssociationSet Name="FK_Customer_AspNetUsers" Association="Self.FK_Customer_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Customer" EntitySet="Customer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Customer_Branch" Association="Self.FK_Customer_Branch">
-            <End Role="Branch" EntitySet="Branch" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
@@ -404,10 +401,22 @@
           <EntitySet Name="AspNetRoles" EntityType="iClassicModel.AspNetRoles" />
           <EntitySet Name="AspNetUsers" EntityType="iClassicModel.AspNetUsers" />
           <EntitySet Name="Branch" EntityType="iClassicModel.Branch" />
+          <EntitySet Name="Customer" EntityType="iClassicModel.Customer" />
           <EntitySet Name="LoaiVai" EntityType="iClassicModel.LoaiVai" />
           <EntitySet Name="PhieuChi" EntityType="iClassicModel.PhieuChi" />
           <EntitySet Name="PhieuSanXuat" EntityType="iClassicModel.PhieuSanXuat" />
           <EntitySet Name="PhieuSua" EntityType="iClassicModel.PhieuSua" />
+          <EntitySet Name="ProductTyeField" EntityType="iClassicModel.ProductTyeField" />
+          <EntitySet Name="ProductType" EntityType="iClassicModel.ProductType" />
+          <EntitySet Name="ProductTypeValue" EntityType="iClassicModel.ProductTypeValue" />
+          <AssociationSet Name="FK_AspNetUsers_Branch" Association="iClassicModel.FK_AspNetUsers_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_AspNetUsers" Association="iClassicModel.FK_Customer_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
           <AssociationSet Name="FK_LoaiVai_AspNetUsers" Association="iClassicModel.FK_LoaiVai_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="LoaiVai" EntitySet="LoaiVai" />
@@ -424,30 +433,6 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="PhieuSua" EntitySet="PhieuSua" />
           </AssociationSet>
-          <AssociationSet Name="FK_PhieuSanXuat_LoaiVai" Association="iClassicModel.FK_PhieuSanXuat_LoaiVai">
-            <End Role="LoaiVai" EntitySet="LoaiVai" />
-            <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
-          </AssociationSet>
-          <AssociationSet Name="AspNetUserRoles" Association="iClassicModel.AspNetUserRoles">
-            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-          </AssociationSet>
-          <EntitySet Name="ProductType" EntityType="iClassicModel.ProductType" />
-          <EntitySet Name="ProductTyeField" EntityType="iClassicModel.ProductTyeField" />
-          <AssociationSet Name="FK_ProductTyeField_ProductType" Association="iClassicModel.FK_ProductTyeField_ProductType">
-            <End Role="ProductType" EntitySet="ProductType" />
-            <End Role="ProductTyeField" EntitySet="ProductTyeField" />
-          </AssociationSet>
-          <EntitySet Name="Customer" EntityType="iClassicModel.Customer" />
-          <EntitySet Name="ProductTypeValue" EntityType="iClassicModel.ProductTypeValue" />
-          <AssociationSet Name="FK_Customer_AspNetUsers" Association="iClassicModel.FK_Customer_AspNetUsers">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Customer" EntitySet="Customer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Customer_Branch" Association="iClassicModel.FK_Customer_Branch">
-            <End Role="Branch" EntitySet="Branch" />
-            <End Role="Customer" EntitySet="Customer" />
-          </AssociationSet>
           <AssociationSet Name="FK_PhieuSanXuat_Customer" Association="iClassicModel.FK_PhieuSanXuat_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
@@ -460,9 +445,21 @@
             <End Role="Customer" EntitySet="Customer" />
             <End Role="ProductTypeValue" EntitySet="ProductTypeValue" />
           </AssociationSet>
+          <AssociationSet Name="FK_PhieuSanXuat_LoaiVai" Association="iClassicModel.FK_PhieuSanXuat_LoaiVai">
+            <End Role="LoaiVai" EntitySet="LoaiVai" />
+            <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductTyeField_ProductType" Association="iClassicModel.FK_ProductTyeField_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="ProductTyeField" EntitySet="ProductTyeField" />
+          </AssociationSet>
           <AssociationSet Name="FK_ProductTypeValue_ProductTyeField" Association="iClassicModel.FK_ProductTypeValue_ProductTyeField">
             <End Role="ProductTyeField" EntitySet="ProductTyeField" />
             <End Role="ProductTypeValue" EntitySet="ProductTypeValue" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="iClassicModel.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AspNetRoles">
@@ -492,12 +489,13 @@
           <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Branch" Relationship="iClassicModel.FK_AspNetUsers_Branch" FromRole="AspNetUsers" ToRole="Branch" />
+          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_Customer_AspNetUsers" FromRole="AspNetUsers" ToRole="Customer" />
           <NavigationProperty Name="LoaiVai" Relationship="iClassicModel.FK_LoaiVai_AspNetUsers" FromRole="AspNetUsers" ToRole="LoaiVai" />
           <NavigationProperty Name="PhieuChi" Relationship="iClassicModel.FK_PhieuChi_AspNetUsers" FromRole="AspNetUsers" ToRole="PhieuChi" />
           <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_AspNetUsers" FromRole="AspNetUsers" ToRole="PhieuSanXuat" />
           <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_AspNetUsers" FromRole="AspNetUsers" ToRole="PhieuSua" />
           <NavigationProperty Name="AspNetRoles" Relationship="iClassicModel.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
-          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_Customer_AspNetUsers" FromRole="AspNetUsers" ToRole="Customer" />
         </EntityType>
         <EntityType Name="Branch">
           <Key>
@@ -508,7 +506,26 @@
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="SDT" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
-          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_Customer_Branch" FromRole="Branch" ToRole="Customer" />
+          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_AspNetUsers_Branch" FromRole="Branch" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaKH" Type="String" MaxLength="12" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TenKH" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SDT" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="KenhQC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_Customer_AspNetUsers" FromRole="Customer" ToRole="AspNetUsers" />
+          <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_Customer" FromRole="Customer" ToRole="PhieuSanXuat" />
+          <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="Customer" ToRole="PhieuSua" />
+          <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_Customer" FromRole="Customer" ToRole="ProductTypeValue" />
         </EntityType>
         <EntityType Name="LoaiVai">
           <Key>
@@ -517,9 +534,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MaVai" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="SoTien" Type="Double" Nullable="false" />
+          <Property Name="SoTienNhapVao" Type="Double" Nullable="false" />
+          <Property Name="SoTienBanRa" Type="Double" Nullable="false" />
           <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="BranchId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_LoaiVai_AspNetUsers" FromRole="LoaiVai" ToRole="AspNetUsers" />
@@ -533,7 +550,6 @@
           <Property Name="MucChi" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="SoTien" Type="Double" Nullable="false" />
           <Property Name="NguoiNhanPhieu" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="BranchId" Type="Int32" Nullable="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_PhieuChi_AspNetUsers" FromRole="PhieuChi" ToRole="AspNetUsers" />
@@ -545,18 +561,18 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenSanPham" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="MaVaiId" Type="Int32" Nullable="false" />
-          <Property Name="DonGia" Type="Double" Nullable="false" />
+          <Property Name="TienCong" Type="Double" Nullable="false" />
           <Property Name="SoLuong" Type="Int32" Nullable="false" />
           <Property Name="DatCoc" Type="Double" Nullable="false" />
           <Property Name="NgayThu" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="NgayLay" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NgayTra" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="KhachHangId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_PhieuSanXuat_AspNetUsers" FromRole="PhieuSanXuat" ToRole="AspNetUsers" />
-          <NavigationProperty Name="LoaiVai" Relationship="iClassicModel.FK_PhieuSanXuat_LoaiVai" FromRole="PhieuSanXuat" ToRole="LoaiVai" />
           <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_PhieuSanXuat_Customer" FromRole="PhieuSanXuat" ToRole="Customer" />
+          <NavigationProperty Name="LoaiVai" Relationship="iClassicModel.FK_PhieuSanXuat_LoaiVai" FromRole="PhieuSanXuat" ToRole="LoaiVai" />
         </EntityType>
         <EntityType Name="PhieuSua">
           <Key>
@@ -565,15 +581,69 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NoiDung" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="SoTien" Type="Double" Nullable="false" />
-          <Property Name="NgayNhan" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="NgayTra" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="KhachHangId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_PhieuSua_AspNetUsers" FromRole="PhieuSua" ToRole="AspNetUsers" />
           <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="PhieuSua" ToRole="Customer" />
         </EntityType>
+        <EntityType Name="ProductTyeField">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductTyeField" ToRole="ProductType" />
+          <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_ProductTyeField" FromRole="ProductTyeField" ToRole="ProductTypeValue" />
+        </EntityType>
+        <EntityType Name="ProductType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ProductTyeField" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductType" ToRole="ProductTyeField" />
+        </EntityType>
+        <EntityType Name="ProductTypeValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeFieldId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_ProductTypeValue_Customer" FromRole="ProductTypeValue" ToRole="Customer" />
+          <NavigationProperty Name="ProductTyeField" Relationship="iClassicModel.FK_ProductTypeValue_ProductTyeField" FromRole="ProductTypeValue" ToRole="ProductTyeField" />
+        </EntityType>
+        <Association Name="FK_AspNetUsers_Branch">
+          <End Type="iClassicModel.Branch" Role="Branch" Multiplicity="1" />
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="BranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_AspNetUsers">
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="iClassicModel.Customer" Role="Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_LoaiVai_AspNetUsers">
           <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
           <End Type="iClassicModel.LoaiVai" Role="LoaiVai" Multiplicity="*" />
@@ -622,112 +692,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PhieuSanXuat_LoaiVai">
-          <End Type="iClassicModel.LoaiVai" Role="LoaiVai" Multiplicity="1" />
-          <End Type="iClassicModel.PhieuSanXuat" Role="PhieuSanXuat" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LoaiVai">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PhieuSanXuat">
-              <PropertyRef Name="MaVaiId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="AspNetUserRoles">
-          <End Type="iClassicModel.AspNetRoles" Role="AspNetRoles" Multiplicity="*" />
-          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
-        </Association>
-        <EntityType Name="ProductType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ProductTyeField" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductType" ToRole="ProductTyeField" />
-        </EntityType>
-        <EntityType Name="ProductTyeField">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductTyeField" ToRole="ProductType" />
-          <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_ProductTyeField" FromRole="ProductTyeField" ToRole="ProductTypeValue" />
-        </EntityType>
-        <Association Name="FK_ProductTyeField_ProductType">
-          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="iClassicModel.ProductTyeField" Role="ProductTyeField" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductTyeField">
-              <PropertyRef Name="ProductTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Customer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MaKH" Type="String" MaxLength="12" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="TenKH" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="SDT" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BranchId" Type="Int32" Nullable="false" />
-          <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_Customer_AspNetUsers" FromRole="Customer" ToRole="AspNetUsers" />
-          <NavigationProperty Name="Branch" Relationship="iClassicModel.FK_Customer_Branch" FromRole="Customer" ToRole="Branch" />
-          <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_Customer" FromRole="Customer" ToRole="PhieuSanXuat" />
-          <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="Customer" ToRole="PhieuSua" />
-          <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_Customer" FromRole="Customer" ToRole="ProductTypeValue" />
-          <Property Name="KenhQC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="ProductTypeValue">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Value" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ProductTypeFieldId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_ProductTypeValue_Customer" FromRole="ProductTypeValue" ToRole="Customer" />
-          <NavigationProperty Name="ProductTyeField" Relationship="iClassicModel.FK_ProductTypeValue_ProductTyeField" FromRole="ProductTypeValue" ToRole="ProductTyeField" />
-        </EntityType>
-        <Association Name="FK_Customer_AspNetUsers">
-          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
-          <End Type="iClassicModel.Customer" Role="Customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Customer">
-              <PropertyRef Name="CreateBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Customer_Branch">
-          <End Type="iClassicModel.Branch" Role="Branch" Multiplicity="1" />
-          <End Type="iClassicModel.Customer" Role="Customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Branch">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Customer">
-              <PropertyRef Name="BranchId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PhieuSanXuat_Customer">
           <End Type="iClassicModel.Customer" Role="Customer" Multiplicity="1" />
           <End Type="iClassicModel.PhieuSanXuat" Role="PhieuSanXuat" Multiplicity="*" />
@@ -736,7 +700,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PhieuSanXuat">
-              <PropertyRef Name="KhachHangId" />
+              <PropertyRef Name="CustomerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -748,7 +712,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PhieuSua">
-              <PropertyRef Name="KhachHangId" />
+              <PropertyRef Name="CustomerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -766,6 +730,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PhieuSanXuat_LoaiVai">
+          <End Type="iClassicModel.LoaiVai" Role="LoaiVai" Multiplicity="1" />
+          <End Type="iClassicModel.PhieuSanXuat" Role="PhieuSanXuat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoaiVai">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhieuSanXuat">
+              <PropertyRef Name="MaVaiId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductTyeField_ProductType">
+          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="iClassicModel.ProductTyeField" Role="ProductTyeField" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductTyeField">
+              <PropertyRef Name="ProductTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ProductTypeValue_ProductTyeField">
           <End Type="iClassicModel.ProductTyeField" Role="ProductTyeField" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -779,6 +769,10 @@
               <PropertyRef Name="ProductTypeFieldId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Type="iClassicModel.AspNetRoles" Role="AspNetRoles" Multiplicity="*" />
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -826,14 +820,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="iClassicModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="KenhQC" ColumnName="KenhQC" />
+                <ScalarProperty Name="SDT" ColumnName="SDT" />
+                <ScalarProperty Name="TenKH" ColumnName="TenKH" />
+                <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="LoaiVai">
             <EntityTypeMapping TypeName="iClassicModel.LoaiVai">
               <MappingFragment StoreEntitySet="LoaiVai">
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+                <ScalarProperty Name="SoTienBanRa" ColumnName="SoTienBanRa" />
+                <ScalarProperty Name="SoTienNhapVao" ColumnName="SoTienNhapVao" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="MaVai" ColumnName="MaVai" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -845,7 +855,6 @@
               <MappingFragment StoreEntitySet="PhieuChi">
                 <ScalarProperty Name="Created" ColumnName="Created" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="NguoiNhanPhieu" ColumnName="NguoiNhanPhieu" />
                 <ScalarProperty Name="SoTien" ColumnName="SoTien" />
                 <ScalarProperty Name="MucChi" ColumnName="MucChi" />
@@ -858,13 +867,13 @@
               <MappingFragment StoreEntitySet="PhieuSanXuat">
                 <ScalarProperty Name="Created" ColumnName="Created" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="NgayLay" ColumnName="NgayLay" />
+                <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
                 <ScalarProperty Name="NgayThu" ColumnName="NgayThu" />
                 <ScalarProperty Name="DatCoc" ColumnName="DatCoc" />
                 <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="TienCong" ColumnName="TienCong" />
                 <ScalarProperty Name="MaVaiId" ColumnName="MaVaiId" />
                 <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -876,29 +885,11 @@
               <MappingFragment StoreEntitySet="PhieuSua">
                 <ScalarProperty Name="Created" ColumnName="Created" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="KhachHangId" ColumnName="KhachHangId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
-                <ScalarProperty Name="NgayNhan" ColumnName="NgayNhan" />
                 <ScalarProperty Name="SoTien" ColumnName="SoTien" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="AspNetUserRoles" TypeName="iClassicModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
-            <EndProperty Name="AspNetUsers">
-              <ScalarProperty Name="Id" ColumnName="UserId" />
-            </EndProperty>
-            <EndProperty Name="AspNetRoles">
-              <ScalarProperty Name="Id" ColumnName="RoleId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <EntitySetMapping Name="ProductType">
-            <EntityTypeMapping TypeName="iClassicModel.ProductType">
-              <MappingFragment StoreEntitySet="ProductType">
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -913,19 +904,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Customer">
-            <EntityTypeMapping TypeName="iClassicModel.Customer">
-              <MappingFragment StoreEntitySet="Customer">
-                <ScalarProperty Name="KenhQC" ColumnName="KenhQC" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="Created" ColumnName="Created" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+          <EntitySetMapping Name="ProductType">
+            <EntityTypeMapping TypeName="iClassicModel.ProductType">
+              <MappingFragment StoreEntitySet="ProductType">
                 <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="SDT" ColumnName="SDT" />
-                <ScalarProperty Name="TenKH" ColumnName="TenKH" />
-                <ScalarProperty Name="MaKH" ColumnName="MaKH" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -940,6 +923,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="iClassicModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUsers">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRoles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

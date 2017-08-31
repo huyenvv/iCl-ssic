@@ -17,10 +17,9 @@ namespace iClassic.Models
         public int Id { get; set; }
         public string NoiDung { get; set; }
         public double SoTien { get; set; }
-        public System.DateTime NgayNhan { get; set; }
         public System.DateTime NgayTra { get; set; }
         public int Status { get; set; }
-        public int KhachHangId { get; set; }
+        public int CustomerId { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime Created { get; set; }
     

@@ -17,18 +17,18 @@ namespace iClassic.Models
         public int Id { get; set; }
         public string TenSanPham { get; set; }
         public int MaVaiId { get; set; }
-        public double DonGia { get; set; }
+        public double TienCong { get; set; }
         public int SoLuong { get; set; }
         public double DatCoc { get; set; }
         public System.DateTime NgayThu { get; set; }
-        public System.DateTime NgayLay { get; set; }
+        public System.DateTime NgayTra { get; set; }
         public int Status { get; set; }
-        public int KhachHangId { get; set; }
+        public int CustomerId { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime Created { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
-        public virtual LoaiVai LoaiVai { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual LoaiVai LoaiVai { get; set; }
     }
 }
