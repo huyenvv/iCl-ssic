@@ -33,6 +33,34 @@
                 </a>
             </div><!-- logopanel -->
             <div class="leftpanelinner">
+                <!-- This is only visible to small devices -->
+                <div class="visible-xs hidden-sm hidden-md hidden-lg">
+                    <div class="media userlogged">
+                        <div class="media-body">
+                            <h4>
+                                @if (!string.IsNullOrEmpty(baseController.CurrentUser.Name))
+                                {
+                                    @baseController.CurrentUser.Name
+                                }
+                                else
+                                {
+                                    @User.Identity.Name
+                                }
+                            </h4>
+                        </div>
+                    </div>
+                    <h5 class="sidebartitle actitle">Tài khoản</h5>
+                    <ul class="nav nav-pills nav-stacked nav-bracket mb30">
+                        <li><a href="@Url.Action("Settings","Account")"><i class="glyphicon glyphicon-cog"></i>Tài khoản</a></li>
+                        <li>
+                            <a href="javascript:document.getElementById('logoutForm').submit()"><i class="glyphicon glyphicon-log-out"></i> Đăng xuất</a>
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                            }
+                        </li>
+                    </ul>
+                </div>
                 <h5 class="sidebartitle">Navigation</h5>
                 <ul class="nav nav-pills nav-stacked nav-bracket" id="LeftMenu">
                     <li><a href="@Url.Action("Index", "Home")" data-href="Home/Index"><i class="fa fa-home"></i> <span>Trang chủ</span></a></li>
@@ -65,17 +93,24 @@
         <div class="mainpanel">
             <div class="headerbar">
                 <a class="menutoggle"><i class="fa fa-bars"></i></a>
-                <div class="col-sm-8 col-md-10" id="branch">
-                    <h3 class="text-center">
+                <div class="col-xs-10 col-md-10 nopadding" id="branch">
+                    <h3 class="text-center  hidden-sm hidden-xs">
                         @baseController.CurrentBrach.Name
                         @if (isSupperAdmin)
                         {
                             <small onclick="changeBranch();"><i class="fa fa-edit"></i></small>
                         }
                     </h3>
+                    <h4 class="text-center hidden-sm hidden-md hidden-lg">
+                        @baseController.CurrentBrach.Name
+                        @if (isSupperAdmin)
+                        {
+                            <small onclick="changeBranch();"><i class="fa fa-edit"></i></small>
+                        }
+                    </h4>
                 </div>
                 <div class="header-right">
-                    <ul class="headermenu">
+                    <ul class="headermenu hidden-sm hidden-xs">
                         <li>
                             <div class="btn-group">
                                 @Html.Partial("_LoginPartial", baseController.CurrentUser.Name)
