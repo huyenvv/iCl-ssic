@@ -869,6 +869,7 @@
     <Content Include="Models\iClassic.edmx.diagram">
       <DependentUpon>iClassic.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\fileinput.min.js" />
     <Content Include="Scripts\iClassic.js" />
