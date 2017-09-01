@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iClassic.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -127,6 +128,16 @@ namespace iClassic.Helper
             }
 
             return "<span class='label label-" + className + "'>" + statusEnum.GetDescription() + "</span>";
+        }
+        public static string GetDescriptionRole(AspNetRoles role)
+        {
+            if (role == null) return string.Empty;
+
+            if (role.Name== RoleList.Admin)
+            {
+                return "Quản lý";
+            }
+            return "Nhân viên";
         }
     }
 }

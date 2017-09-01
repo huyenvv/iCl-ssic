@@ -22,11 +22,13 @@ namespace iClassic.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private UsersRepository _userRepository;
+        private BranchRepository _branchRepository;
 
         public ManageController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _userRepository = new UsersRepository(_entities);
+            _branchRepository = new BranchRepository(_entities);
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -35,6 +37,7 @@ namespace iClassic.Controllers
             UserManager = userManager;
             SignInManager = signInManager;
             _userRepository = new UsersRepository(_entities);
+            _branchRepository = new BranchRepository(_entities);
         }
 
         public ApplicationSignInManager SignInManager
@@ -336,7 +339,7 @@ namespace iClassic.Controllers
         public ActionResult Employees(EmployeeSearch model)
         {
             model.BranchId = CurrentBranchId;
-            var result = _userRepository.Search(model);
+            var result = _userRepository.Search(model, User.IsInRole(RoleList.SupperAdmin));
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
@@ -346,6 +349,7 @@ namespace iClassic.Controllers
 
         public ActionResult AddEmployee()
         {
+            CreateBranchViewBag();
             return View(new EmployeeModel { BranchId = CurrentBranchId });
         }
 
@@ -357,12 +361,24 @@ namespace iClassic.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    model.BranchId = CurrentBranchId;
+                    if (!RoleList.GetAll().Contains(model.Role))
+                    {
+                        ShowMessageError(Message.RoleNotExists);
+                        CreateBranchViewBag();
+                        return View(model);
+                    }
+
+                    if (User.IsInRole(RoleList.Admin))
+                    {
+                        model.BranchId = CurrentBranchId;
+                        model.Role = RoleList.Employee;
+                    }
+
                     var user = new ApplicationUser
                     {
                         UserName = model.UserName,
-                        Email = string.IsNullOrWhiteSpace(model.Email) ? model.UserName + "@iclassic.vn" : model.Email,
                         PhoneNumber = model.PhoneNumber,
+                        Email = model.Email,
                         Name = model.Name,
                         BranchId = model.BranchId,
                         IsActive = true
@@ -370,7 +386,7 @@ namespace iClassic.Controllers
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
-                        result = await UserManager.AddToRoleAsync(user.Id, RoleList.Employee);
+                        result = await UserManager.AddToRoleAsync(user.Id, model.Role);
                         if (result.Succeeded)
                         {
                             ShowMessageSuccess(Message.Update_Successfully);
@@ -388,6 +404,7 @@ namespace iClassic.Controllers
 
                 ShowMessageError(Message.Update_Fail);
             }
+            CreateBranchViewBag();
             return View(model);
         }
 
@@ -398,7 +415,9 @@ namespace iClassic.Controllers
             {
                 return HttpNotFound();
             }
-            return View(obj.ToModel());
+            CreateBranchViewBag();
+            var roleUser = UserManager.GetRoles(obj.Id).FirstOrDefault();
+            return View(obj.ToModel(roleUser));
         }
 
         [HttpPost]
@@ -412,25 +431,58 @@ namespace iClassic.Controllers
                     if (User.IsInRole(RoleList.Admin) && UserManager.IsInRole(model.Id, RoleList.Admin))
                         return HttpNotFound();
 
-                    model.BranchId = CurrentBranchId;
+                    if (!RoleList.GetAll().Contains(model.Role))
+                    {
+                        ShowMessageError(Message.RoleNotExists);
+                        CreateBranchViewBag();
+                        return View(model);
+                    }
+
+                    if (User.IsInRole(RoleList.Admin))
+                    {
+                        model.BranchId = CurrentBranchId;
+                        model.Role = RoleList.Employee;
+                    }
 
                     var user = await UserManager.FindByIdAsync(model.Id);
 
                     user.UserName = model.UserName;
-                    user.Email = string.IsNullOrWhiteSpace(model.Email) ? user.UserName + "@iclassic.vn" : model.Email;
+                    user.Email = model.Email;
                     user.PhoneNumber = model.PhoneNumber;
                     user.Name = model.Name;
                     user.BranchId = model.BranchId;
                     user.IsActive = model.IsActive;
 
                     var result = await UserManager.UpdateAsync(user);
-                    if (result.Succeeded)
+                    if (!result.Succeeded)
                     {
-                        ShowMessageSuccess(Message.Update_Successfully);
-                        return RedirectToAction("Employees");
+                        AddErrors(result);
+                        CreateBranchViewBag();
+                        return View(model);
                     }
 
-                    AddErrors(result);
+                    var oldRole = UserManager.GetRoles(user.Id).FirstOrDefault();
+                    if (oldRole != model.Role)
+                    {
+                        result = await UserManager.RemoveFromRolesAsync(user.Id, oldRole);
+                        if (!result.Succeeded)
+                        {
+                            AddErrors(result);
+                            CreateBranchViewBag();
+                            return View(model);
+                        }
+
+                        result = UserManager.AddToRole(user.Id, model.Role);
+                        if (!result.Succeeded)
+                        {
+                            AddErrors(result);
+                            CreateBranchViewBag();
+                            return View(model);
+                        }
+                    }
+
+                    ShowMessageSuccess(Message.Update_Successfully);
+                    return RedirectToAction("Employees");
                 }
             }
             catch (Exception ex)
@@ -439,6 +491,7 @@ namespace iClassic.Controllers
 
                 ShowMessageError(Message.Update_Fail);
             }
+            CreateBranchViewBag();
             return View(model);
         }
 
@@ -507,6 +560,52 @@ namespace iClassic.Controllers
                 _log.Info(ex.ToString());
             }
             return RedirectToAction("Employees");
+        }
+
+        [Override.Authorize(RoleList.SupperAdmin)]
+        public ActionResult ChangeBranch()
+        {
+            var listBranch = _branchRepository.GetAll();
+            if (!User.IsInRole(RoleList.SupperAdmin))
+            {
+                listBranch = listBranch.Where(m => m.Id == CurrentBranchId);
+            }
+            CreateBranchViewBag();
+            return PartialView("_ChangeBranch");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Override.Authorize(RoleList.SupperAdmin)]
+        public ActionResult ChangeBranch(int branchId)
+        {
+            try
+            {
+                var branch = _branchRepository.GetById(branchId);
+                if (branch != null)
+                {
+                    SessionHelpers.Set(Constant.SESSION_CurrentBrach, branch);
+                    return JavaScript("location.href = '';");
+                }
+                ModelState.AddModelError("", "Chi nhánh không tồn tại!");
+
+            }
+            catch (Exception ex)
+            {
+                _log.Info(ex.ToString());
+            }
+            CreateBranchViewBag();
+            return PartialView("_ChangeBranch");
+        }
+
+        private void CreateBranchViewBag()
+        {
+            var listBranch = _branchRepository.GetAll();
+            if (!User.IsInRole(RoleList.SupperAdmin))
+            {
+                listBranch = listBranch.Where(m => m.Id == CurrentBranchId);
+            }
+            ViewBag.BranchId = new SelectList(listBranch, "Id", "Name", CurrentBranchId);
         }
 
         protected override void Dispose(bool disposing)

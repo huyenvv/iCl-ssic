@@ -13,5 +13,6 @@ namespace iClassic.Helper
 
         // Fail
         public const string Update_Fail = "Có lỗi xảy ra. Vui lòng liên hệ quản trị để giải quyết.";
+        public const string RoleNotExists = "Không tồn tại \"quyền hạn này\"";
     }
 }

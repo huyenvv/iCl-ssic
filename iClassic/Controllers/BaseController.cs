@@ -37,11 +37,29 @@ namespace iClassic.Controllers
             }
         }
 
+        public Branch CurrentBrach
+        {
+            get
+            {
+                Branch branch;
+                if (SessionHelpers.Exist(Constant.SESSION_CurrentBrach))
+                {
+                    branch = SessionHelpers.Get(Constant.SESSION_CurrentBrach) as Branch;
+                }
+                else
+                {
+                    branch = CurrentUser.Branch;
+                    SessionHelpers.Set(Constant.SESSION_CurrentBrach, branch);
+                }
+                return branch;
+            }
+        }
+
         public int CurrentBranchId
         {
             get
             {
-                return CurrentUser.BranchId;
+                return CurrentBrach.Id;
             }
         }
 
@@ -73,15 +91,6 @@ namespace iClassic.Controllers
             SessionHelpers.Set(Constant.SESSION_MessageSuccess, message);
         }
 
-        private void CreateBranchViewBag()
-        {
-            var listBranch = _branchRepository.GetAll();
-            if (!User.IsInRole(RoleList.SupperAdmin))
-            {
-                listBranch = listBranch.Where(m => m.Id == CurrentBranchId);
-            }
-            ViewBag.BranchId = new SelectList(listBranch, "Id", "Name", CurrentBranchId);
-        }
 
         public void CreateCustomerViewBag(int selectedId)
         {

@@ -1,4 +1,5 @@
 ﻿@using iClassic.Models;
+@using iClassic.Helper;
 @using PagedList.Mvc;
 @model PagedList.IPagedList<AspNetUsers>
 @{
@@ -40,6 +41,8 @@
             <th><a href="javascript:void(0)" class="sortField" data-sortName="Name">Tên</a></th>
             <th><a href="javascript:void(0)" class="sortField" data-sortName="UserName">Tài khoản</a></th>
             <th><a href="javascript:void(0)" class="sortField" data-sortName="Email">E-mail</a></th>
+            <th><a href="javascript:void(0)" class="sortField" data-sortName="Branch">Chi nhánh</a></th>
+            <th><a href="javascript:void(0)" class="sortField" data-sortName="Role">Vai trò</a></th>
             <th><a href="javascript:void(0)" class="sortField" data-sortName="Status">Trạng thái</a></th>
             <th><a href="javascript:void(0)" class="sortField" data-sortName="PhoneNumber">Số điện thoại</a></th>
             <th></th>
@@ -61,6 +64,12 @@
                     </td>
                     <td>
                         @item.Email
+                    </td>
+                    <td>
+                        @item.Branch.Name
+                    </td>
+                    <td>
+                        @Helpers.GetDescriptionRole(item.AspNetRoles.FirstOrDefault())
                     </td>
                     <td>
                         @if (item.IsActive)

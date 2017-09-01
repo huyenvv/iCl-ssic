@@ -18,5 +18,8 @@ namespace iClassic.Models
         [DataType(DataType.EmailAddress, ErrorMessage = "Sai định dạng {0}")]
         public string Email { get; set; }
         public bool IsActive { get; set; }
+        [Display(Name = "Quyền hạn")]
+        [Required(ErrorMessage = "Bạn chưa nhập {0}")]
+        public string Role { get; set; }
     }
 }

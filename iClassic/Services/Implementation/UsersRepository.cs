@@ -28,13 +28,12 @@ namespace iClassic.Services.Implementation
             return await FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public IQueryable<AspNetUsers> Search(EmployeeSearch model)
+        public IQueryable<AspNetUsers> Search(EmployeeSearch model, bool isSupperAdmin)
         {
-            var list = Where(m => m.AspNetRoles.Any(n => n.Name == RoleList.Employee));
-
-            if (model.BranchId > 0)
+            var list = Where(m => !m.AspNetRoles.Any(n => n.Name == RoleList.SupperAdmin));
+            if (!isSupperAdmin)
             {
-                list = list.Where(m => m.BranchId == model.BranchId);
+                list = Where(m => m.BranchId == model.BranchId && m.AspNetRoles.Any(n => n.Name == RoleList.Employee));
             }
 
             if (!string.IsNullOrWhiteSpace(model.SearchText))

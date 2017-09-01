@@ -12,5 +12,7 @@ namespace iClassic.Helper
 
         public const string SESSION_MessageSuccess = "SESSION_MESSAGE_SUCCESS";
         public const string SESSION_MessageError = "SESSION_MESSAGE_ERROR";
+
+        public const string SESSION_CurrentBrach = "SESSION_CurrentBrach";
     }
 }

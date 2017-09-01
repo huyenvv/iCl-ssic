@@ -11,7 +11,7 @@ namespace iClassic.Helper
 {
     public static class Extensions
     {
-        public static EmployeeEditModel ToModel(this ApplicationUser model)
+        public static EmployeeEditModel ToModel(this ApplicationUser model, string role)
         {
             return new EmployeeEditModel
             {
@@ -21,7 +21,8 @@ namespace iClassic.Helper
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 UserName = model.UserName,
-                IsActive = model.IsActive
+                IsActive = model.IsActive,
+                Role = role
             };
         }
 

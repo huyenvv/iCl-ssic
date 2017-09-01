@@ -1,4 +1,8 @@
 ﻿@using iClassic.Helper;
+@{
+    var isSupperAdmin = User.IsInRole(RoleList.SupperAdmin);
+    var baseController = ViewContext.Controller as iClassic.Controllers.BaseController;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,13 +40,13 @@
                     <li><a href="@Url.Action("Index", "PhieuSua")" data-href="Index/PhieuSua/NewOrEdit"><i class="fa fa-cog"></i> <span>Phiếu sửa chữa</span></a></li>
                     <li><a href="@Url.Action("Index", "PhieuChi")" data-href="Index/PhieuChi/NewOrEdit"><i class="fa fa-dollar"></i> <span>Phiếu chi</span></a></li>
 
-                    @if (User.IsInRole(RoleList.SupperAdmin) || User.IsInRole(RoleList.Admin))
+                    @if (isSupperAdmin || User.IsInRole(RoleList.Admin))
                     {
                         <li><a href="@Url.Action("Index", "Customer")" data-href="Index/Customer/NewOrEdit"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
                         <li><a href="@Url.Action("Index", "LoaiVai")" data-href="Index/LoaiVai/NewOrEdit"><i class="fa fa-bars"></i> <span>Loại vải</span></a></li>
                         <li><a href="@Url.Action("Index", "Branch")" data-href="Index/Branch/NewOrEdit"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
                         <li><a href="@Url.Action("Employees", "Manage")"><i class="fa fa-user"></i> <span>Nhân viên</span></a></li>
-                        if (User.IsInRole(RoleList.SupperAdmin))
+                        if (isSupperAdmin)
                         {
                             <li><a href="@Url.Action("Index", "ProductType")" data-href="Index/ProductType/NewOrEdit"><i class="fa fa-list-ol"></i> <span>Sản phẩm</span></a></li>
                         }
@@ -61,11 +65,20 @@
         <div class="mainpanel">
             <div class="headerbar">
                 <a class="menutoggle"><i class="fa fa-bars"></i></a>
+                <div class="col-sm-8 col-md-10" id="branch">
+                    <h3 class="text-center">
+                        @baseController.CurrentBrach.Name
+                        @if (isSupperAdmin)
+                        {
+                            <small onclick="changeBranch();"><i class="fa fa-edit"></i></small>
+                        }
+                    </h3>
+                </div>
                 <div class="header-right">
                     <ul class="headermenu">
                         <li>
                             <div class="btn-group">
-                                @Html.Partial("_LoginPartial")
+                                @Html.Partial("_LoginPartial", baseController.CurrentUser.Name)
                             </div>
                         </li>
                     </ul>
@@ -132,6 +145,27 @@
             searchModel = ViewBag.SearchModel as iClassic.Models.SortPagingBase;
         }
     }
+    @if (isSupperAdmin)
+    {
+        <script>
+            function changeBranch() {
+                $.ajax({
+                    url: '/Manage/ChangeBranch',
+                    dataType: "html",
+                    type: "GET",
+                    contentType: 'application/html; charset=utf-8',
+                    success: function (data) {
+                        $("#modalDefault").html(data);
+                        $("#modalDefault").modal("show");
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    }
+                });
+            }
+        </script>
+    }
+
     <script>
         function cfmDelete() {
             var isConfirm = confirm("Bạn có chắc chắn muốn xóa bản ghi này?");

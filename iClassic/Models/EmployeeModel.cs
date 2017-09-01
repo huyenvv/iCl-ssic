@@ -30,5 +30,9 @@ namespace iClassic.Models
         [Display(Name = "Nhập lại mật khẩu")]
         [Compare("Password", ErrorMessage = "Mật khẩu không khớp.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Quyền hạn")]
+        [Required(ErrorMessage = "Bạn chưa nhập {0}")]
+        public string Role { get; set; }
     }
 }
