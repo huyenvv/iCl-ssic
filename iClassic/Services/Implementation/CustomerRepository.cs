@@ -129,6 +129,8 @@ namespace iClassic.Services.Implementation
             }
             obj.Note = model.Note;
             obj.BranchId = model.BranchId;
+            obj.DangNguoi = model.DangNguoi;
+            obj.KenhQC = model.KenhQC;
 
             var listNew = model.ProductTypeValue.Where(m => !obj.ProductTypeValue.Any(n => n.ProductTypeFieldId == m.ProductTypeFieldId));
             var lisUpdate = model.ProductTypeValue.Where(m => obj.ProductTypeValue.Any(n => n.ProductTypeFieldId == m.ProductTypeFieldId));

@@ -58,7 +58,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenKH,Address,SDT,ProductTypeValue,BranchId,Note,KenhQC")] Customer model, HttpPostedFileBase fileImage)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenKH,Address,SDT,ProductTypeValue,BranchId,Note,KenhQC,DangNguoi")] Customer model, HttpPostedFileBase fileImage)
         {
             try
             {

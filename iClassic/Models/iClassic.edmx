@@ -59,6 +59,7 @@
           <Property Name="TenKH" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="SDT" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="KenhQC" Type="nvarchar" MaxLength="200" />
+          <Property Name="DangNguoi" Type="nvarchar" MaxLength="500" />
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
           <Property Name="Image" Type="nvarchar(max)" />
           <Property Name="Note" Type="nvarchar(max)" />
@@ -638,6 +639,7 @@
           <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_Customer" FromRole="Customer" ToRole="PhieuSanXuat" />
           <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_Customer" FromRole="Customer" ToRole="PhieuSua" />
           <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_Customer" FromRole="Customer" ToRole="ProductTypeValue" />
+          <Property Name="DangNguoi" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="LoaiVai">
           <Key>
@@ -1003,6 +1005,7 @@
           <EntitySetMapping Name="Customer">
             <EntityTypeMapping TypeName="iClassicModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="DangNguoi" ColumnName="DangNguoi" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="Created" ColumnName="Created" />

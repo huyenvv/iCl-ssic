@@ -41,11 +41,7 @@
                         @Html.LabelFor(model => model.Address)
                         @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-                    </div>
-                    @*<div class="form-group">
-                        <label>Ảnh đại diện</label>
-                        <input type="file" name="fileImage" accept="image/*" class="form-control file" data-show-preview="false" data-show-upload="false" />
-                    </div>*@
+                    </div>                    
                     <div class="form-group">
                         @Html.LabelFor(model => model.KenhQC)
                         @Html.EditorFor(model => model.KenhQC, new { htmlAttributes = new { @class = "form-control" } })
@@ -55,6 +51,11 @@
                         @Html.LabelFor(model => model.Note)
                         @Html.TextAreaFor(model => model.Note, new { @class = "form-control", rows = "5" })
                         @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DangNguoi)
+                        @Html.EditorFor(model => model.DangNguoi, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DangNguoi, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>

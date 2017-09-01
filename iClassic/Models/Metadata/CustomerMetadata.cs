@@ -27,6 +27,9 @@ namespace iClassic.Models.Metadata
         public string Note { get; set; }
 
         [Display(Name = "Kênh quảng cáo?")]
-        public string KenhQC { get; set; }  
+        public string KenhQC { get; set; }
+
+        [Display(Name = "Đặc điểm dáng người")]
+        public string DangNguoi { get; set; }
     }
 }
