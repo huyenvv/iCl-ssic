@@ -212,7 +212,7 @@ namespace iClassic.Services.Implementation
                 var objForUpdate = obj.PhieuSua.FirstOrDefault(m => m.Id == t.Id);
                 objForUpdate.NoiDung = t.NoiDung;
                 objForUpdate.ProblemType = t.ProblemType;
-                objForUpdate.ProblemTypeOther = t.ProblemTypeOther;
+                objForUpdate.ProblemTypeOther = !string.IsNullOrEmpty(t.ProblemTypeOther) ? t.ProblemTypeOther : string.Empty;
                 objForUpdate.Type = t.Type;
                 objForUpdate.Status = t.Status;
                 objForUpdate.SoTien = t.Type == (byte)PhieuSuaType.BaoHanh ? 0 : t.SoTien;

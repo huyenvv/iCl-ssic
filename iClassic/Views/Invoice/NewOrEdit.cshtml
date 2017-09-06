@@ -386,7 +386,7 @@
         function cboLyDoChange(e) {
             var obj = $(e);
             var value = $(e).val();
-            var sotienobj = obj.parents(".media").find(".boxtien");
+            var sotienobj = obj.parents(".media").find(".problemTypeOther");
             if (value == "@((byte)PhieuSuaType.BaoHanh)") {
                 sotienobj.addClass('hide');
                 sotienobj.find('.sotien').val(0);
@@ -395,6 +395,17 @@
             }
         }
 
+        function cboProblemTypeChange(e) {
+            var obj = $(e);
+            var value = $(e).val();
+            var other = obj.parents(".media").find(".problemTypeOther");
+            if (value) {
+                other.slideUp();
+                other.val('');
+            } else {
+                other.slideDown();
+            }
+        }
         function removePhieuSua(e) {
             if (confirm("Bạn có chắc chắn muốn xóa phiếu sửa này?")) {
                 $(e).parents(".media").remove();
@@ -445,14 +456,14 @@
                 html += "   </div>";
                 html += "   <div class='form-group'>";
                 html += "               <label>Lỗi do ai?</label>";
-                html += "               <select name='PhieuSua[" + index + "].ProblemType'  class='form-control loitype'>";
+                html += "               <select name='PhieuSua[" + index + "].ProblemType'  class='form-control loitype' onchange='cboProblemTypeChange(this);'>";
                 $.each(loiPhieuSuaTypes, function (i, type) {
                     html += "               <option value='" + type.Key + "'" + (type.Key == item.ProblemType ? "selected" : "") + ">";
                     html += "                   " + type.Value;
                     html += "               </option>";
                 });
                 html += "               </select>";
-                html += "       <input type='text' name='PhieuSua[" + index + "].ProblemTypeOther' value='" + item.ProblemTypeOther + "' class='form-control problemTypeOther " + (!item.ProblemType ? "hide" : "") + "' />";
+                html += "       <input type='text' name='PhieuSua[" + index + "].ProblemTypeOther' value='" + item.ProblemTypeOther + "' class='form-control problemTypeOther mt5' style='display:" + (item.ProblemType ? "none" : "block") + "' />";
                 html += "   </div>";
                 html += "   <div class='form-group boxtien " + (item.Type == '@((byte)PhieuSuaType.BaoHanh)' ? "hide" : "") + "'>";
                 html += "       <label>Giá tiền</label>";
@@ -465,6 +476,7 @@
             $("#soluongspcansua").html("(" + phieuSuaModels.length + ")");
 
             $('.price').maskMoney({ precision: 0 });
+            $('.price').focus();
         }
     </script>
 
