@@ -208,8 +208,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\PhieuChiController.cs" />
-    <Compile Include="Controllers\PhieuSanXuatController.cs" />
-    <Compile Include="Controllers\PhieuSuaController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\LoaiVaiController.cs" />
     <Compile Include="Controllers\BranchController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -236,6 +235,12 @@
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Branch.cs">
+      <DependentUpon>iClassic.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Invoice.cs">
+      <DependentUpon>iClassic.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductTypeLoaiVai.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductTypeSearch.cs" />
@@ -271,9 +276,9 @@
     <Compile Include="Models\Metadata\AspNetUsersMetadata.cs" />
     <Compile Include="Models\Metadata\ProductTypeMetadata.cs" />
     <Compile Include="Models\Metadata\PhieuChiMetadata.cs" />
-    <Compile Include="Models\Metadata\PhieuSanXuatMetadata.cs" />
+    <Compile Include="Models\Metadata\InvoiceMetadata.cs" />
     <Compile Include="Models\Metadata\PhieuSuaMetadata.cs" />
-    <Compile Include="Models\PhieuSanXuatSearch.cs" />
+    <Compile Include="Models\InvoiceSearch.cs" />
     <Compile Include="Models\LoaiVaiSearch.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metadata.cs" />
@@ -312,7 +317,7 @@
     <Compile Include="Services\Implementation\ProductTypeRepository.cs" />
     <Compile Include="Services\Implementation\PhieuChiRepository.cs" />
     <Compile Include="Services\Implementation\PhieuSuaRepository.cs" />
-    <Compile Include="Services\Implementation\PhieuSanXuatRepository.cs" />
+    <Compile Include="Services\Implementation\InvoiceRepository.cs" />
     <Compile Include="Services\Implementation\LoaiVaiRepository.cs" />
     <Compile Include="Services\Implementation\CustomerRepository.cs" />
     <Compile Include="Services\Implementation\BranchRepository.cs" />
@@ -939,14 +944,14 @@
     <Content Include="Views\LoaiVai\Index.cshtml" />
     <Content Include="Views\Statistic\Index.cshtml" />
     <Content Include="Views\PhieuChi\Index.cshtml" />
-    <Content Include="Views\PhieuSanXuat\Index.cshtml" />
+    <Content Include="Views\Invoice\Index.cshtml" />
     <Content Include="Views\PhieuSua\Index.cshtml" />
     <Content Include="Views\Account\Settings.cshtml" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\PhieuChi\NewOrEdit.cshtml" />
     <Content Include="Views\PhieuSua\NewOrEdit.cshtml" />
-    <Content Include="Views\PhieuSanXuat\NewOrEdit.cshtml" />
-    <Content Include="Views\PhieuSanXuat\PrintPhieuHen.cshtml" />
+    <Content Include="Views\Invoice\NewOrEdit.cshtml" />
+    <Content Include="Views\Invoice\PrintPhieuHen.cshtml" />
     <Content Include="Views\ProductType\Index.cshtml" />
     <Content Include="Views\ProductType\NewOrEdit.cshtml" />
     <Content Include="Views\Statistic\Profit.cshtml" />

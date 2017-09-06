@@ -30,33 +30,18 @@ namespace iClassic.Services.Implementation
 
         public IQueryable<PhieuSua> Search(PhieuSuaSearch model)
         {
-            var list = Where(m => m.BranchId == model.BranchId);
+            var list = GetAll();
 
             if (!string.IsNullOrWhiteSpace(model.SearchText))
             {
                 model.SearchText = model.SearchText.ToUpper();
-                list = list.Where(m => m.NoiDung.ToUpper().Contains(model.SearchText) ||
-                        m.Customer.TenKH.ToUpper().Contains(model.SearchText) ||
-                        m.Customer.SDT.ToUpper().Contains(model.SearchText));
+                list = list.Where(m => m.NoiDung.ToUpper().Contains(model.SearchText));
             }
 
             if (model.Status.HasValue)
             {
                 list = list.Where(m => m.Status == model.Status);
-            }
-
-            if (model.FromDate.HasValue)
-            {
-                list = list.Where(m => model.FromDate <= m.Created ||
-                                       model.FromDate <= m.NgayTra
-                );
-            }
-            if (model.ToDate.HasValue)
-            {
-                list = list.Where(m => m.Created <= model.ToDate ||
-                                       m.NgayTra <= model.ToDate
-                );
-            }
+            }           
 
             var sortNameUpper = !string.IsNullOrEmpty(model.SortName) ? model.SortName.ToUpper() : "";
             if (model.SortOrder == SortDirection.Ascending)
@@ -65,21 +50,12 @@ namespace iClassic.Services.Implementation
                 {
                     case "STATUS":
                         list = list.OrderBy(m => m.Status);
-                        break;
-                    case "CustomerId":
-                        list = list.OrderBy(m => m.Customer.TenKH);
-                        break;
-                    case "NGAYTRA":
-                        list = list.OrderBy(m => m.NgayTra);
-                        break;
+                        break;                   
                     case "NOIDUNG":
                         list = list.OrderBy(m => m.NoiDung);
-                        break;
-                    case "CREATED":
-                        list = list.OrderBy(m => m.Created);
-                        break;
+                        break;                    
                     default:
-                        list = list.OrderBy(m => m.Created);
+                        list = list.OrderBy(m => m.Id);
                         break;
                 }
             }
@@ -89,21 +65,12 @@ namespace iClassic.Services.Implementation
                 {
                     case "STATUS":
                         list = list.OrderByDescending(m => m.Status);
-                        break;
-                    case "CustomerId":
-                        list = list.OrderByDescending(m => m.Customer.TenKH);
-                        break;
-                    case "NGAYTRA":
-                        list = list.OrderByDescending(m => m.NgayTra);
-                        break;
+                        break;                    
                     case "NOIDUNG":
                         list = list.OrderByDescending(m => m.NoiDung);
-                        break;
-                    case "CREATED":
-                        list = list.OrderByDescending(m => m.Created);
-                        break;
+                        break;                    
                     default:
-                        list = list.OrderByDescending(m => m.Created);
+                        list = list.OrderByDescending(m => m.Id);
                         break;
                 }
             }
@@ -113,13 +80,13 @@ namespace iClassic.Services.Implementation
         public IQueryable<PhieuSua> GetByDateRange(int branchId, DateTime? startDate, DateTime? endDate)
         {
             var statusDone = (byte)TicketStatus.DaTraChoKhach;
-            return Where(m => m.Customer.BranchId == branchId && m.Status == statusDone && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
+            return Where(m => m.Status == statusDone);
         }
 
         public int Count(int branchId, TicketStatus status)
         {
             var stt = (byte)status;
-            return Where(m => m.Customer.BranchId == branchId && m.Status == stt).Count();
+            return Where(m => m.Status == stt).Count();
         }
 
         public override void Insert(PhieuSua model)
@@ -129,10 +96,8 @@ namespace iClassic.Services.Implementation
 
         public override void Update(PhieuSua model)
         {
-            var obj = GetById(model.Id);
-            obj.CustomerId = model.CustomerId;
-            obj.SoTien = model.SoTien;
-            obj.NgayTra = model.NgayTra;
+            var obj = GetById(model.Id);            
+            obj.SoTien = model.SoTien;            
             obj.NoiDung = model.NoiDung;
             obj.Status = model.Status;
             base.Update(obj);

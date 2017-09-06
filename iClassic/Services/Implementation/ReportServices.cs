@@ -9,15 +9,13 @@ namespace iClassic.Services.Implementation
 {
     public class ReportServices
     {
-        private readonly PhieuSanXuatRepository _phieuSanXuatRepository;
-        private readonly PhieuSuaRepository _phieuSuaRepository;
+        private readonly InvoiceRepository _invoiceRepository;
         private readonly PhieuChiRepository _phieuChiRepository;
         private readonly CustomerRepository _customerRepository;
 
         public ReportServices(iClassicEntities entities)
         {
-            _phieuSanXuatRepository = new PhieuSanXuatRepository(entities);
-            _phieuSuaRepository = new PhieuSuaRepository(entities);
+            _invoiceRepository = new InvoiceRepository(entities);
             _phieuChiRepository = new PhieuChiRepository(entities);
             _customerRepository = new CustomerRepository(entities);
         }
@@ -53,8 +51,7 @@ namespace iClassic.Services.Implementation
 
             #region Build Data
             var data = new ReportGraphResult[column];
-            var tongThuSanXuat = _phieuSanXuatRepository.GetByDateRange(model.BranchId, startDate, now);
-            var tongThuSuachua = _phieuSuaRepository.GetByDateRange(model.BranchId, startDate, now);
+            var tongThu = _invoiceRepository.GetByDateRange(model.BranchId, startDate, now);
             var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, startDate, now);
 
             for (int i = 1; i <= column; i++)
@@ -77,10 +74,9 @@ namespace iClassic.Services.Implementation
                 }
                 #endregion
 
-                var sanxuat = tongThuSanXuat.Where(m => startDate <= m.NgayTra && m.NgayTra <= endate).Sum(m => (float?)(m.TienCong + m.LoaiVai.SoTienBanRa) * m.SoLuong);
-                var suachua = tongThuSuachua.Where(m => startDate <= m.NgayTra && m.NgayTra <= endate).Sum(m => (float?)(m.SoTien));
-                var chi = tongChi.Where(m => startDate <= m.Created && m.Created <= endate).Sum(m => (float?)(m.SoTien));
-                item.Thu = (sanxuat ?? 0) + (suachua ?? 0);
+                var thu = tongThu.Where(m => startDate <= m.NgayTra && m.NgayTra <= endate).Sum(m => (double?)(m.Total));
+                var chi = tongChi.Where(m => startDate <= m.Created && m.Created <= endate).Sum(m => (double?)(m.SoTien));
+                item.Thu = thu ?? 0;
                 item.Chi = chi ?? 0;
                 item.LoiNhuan = item.Thu - item.Chi;
                 #region item.Time
@@ -122,12 +118,11 @@ namespace iClassic.Services.Implementation
 
         public ReportProfit GetProfit(StatisticSearch model)
         {
-            var tongThuSanXuat = _phieuSanXuatRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.TienCong + m.LoaiVai.SoTienBanRa) * m.SoLuong);
-            var tongThuSuachua = _phieuSuaRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.SoTien));
-            var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (float?)(m.SoTien));
+            var tongThu = _invoiceRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (double?)(m.Total));
+            var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (double?)(m.SoTien));
 
             var profit = new ReportProfit();
-            profit.Thu = (tongThuSanXuat ?? 0) + (tongThuSuachua ?? 0);
+            profit.Thu = tongThu ?? 0;
             profit.Chi = tongChi ?? 0;
             profit.LoiNhuan = profit.Thu - profit.Chi;
             return profit;
@@ -139,8 +134,9 @@ namespace iClassic.Services.Implementation
                 .Select(m => new ReportCustomVip
                 {
                     Customer = m,
-                    SoLanMay = m.PhieuSanXuat.Count,
-                    SoLanSua = m.PhieuSua.Count
+                    SoLanMay = m.Invoice.Sum(n => n.PhieuSanXuat.Count),
+                    SoLanSua = m.Invoice.Sum(n => n.PhieuSua.Count),
+                    Total = m.Invoice.Sum(n=>(double?)n.Total) ?? 0
                 });
             return allCustomers;
         }

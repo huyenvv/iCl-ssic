@@ -12,28 +12,34 @@ namespace iClassic.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class LoaiVai
+    public partial class Invoice
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public LoaiVai()
+        public Invoice()
         {
-            this.ProductTypeLoaiVai = new HashSet<ProductTypeLoaiVai>();
+            this.PhieuSua = new HashSet<PhieuSua>();
             this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
         }
     
         public int Id { get; set; }
-        public string MaVai { get; set; }
-        public string Name { get; set; }
-        public Nullable<double> SoTienNhapVao { get; set; }
-        public string Note { get; set; }
-        public System.DateTime Created { get; set; }
-        public int BranchId { get; set; }
+        public string Code { get; set; }
+        public double Total { get; set; }
+        public double DatCoc { get; set; }
+        public double ChietKhau { get; set; }
+        public System.DateTime NgayThu { get; set; }
+        public System.DateTime NgayTra { get; set; }
+        public int Status { get; set; }
+        public int CustomerId { get; set; }
         public string CreateBy { get; set; }
+        public string ModifiedBy { get; set; }
+        public int BranchId { get; set; }
+        public System.DateTime Created { get; set; }
+        public System.DateTime ModifiedDate { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductTypeLoaiVai> ProductTypeLoaiVai { get; set; }
         public virtual Branch Branch { get; set; }
+        public virtual Customer Customer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
     }

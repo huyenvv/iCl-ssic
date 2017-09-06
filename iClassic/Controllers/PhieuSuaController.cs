@@ -56,16 +56,14 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,CustomerId,SoTien,NoiDung,Created,NgayTra,Status,BranchId")] PhieuSua model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,InvoiceId,SoTien,NoiDung,Status")] PhieuSua model)
         {
             try
             {
                 if (ModelState.IsValid)
-                {
-                    model.BranchId = CurrentBranchId;
+                {                    
                     if (model.Id == 0)
-                    {
-                        model.CreateBy = CurrentUserId;
+                    {                        
                         _PhieuSuaRepository.Insert(model);
                     }
                     else

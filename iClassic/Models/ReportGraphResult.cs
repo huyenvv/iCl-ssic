@@ -9,10 +9,10 @@ namespace iClassic.Models
     public class ReportGraphResult
     {
         public string Time { get; set; }
-        public float Thu { get; set; }
-        public float Chi { get; set; }
+        public double Thu { get; set; }
+        public double Chi { get; set; }
 
         [JsonProperty("Lợi nhuận")]
-        public float LoiNhuan { get; set; }
+        public double LoiNhuan { get; set; }
     }
 }

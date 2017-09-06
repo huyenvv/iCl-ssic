@@ -15,13 +15,13 @@ namespace iClassic.Controllers
     {
         private readonly ILog _log;
         private PhieuSuaRepository _phieuSuaRepository;
-        private PhieuSanXuatRepository _phieuSanXuatRepository;
+        private InvoiceRepository _phieuSanXuatRepository;
 
         public HomeController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _phieuSuaRepository = new PhieuSuaRepository(_entities);
-            _phieuSanXuatRepository = new PhieuSanXuatRepository(_entities);
+            _phieuSanXuatRepository = new InvoiceRepository(_entities);
         }
         public ActionResult Index()
         {

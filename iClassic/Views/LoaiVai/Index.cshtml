@@ -36,19 +36,22 @@
         <tr>
             <th>STT</th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="MaVai">Mã vải</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="MaVai">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaVai)
+                </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="Name">Tên loại vải</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Name">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
+                </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="SoTienNhapVao">Số tiền nhập vào</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="SoTienNhapVao">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().SoTienNhapVao)
+                </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="SoTienBanRa">Số tiền bán ra</a>
-            </th>
-            <th>
-                Ghi chú
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Note)
             </th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Created">Ngày tạo</a>
@@ -72,10 +75,7 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        @item.SoTienNhapVao.ToString("N0") ₫
-                    </td>
-                    <td>
-                        @item.SoTienBanRa.ToString("N0") ₫
+                        @(item.SoTienNhapVao.HasValue ? item.SoTienNhapVao.Value.ToString("N0") + " ₫" : "")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Note)

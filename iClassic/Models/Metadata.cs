@@ -18,8 +18,8 @@ namespace iClassic.Models
     {        
     }
 
-    [MetadataType(typeof(PhieuSanXuatMetadata))]
-    public partial class PhieuSanXuat
+    [MetadataType(typeof(InvoiceMetadata))]
+    public partial class Invoice
     {
     }
 

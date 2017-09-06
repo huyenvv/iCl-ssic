@@ -110,6 +110,28 @@ namespace iClassic.Helper
             }
             return result;
         }
+        public static HashSet<KeyValuePair<int, string>> GetPhieuSuaTypeList()
+        {
+            var result = new HashSet<KeyValuePair<int, string>>();
+            var list = Enum.GetValues(typeof(PhieuSuaType));
+            foreach (int enumItem in list)
+            {
+                var keyValueItem = new KeyValuePair<int, string>(enumItem, ((PhieuSuaType)enumItem).GetDescription());
+                result.Add(keyValueItem);
+            }
+            return result;
+        }
+        public static HashSet<KeyValuePair<int, string>> GetLoiPhieuSuaTypeList()
+        {
+            var result = new HashSet<KeyValuePair<int, string>>();
+            var list = Enum.GetValues(typeof(LoiPhieuSuaType));
+            foreach (int enumItem in list)
+            {
+                var keyValueItem = new KeyValuePair<int, string>(enumItem, ((LoiPhieuSuaType)enumItem).GetDescription());
+                result.Add(keyValueItem);
+            }
+            return result;
+        }
         public static string DrawStatusTicket(int status)
         {
             var statusEnum = (TicketStatus)status;

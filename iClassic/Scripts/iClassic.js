@@ -31,7 +31,10 @@ jQuery(document).ready(function () {
             var isActive = validateMenuLink($this);
             if (!isActive) return;
 
-            $this.parent().addClass("active").parent().show();
+            $this.parent().addClass("active");
+            if (!$("body").hasClass("leftpanel-collapsed")) {
+                $this.parent().parent().show();
+            }
             $this.parents(".nav-parent").addClass("active nav-active");
         });
     }

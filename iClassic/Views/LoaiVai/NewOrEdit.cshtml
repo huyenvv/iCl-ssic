@@ -1,11 +1,13 @@
-﻿@model iClassic.Models.LoaiVai
+﻿@using iClassic.Models;
+@model iClassic.Models.LoaiVai
 
 @{
     ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
     ViewBag.Class = "fa fa-map-marker";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Loại vải</a>" +
-                          "<span>"+ViewBag.Title+"</span>";
-
+                          "<span>" + ViewBag.Title + "</span>";
+    var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
+    var index = 0;
 }
 
 <div class="row mb10 mt10">
@@ -38,13 +40,25 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.SoTienNhapVao)
-                        @Html.EditorFor(model => model.SoTienNhapVao, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.SoTienNhapVao, new { htmlAttributes = new { @class = "form-control price" } })
                         @Html.ValidationMessageFor(model => model.SoTienNhapVao, "", new { @class = "text-danger" })
                     </div>
+                </div>
+                <div class="col-md-12 form-bordered">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.SoTienBanRa)
-                        @Html.EditorFor(model => model.SoTienBanRa, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.SoTienBanRa, "", new { @class = "text-danger" })
+                        <div class="row">
+                            <div class="col-md-12"><h4>@Html.LabelFor(model => model.ProductTypeLoaiVai)</h4></div>
+                            @foreach (var item in listProductType)
+                            {
+                                var productVai = Model.ProductTypeLoaiVai.FirstOrDefault(m => m.ProductTypeId == item.Id);
+                                <div class="col-sm-4 col-xs-6 col-md-3">
+                                    <small>@item.Name</small>
+                                    <input type="hidden" name="ProductTypeLoaiVai[@index].ProductTypeId" value="@item.Id" />
+                                    <input type="text" name="ProductTypeLoaiVai[@index].Price" value="@(productVai != null ?productVai.Price : 0)" class="form-control price" />
+                                </div>
+                                index++;
+                            }
+                        </div>
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Note)
@@ -62,18 +76,16 @@
 @section Scripts {
     <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
     <script>
-        function beforeSubmit() {
-            var sotienObj = $("#SoTienNhapVao");
-            var value = sotienObj.val().replace(/,/g, '');
-            sotienObj.val(value);
-
-            var sotienObj = $("#SoTienBanRa");
-            var value = sotienObj.val().replace(/,/g, '');
-            sotienObj.val(value);
+        function beforeSubmit() {            
+            $(".price").each(function () {
+                var $this = $(this);
+                var value = $this.val().replace(/,/g, '');
+                $this.val(value);
+            });
         }
         $(function () {
-            $('#SoTienNhapVao').maskMoney({ precision: 0 });
-            $('#SoTienBanRa').maskMoney({ precision: 0 });
+            $('.price').maskMoney({ precision: 0 });
+            $('.price').focus();
         })
     </script>
     @Scripts.Render("~/bundles/jqueryval")

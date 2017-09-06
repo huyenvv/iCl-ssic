@@ -5,7 +5,7 @@ using System.Web;
 
 namespace iClassic.Models
 {
-    public class PhieuSanXuatSearch : SortPagingBase
+    public class InvoiceSearch : SortPagingBase
     {
         public int BranchId { get; set; }
         public int? Status { get; set; }

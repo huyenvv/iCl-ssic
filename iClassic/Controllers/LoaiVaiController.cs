@@ -41,8 +41,9 @@ namespace iClassic.Controllers
             var model = await _LoaiVaiRepository.GetByIdAsync(id);
             if (model == null)
             {
-                return View(new LoaiVai { BranchId = CurrentBranchId });
+                model = new LoaiVai { BranchId = CurrentBranchId };
             }
+            CreateListProductTypeViewBag();
             return View(model);
         }
 
@@ -51,7 +52,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,SoTienNhapVao,SoTienBanRa,MaVai,Note,BranchId")] LoaiVai model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,SoTienNhapVao,ProductTypeLoaiVai,PhieuSanXuat,MaVai,Note,BranchId")] LoaiVai model)
         {
             try
             {
@@ -80,6 +81,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
+            CreateListProductTypeViewBag();
             return View(model);
         }
 

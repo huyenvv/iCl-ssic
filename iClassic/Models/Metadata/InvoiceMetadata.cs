@@ -1,24 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace iClassic.Models.Metadata
 {
-    public class PhieuSanXuatMetadata
+    public class InvoiceMetadata
     {
-        [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Tên sản phẩm")]
-        public string TenSanPham { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Display(Name = "Mã hóa đơn")]
+        public string Code { get; set; }
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Loại vải")]
-        public int MaVaiId { get; set; }
-
-        [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Tiền công")]
-        public double TienCong { get; set; }
-
-        [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Số lượng")]
-        public int SoLuong { get; set; }
+        [Display(Name = "Tổng tiền")]
+        public double Total { get; set; }        
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Đặt cọc")]
@@ -39,5 +32,8 @@ namespace iClassic.Models.Metadata
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Khách hàng")]
         public int CustomerId { get; set; }
+
+        [Display(Name = "Chiết khấu")]
+        public double ChietKhau { get; set; }
     }
 }

@@ -52,12 +52,6 @@ namespace iClassic.Services.Implementation
                     case "SOTIENNHAPVAO":
                         list = list.OrderBy(m => m.SoTienNhapVao);
                         break;
-                    case "SOTIENBANRA":
-                        list = list.OrderBy(m => m.SoTienBanRa);
-                        break;
-                    case "CREATED":
-                        list = list.OrderBy(m => m.Created);
-                        break;
                     default:
                         list = list.OrderBy(m => m.Created);
                         break;
@@ -75,12 +69,6 @@ namespace iClassic.Services.Implementation
                         break;
                     case "SOTIENNHAPVAO":
                         list = list.OrderByDescending(m => m.SoTienNhapVao);
-                        break;
-                    case "SOTIENBANRA":
-                        list = list.OrderByDescending(m => m.SoTienBanRa);
-                        break;
-                    case "CREATED":
-                        list = list.OrderByDescending(m => m.Created);
                         break;
                     default:
                         list = list.OrderByDescending(m => m.Created);
@@ -102,9 +90,20 @@ namespace iClassic.Services.Implementation
             obj.MaVai = model.MaVai;
             obj.Name = model.Name;
             obj.SoTienNhapVao = model.SoTienNhapVao;
-            obj.SoTienBanRa = model.SoTienBanRa;
             obj.Note = model.Note;
             obj.BranchId = model.BranchId;
+
+            var listNew = model.ProductTypeLoaiVai.Where(m => !obj.ProductTypeLoaiVai.Any(n => n.ProductTypeId == m.ProductTypeId));
+            var lisUpdate = model.ProductTypeLoaiVai.Where(m => obj.ProductTypeLoaiVai.Any(n => n.ProductTypeId == m.ProductTypeId));
+            var listRemove = obj.ProductTypeLoaiVai.Where(m => !model.ProductTypeLoaiVai.Any(n => n.ProductTypeId == m.ProductTypeId));
+
+            listNew.ToList().ForEach(t => obj.ProductTypeLoaiVai.Add(t));
+            lisUpdate.ToList().ForEach(t => {
+                var objForUpdate = obj.ProductTypeLoaiVai.FirstOrDefault(m => m.ProductTypeId == t.ProductTypeId);
+                objForUpdate.Price = t.Price;
+            });
+            listRemove.ToList().ForEach(t => obj.ProductTypeLoaiVai.Remove(t));
+
             base.Update(obj);
         }
 

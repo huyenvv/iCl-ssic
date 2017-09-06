@@ -18,11 +18,13 @@ namespace iClassic.Controllers
         private AspNetUsers _currentUser;
         private BranchRepository _branchRepository;
         private CustomerRepository _customerRepository;
+        private ProductTypeRepository _productTypeRepository;
         public BaseController()
         {
             _entities = new iClassicEntities();
             _branchRepository = new BranchRepository(_entities);
             _customerRepository = new CustomerRepository(_entities);
+            _productTypeRepository = new ProductTypeRepository(_entities);
         }
 
         public AspNetUsers CurrentUser
@@ -96,6 +98,11 @@ namespace iClassic.Controllers
         {
             var data = _customerRepository.GetByBranchId(CurrentBranchId).Select(m => new { m.Id, Title = m.TenKH + " (" + m.SDT + ")" });
             ViewBag.CustomerId = new SelectList(data, "Id", "Title", selectedId);
+        }
+
+        public void CreateListProductTypeViewBag()
+        {
+            ViewBag.ProductTypeList = _productTypeRepository.GetAll();
         }
 
         public int SoNgayTraSauKhiSua

@@ -6,22 +6,10 @@ namespace iClassic.Models.Metadata
     {
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Nội dung")]
-        public string NoiDung { get; set; }
-
-        [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Ngày nhận")]
-        public System.DateTime Created { get; set; }
-
-        [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Ngày trả")]
-        public System.DateTime NgayTra { get; set; }
+        public string NoiDung { get; set; }       
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Trạng thái")]
         public int Status { get; set; }
-
-        [Required(ErrorMessage = "Bạn phải nhập {0}")]
-        [Display(Name = "Khách hàng")]
-        public int CustomerId { get; set; }
     }
 }

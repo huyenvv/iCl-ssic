@@ -1,13 +1,13 @@
 ﻿@using iClassic.Helper;
 @using iClassic.Models;
 @using PagedList.Mvc;
-@model PagedList.IPagedList<PhieuSanXuat>
+@model PagedList.IPagedList<Invoice>
 
 @{
-    ViewBag.Title = "Phiếu sản xuất";
+    ViewBag.Title = "Đơn hàng";
     ViewBag.Class = "fa fa-dollar";
     ViewBag.Breadcrumbs = ViewBag.Title;
-    var searchModel = ViewBag.SearchModel as PhieuSanXuatSearch;
+    var searchModel = ViewBag.SearchModel as InvoiceSearch;
 }
 
 <div class="row mb10 mt10">
@@ -44,31 +44,44 @@
         <tr>
             <th>STT</th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="KhachHang">Khách hàng</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Code">
+                    @Html.DisplayNameFor(m=>m.FirstOrDefault().Code)
+                </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="TenSanPham">Tên sản phẩm</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="KhachHang">
+                    @Html.DisplayNameFor(m => m.FirstOrDefault().CustomerId)
+                </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="LoaiVai">Loại vải</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Total">
+                    @Html.DisplayNameFor(m => m.FirstOrDefault().Total)
+                </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="TienCong">Tiền công</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="DatCoc">
+                    @Html.DisplayNameFor(m => m.FirstOrDefault().DatCoc)
+                </a>
+            </th>   
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="ChietKhau">
+                    @Html.DisplayNameFor(m => m.FirstOrDefault().ChietKhau)
+                </a>
+            </th>         
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="NgayThu">
+                    @Html.DisplayNameFor(m => m.FirstOrDefault().NgayThu)
+                </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="DatCoc">Đặt cọc</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="NgayTra">
+                    @Html.DisplayNameFor(m => m.FirstOrDefault().NgayTra)
+                </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="SoLuong">Số lượng</a>
-            </th>
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="NgayThu">Ngày thử</a>
-            </th>
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="NgayTra">Ngày trả</a>
-            </th>
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="Status">Trạng thái</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Status">
+                    @Html.DisplayNameFor(m => m.FirstOrDefault().Status)
+                </a>
             </th>
             <th></th>
         </tr>
@@ -82,20 +95,19 @@
                         @(stt++)
                     </td>
                     <td>
+                        @item.Code
+                    </td>
+                    <td>
                         @item.Customer.TenKH (@item.Customer.SDT)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TenSanPham)
-                    </td>
-                    <td>@item.LoaiVai.Name (@item.LoaiVai.MaVai)</td>
-                    <td>
-                        @item.TienCong.ToString("N0") ₫
+                        @item.Total.ToString("N0") ₫
                     </td>
                     <td>
                         @item.DatCoc.ToString("N0") ₫
                     </td>
                     <td>
-                        @item.SoLuong
+                        @item.ChietKhau.ToString("N0") ₫
                     </td>
                     <td>
                         @item.NgayThu.ToString("dd/MM/yyyy HH:mm:ss")

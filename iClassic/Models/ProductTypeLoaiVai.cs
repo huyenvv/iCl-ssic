@@ -12,19 +12,13 @@ namespace iClassic.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PhieuSanXuat
+    public partial class ProductTypeLoaiVai
     {
         public int Id { get; set; }
-        public string TenSanPham { get; set; }
-        public Nullable<int> MaVaiId { get; set; }
-        public int SoLuong { get; set; }
-        public int Status { get; set; }
-        public bool HasVai { get; set; }
-        public int InvoiceId { get; set; }
+        public int MavaiId { get; set; }
+        public Nullable<double> Price { get; set; }
         public int ProductTypeId { get; set; }
-        public double DonGia { get; set; }
     
-        public virtual Invoice Invoice { get; set; }
         public virtual LoaiVai LoaiVai { get; set; }
         public virtual ProductType ProductType { get; set; }
     }

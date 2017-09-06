@@ -18,13 +18,20 @@ namespace iClassic.Models
         public ProductType()
         {
             this.ProductTyeField = new HashSet<ProductTyeField>();
+            this.ProductTypeLoaiVai = new HashSet<ProductTypeLoaiVai>();
+            this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
+        public double Price { get; set; }
         public string Note { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductTyeField> ProductTyeField { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductTypeLoaiVai> ProductTypeLoaiVai { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
     }
 }

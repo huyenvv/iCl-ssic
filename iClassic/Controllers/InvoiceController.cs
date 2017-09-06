@@ -12,24 +12,24 @@ using iClassic.Helper;
 namespace iClassic.Controllers
 {
     [Override.Authorize]
-    public class PhieuSanXuatController : BaseController
+    public class InvoiceController : BaseController
     {
         private readonly ILog _log;
-        private PhieuSanXuatRepository _phieuSanXuatRepository;
+        private InvoiceRepository _invoiceRepository;
         private LoaiVaiRepository _loaiVaiRepository;
 
-        public PhieuSanXuatController()
+        public InvoiceController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _phieuSanXuatRepository = new PhieuSanXuatRepository(_entities);
+            _invoiceRepository = new InvoiceRepository(_entities);
             _loaiVaiRepository = new LoaiVaiRepository(_entities);
         }
 
-        // GET: PhieuSanXuates
-        public ActionResult Index(PhieuSanXuatSearch model)
+        // GET: Invoicees
+        public ActionResult Index(InvoiceSearch model)
         {
             model.BranchId = CurrentBranchId;
-            var result = _phieuSanXuatRepository.Search(model);
+            var result = _invoiceRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
@@ -37,30 +37,30 @@ namespace iClassic.Controllers
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: PhieuSanXuates/NewOrEdit/5
+        // GET: Invoicees/NewOrEdit/5
         public async Task<ActionResult> NewOrEdit(int id = 0)
         {
-            var model = await _phieuSanXuatRepository.GetByIdAsync(id);
+            var model = await _invoiceRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new PhieuSanXuat {
+                model = new Invoice {
                     NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
-                    NgayTra = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
-                    SoLuong = 1 ,
+                    NgayTra = DateTime.Now.AddDays(SoNgayThuSauKhiLam),                    
                     BranchId = CurrentBranchId
                 };
             }            
             CreateCustomerViewBag(model.CustomerId);
-            CreateLoaiVaiViewBag(model.MaVaiId);
+            CreateLoaiVaiViewBag();
+            CreateListProductTypeViewBag();
             return View(model);
         }
 
-        // POST: PhieuSanXuates/Edit/5
+        // POST: Invoicees/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenSanPham,MaVaiId,TienCong,SoLuong,DatCoc,NgayThu,NgayTra,Status,CustomerId,BranchId")] PhieuSanXuat model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Total,ChietKhau,DatCoc,NgayThu,NgayTra,Status,CustomerId,BranchId,PhieuSanXuat,PhieuSua")] Invoice model)
         {
             try
             {
@@ -70,13 +70,13 @@ namespace iClassic.Controllers
                     if (model.Id == 0)
                     {
                         model.CreateBy = CurrentUserId;
-                        _phieuSanXuatRepository.Insert(model);
+                        _invoiceRepository.Insert(model);
                     }
                     else
                     {
-                        _phieuSanXuatRepository.Update(model);
+                        _invoiceRepository.Update(model);
                     }
-                    await _phieuSanXuatRepository.SaveAsync();
+                    await _invoiceRepository.SaveAsync();
 
                     ShowMessageSuccess(Message.Update_Successfully);
 
@@ -90,11 +90,12 @@ namespace iClassic.Controllers
                 _log.Info(ex.ToString());
             }
             CreateCustomerViewBag(model.CustomerId);
-            CreateLoaiVaiViewBag(model.MaVaiId);
+            CreateLoaiVaiViewBag();
+            CreateListProductTypeViewBag();
             return View(model);
         }
 
-        // GET: PhieuSanXuates/Delete/5
+        // GET: Invoicees/Delete/5
         public async Task<ActionResult> Delete(int id = 0)
         {
             try
@@ -103,14 +104,14 @@ namespace iClassic.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var obj = await _phieuSanXuatRepository.GetByIdAsync(id);
+                var obj = await _invoiceRepository.GetByIdAsync(id);
                 if (obj == null || !IsValidBranch(obj.BranchId))
                 {
                     return HttpNotFound();
                 }
-                _phieuSanXuatRepository.Delete(obj);
+                _invoiceRepository.Delete(obj);
 
-                await _phieuSanXuatRepository.SaveAsync();
+                await _invoiceRepository.SaveAsync();
 
                 ShowMessageSuccess(Message.Update_Successfully);
             }
@@ -129,7 +130,7 @@ namespace iClassic.Controllers
             return View(list);
         }
 
-        private void CreateLoaiVaiViewBag(int maVaiId)
+        private void CreateLoaiVaiViewBag()
         {
             ViewBag.MaVaiId = _loaiVaiRepository.GetByBranchId(CurrentBranchId);
         }
@@ -138,7 +139,7 @@ namespace iClassic.Controllers
         {
             if (disposing)
             {
-                _phieuSanXuatRepository.Dispose();
+                _invoiceRepository.Dispose();
                 _loaiVaiRepository.Dispose();
             }
             base.Dispose(disposing);

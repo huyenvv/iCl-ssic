@@ -1,0 +1,472 @@
+﻿@using iClassic.Helper;
+@using iClassic.Models;
+@using Newtonsoft.Json;
+@model iClassic.Models.Invoice
+
+@{
+    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
+    ViewBag.Class = "fa fa-dollar";
+    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Hóa đơn</a>" +
+                          "<span>" + ViewBag.Title + "</span>";
+
+    var loaivai = ViewBag.MaVaiId as IQueryable<LoaiVai>;
+    var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
+}
+
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.BranchId)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CustomerId)
+                        @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
+                        <a href="@Url.Action("NewOrEdit","Customer")">+ Thêm mới khách hàng</a>
+                        @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            @Html.HiddenFor(m => m.Total)
+                            Tổng tiền: <strong id="lblTotal" class="text-success">0 ₫</strong>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatCoc)
+                        @Html.EditorFor(model => model.DatCoc, new { htmlAttributes = new { @class = "form-control price", onchange = "updateSoTienItem();" } })
+                        @Html.ValidationMessageFor(model => model.DatCoc, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ChietKhau)
+                        @Html.EditorFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control price", onchange = "updateSoTienItem();" } })
+                        @Html.ValidationMessageFor(model => model.ChietKhau, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="text-danger">Còn thiếu: <strong id="TienConThieu"></strong></label>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NgayThu)
+                        <input type="text" name="NgayThu" value="@Model.NgayThu.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                        @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NgayTra)
+                        <input type="text" name="NgayTra" value="@Model.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                        @Html.ValidationMessageFor(model => model.NgayTra, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Status)
+                        <select name="Status" class="form-control">
+                            @foreach (var item in Helpers.GetTicketStatusList())
+                            {
+                                <option value="@item.Key" @(item.Key == Model.Status ? "selected" : "")>@item.Value</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-btns">
+                        <a href="" class="minimize">−</a>
+                        <h4>Sản phẩm cần may? <span id="soluongspcanmay"></span></h4>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="widget-bloglist" id="boxPhieuSanXuat">
+
+                    </div>
+                    <div class="mt10">
+                        <a href="javascript:void(0)" id="btnAddPhieuSanXuat">+ Thêm sản phẩm may</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-btns">
+                        <a href="" class="minimize">−</a>
+                        <h4>Sản phẩm cần sửa? <span id="soluongspcansua"></span></h4>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="widget-bloglist" id="boxPhieuSua">
+
+                    </div>
+                    <div class="mt10">
+                        <a href="javascript:void(0)" id="btnAddPhieuSua">+ Thêm sản phẩm cần sửa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit()">Lưu</button>
+    <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" />
+    <style>
+        .widget-bloglist .media {
+            border-bottom: 1px solid #1d2939;
+            padding-bottom: 10px;
+        }
+
+        .media h4 {
+            padding-bottom: 5px;
+            background: #1d2939;
+            padding: 5px 10px;
+            color: #ffffff;
+        }
+
+            .media h4 span:hover {
+                cursor: pointer;
+            }
+    </style>
+}
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/moment.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
+
+    @*Sản phẩm may*@
+
+    <script>
+
+        var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.ProductTypeId,m.MaVaiId,m.SoLuong}))".replace(/&quot;/g, '"'));
+        var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price}))".replace(/&quot;/g, '"'));
+        var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
+
+        $(function () {
+            //showSoTienLoaiVai();
+
+            $('.price').maskMoney({ precision: 0 });
+            $('.price').focus();
+
+            $('.datepicker').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm:ss'
+            });
+
+            var newLoaiVai = {
+                Id: '',
+                Name: 'KHÁCH MANG VẢI ĐẾN',
+                MaVai: '',
+                ProductTypeLoaiVai: {}
+            };
+            loaiVai.unshift(newLoaiVai);
+
+            bindPhieuSanXuat();
+            updateSoTienItem();
+
+            $("#btnAddPhieuSanXuat").on("click", function () {
+
+                updatePhieuSanXuatData();
+
+                var newPhieusx = {
+                    Id: 0,
+                    TenSanPham: '',
+                    ProductTypeId: 0,
+                    MaVaiId: 0,
+                    SoLuong: 1,
+                };
+                phieuSanXuatModels.push(newPhieusx);
+
+                bindPhieuSanXuat();
+
+                return false;
+            });
+        });
+
+        function updateSoTienItem() {
+            var tongtien = 0;
+            $('#boxPhieuSanXuat .media').each(function (i, element) {
+                var obj = $(element);
+
+                var loaivaiId = parseInt(obj.find("select.loaivai").val()) | 0;
+                var soluong = parseInt(obj.find(".soluong").val()) | 0;
+                var productTypeId = parseInt(obj.find("input[type='radio']:checked").val()) | 0;
+
+                var dongia = getPrice(loaivaiId, productTypeId);
+                var thanhtien = dongia * soluong;
+                obj.find(".giatien").html(formatMoney(thanhtien));
+
+                tongtien += thanhtien;
+            });
+
+            $('#boxPhieuSua .media').each(function (i, element) {
+                var obj = $(element);
+                var sotien = parseInt(obj.find(".sotien").val().replace(/,/g, '')) | 0;
+                tongtien += sotien;
+            });
+
+            $("#Total").val(tongtien);
+            $("#lblTotal").html(formatMoney(tongtien));
+
+            var datcoc = parseInt($("#DatCoc").val().replace(/,/g, '')) | 0;
+            var chietKhau = parseInt($("#ChietKhau").val().replace(/,/g, '')) | 0;
+            var conthieu = tongtien - datcoc - chietKhau;
+            $("#TienConThieu").html(formatMoney(conthieu));
+        }
+
+        function getPrice(loaivaiId, productTypeId) {
+            var dongia = 0;
+            if (loaivaiId == 0) {
+                $.each(listProductType, function (index, item) {
+                    if (item.Id != productTypeId) return;
+
+                    dongia = item.Price;
+                    return false;
+                });
+            } else {
+                $.each(loaiVai, function (index, item) {
+                    if (item.Id != loaivaiId) return;
+
+                    $.each(item.ProductTypeLoaiVai, function (index, typeitem) {
+                        if (typeitem.ProductTypeId != productTypeId) return;
+
+                        dongia = typeitem.Price;
+                        return false;
+                    });
+                    return false;
+                });
+            }
+            return dongia;
+        }
+
+        function removePhieuSx(e) {
+            if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+                $(e).parents(".media").remove();
+
+                updatePhieuSanXuatData();
+
+                bindPhieuSanXuat();
+            }
+        }
+
+        function updatePhieuSanXuatData() {
+            phieuSanXuatModels = [];
+            $('#boxPhieuSanXuat .media').each(function (i, element) {
+                var obj = $(element);
+                var phieusx = {};
+                phieusx.Id = parseInt(obj.find(".idsanpham").val()) | 0;
+                phieusx.TenSanPham = obj.find(".tensanpham").val();
+                phieusx.ProductTypeId = parseInt(obj.find("input[type='radio']:checked").val()) | 0;
+                phieusx.MaVaiId = parseInt(obj.find("select.loaivai").val()) | 0;
+                phieusx.SoLuong = parseInt(obj.find(".soluong").val()) | 0;
+
+                phieuSanXuatModels.push(phieusx);
+            });
+        }
+
+        function bindPhieuSanXuat() {
+            var box = $('#boxPhieuSanXuat');
+            var html = "";
+            $.each(phieuSanXuatModels, function (index, item) {
+
+                var dongia = getPrice(item.MaVaiId, item.ProductTypeId);
+                var giatien = formatMoney(dongia * item.SoLuong);
+
+                html += "<div class='media'>";
+                html += "   <h4 class='text-warning'>" + (index + 1) + ".<span class='pull-right' onclick='removePhieuSx(this);'>x</span></h4>";
+                html += "   <div class='form-group'>";
+                html += "       <input type='hidden' name='PhieuSanXuat[" + index + "].Id' value='" + item.Id + "'  class='idsanpham'/>";
+                html += "       <input type='text' name='PhieuSanXuat[" + index + "].TenSanPham' value='" + item.TenSanPham + "' class='form-control tensanpham' placeholder='Tên sản phẩm' />";
+                html += "   </div>";
+                html += "   <div class='form-group'>";
+                html += "       <label>Loại sản phẩm ?</label>";
+                html += "       <br />";
+
+                var typecount = 0;
+                $.each(listProductType, function (i, product) {
+                    var id = "rdoProductType" + index + "-" + typecount;
+                    var hasValue = product.Id == item.ProductTypeId;
+                    html += "   <div class='rdio rdio-default pull-left mr20'>";
+                    html += "       <input type='radio' name='PhieuSanXuat[" + index + "].ProductTypeId' id='" + id + "' value='" + product.Id + "' " + (hasValue ? "checked" : "") + " onclick='updateSoTienItem();'>";
+                    html += "       <label for='" + id + "'>" + product.Name + "</label>";
+                    html += "   </div>";
+                    typecount++;
+                });
+
+                html += "   </div>";
+                html += "   <div class='form-group'>";
+                html += "       <div class='row'>";
+                html += "           <div class='col-sm-6'>";
+                html += "               <label>Loại vải</label>";
+                html += "               <select name='PhieuSanXuat[" + index + "].MaVaiId' class='select22 loaivai' data-placeholder='Nhập tên hoặc mã vải...' onchange='updateSoTienItem();'>";
+                $.each(loaiVai, function (i, vai) {
+                    html += "               <option value='" + vai.Id + "'" + (vai.Id == item.MaVaiId ? "selected" : "") + ">";
+                    html += "                   " + vai.Name;
+                    if (vai.MaVai) {
+                        html += "                   (" + vai.MaVai + ")";
+                    }
+                    html += "               </option>";
+                });
+                html += "               </select>";
+                html += "           </div>";
+                html += "           <div class='col-sm-6'>";
+                html += "           <div class='form-group'>";
+                html += "                    <label>Số lượng</label>";
+                html += "                    <input type='number' name='PhieuSanXuat[" + index + "].SoLuong' value='" + item.SoLuong + "' min='1' class='form-control soluong'  onchange='updateSoTienItem();' />";
+                html += "               </div>";
+                html += "           </div>";
+                html += "       </div>";
+                html += "   </div>";
+                html += "   <label>Giá tiền: <strong class='text-success giatien'>" + giatien + "</strong></label>";
+                html += "</div>";
+            });
+            box.html(html);
+
+            $("#soluongspcanmay").html("(" + phieuSanXuatModels.length + ")");
+
+            jQuery(".select22").select2({
+                width: '100%'
+            });
+        }
+
+        function beforeSubmit() {
+            $(".price").each(function () {
+                var $this = $(this);
+                var value = $this.val().replace(/,/g, '');
+                $this.val(value);
+            });
+        }
+    </script>
+
+    @*Sản phẩm sửa*@
+    <script>
+        var phieuSuaModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSua.Select(m=>new {m.Id,m.NoiDung,m.ProblemType,m.SoTien,m.Type,m.ProblemTypeOther}))".replace(/&quot;/g, '"'));
+        var phieuSuaTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetPhieuSuaTypeList())".replace(/&quot;/g, '"'));
+        var loiPhieuSuaTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetLoiPhieuSuaTypeList())".replace(/&quot;/g, '"'));
+
+        $(function () {
+
+            var loiphieusuakhac = {
+                Key: '',
+                Value: 'Lý do khác'
+            };
+            loiPhieuSuaTypes.unshift(loiphieusuakhac);
+
+            bindPhieuSua();
+            updateSoTienItem();
+
+            $("#btnAddPhieuSua").on("click", function () {
+
+                updatePhieuSuaData();
+
+                var newPhieuSua = {
+                    Id: 0,
+                    NoiDung: '',
+                    ProblemType: 0,
+                    Type: 0,
+                    ProblemTypeOther: '',
+                    SoTien: 0
+                };
+                phieuSuaModels.push(newPhieuSua);
+
+                bindPhieuSua();
+
+                return false;
+            });
+        });
+
+        function cboLyDoChange(e) {
+            var obj = $(e);
+            var value = $(e).val();
+            var sotienobj = obj.parents(".media").find(".boxtien");
+            if (value == "@((byte)PhieuSuaType.BaoHanh)") {
+                sotienobj.addClass('hide');
+                sotienobj.find('.sotien').val(0);
+            } else {
+                sotienobj.removeClass('hide');
+            }
+        }
+
+        function removePhieuSua(e) {
+            if (confirm("Bạn có chắc chắn muốn xóa phiếu sửa này?")) {
+                $(e).parents(".media").remove();
+
+                updatePhieuSuaData();
+
+                bindPhieuSua();
+            }
+        }
+
+        function updatePhieuSuaData() {
+            phieuSuaModels = [];
+            $('#boxPhieuSua .media').each(function (i, element) {
+                var obj = $(element);
+                var phieusua = {};
+                phieusua.Id = parseInt(obj.find(".idphieusua").val()) | 0;
+                phieusua.NoiDung = obj.find(".noidung").val();
+                phieusua.Type = parseInt(obj.find("select.type").val()) | 0;
+                phieusua.ProblemType = parseInt(obj.find("select.loitype").val()) | 0;
+                phieusua.ProblemTypeOther = obj.find(".problemTypeOther").val();
+                phieusua.SoTien = parseInt(obj.find(".sotien").val().replace(/,/g, '')) | 0;
+
+                phieuSuaModels.push(phieusua);
+            });
+        }
+
+        function bindPhieuSua() {
+            var box = $('#boxPhieuSua');
+            var html = "";
+            $.each(phieuSuaModels, function (index, item) {
+                var giatien = formatMoney(item.SoTien);
+
+                html += "<div class='media'>";
+                html += "   <h4 class='text-warning'>" + (index + 1) + ".<span class='pull-right' onclick='removePhieuSua(this);'>x</span></h4>";
+                html += "   <div class='form-group'>";
+                html += "       <input type='hidden' name='PhieuSua[" + index + "].Id' value='" + item.Id + "'  class='idphieusua'/>";
+                html += "       <input type='text' name='PhieuSua[" + index + "].NoiDung' value='" + item.NoiDung + "' class='form-control noidung' placeholder='Miêu tả lỗi sản phẩm' />";
+                html += "   </div>";
+                html += "   <div class='form-group'>";
+                html += "               <label>Lý do sửa</label>";
+                html += "               <select name='PhieuSua[" + index + "].Type' class='form-control type' onchange='cboLyDoChange(this);'>";
+                $.each(phieuSuaTypes, function (i, type) {
+                    html += "               <option value='" + type.Key + "'" + (type.Key == item.Type ? "selected" : "") + ">";
+                    html += "                   " + type.Value;
+                    html += "               </option>";
+                });
+                html += "               </select>";
+                html += "   </div>";
+                html += "   <div class='form-group'>";
+                html += "               <label>Lỗi do ai?</label>";
+                html += "               <select name='PhieuSua[" + index + "].ProblemType'  class='form-control loitype'>";
+                $.each(loiPhieuSuaTypes, function (i, type) {
+                    html += "               <option value='" + type.Key + "'" + (type.Key == item.ProblemType ? "selected" : "") + ">";
+                    html += "                   " + type.Value;
+                    html += "               </option>";
+                });
+                html += "               </select>";
+                html += "       <input type='text' name='PhieuSua[" + index + "].ProblemTypeOther' value='" + item.ProblemTypeOther + "' class='form-control problemTypeOther " + (!item.ProblemType ? "hide" : "") + "' />";
+                html += "   </div>";
+                html += "   <div class='form-group boxtien " + (item.Type == '@((byte)PhieuSuaType.BaoHanh)' ? "hide" : "") + "'>";
+                html += "       <label>Giá tiền</label>";
+                html += "       <input type='text' name='PhieuSua[" + index + "].SoTien' value='" + item.SoTien + "' class='form-control price sotien'  onchange='updateSoTienItem();' />";
+                html += "   </div>";
+                html += "</div>";
+            });
+            box.html(html);
+
+            $("#soluongspcansua").html("(" + phieuSuaModels.length + ")");
+
+            $('.price').maskMoney({ precision: 0 });
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

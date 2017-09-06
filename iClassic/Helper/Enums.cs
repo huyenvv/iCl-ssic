@@ -18,6 +18,27 @@ namespace iClassic.Helper
         DaTraChoKhach
     }
 
+    public enum PhieuSuaType
+    {
+        [Description("Bảo hành")]
+        BaoHanh,
+
+        [Description("Khách nhờ sửa")]
+        KhachNhoSua,
+    }
+
+    public enum LoiPhieuSuaType
+    {
+        [Description("Người CẮT")]
+        NguoiCat = 1,
+
+        [Description("Người MAY")]
+        NguoiMay = 2,
+
+        [Description("Người ĐO")]
+        NguoiDo = 3,
+    }
+
     public enum ReportTypes
     {
         SevenDaysRecent = 1,

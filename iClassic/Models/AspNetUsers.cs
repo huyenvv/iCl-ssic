@@ -20,8 +20,6 @@ namespace iClassic.Models
             this.Customer = new HashSet<Customer>();
             this.LoaiVai = new HashSet<LoaiVai>();
             this.PhieuChi = new HashSet<PhieuChi>();
-            this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
-            this.PhieuSua = new HashSet<PhieuSua>();
             this.AspNetRoles = new HashSet<AspNetRoles>();
         }
     
@@ -41,7 +39,6 @@ namespace iClassic.Models
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
     
-        public virtual Branch Branch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer> Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -49,10 +46,7 @@ namespace iClassic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuChi> PhieuChi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
+        public virtual Branch Branch { get; set; }
     }
 }
