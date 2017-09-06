@@ -46,8 +46,8 @@ namespace iClassic.Services.Implementation
                     case "ID":
                         list = list.OrderBy(m => m.Id);
                         break;
-                    case "NOTE":
-                        list = list.OrderBy(m => m.Note);
+                    case "PRICE":
+                        list = list.OrderBy(m => m.Price);
                         break;
                     case "NAME":
                         list = list.OrderBy(m => m.Name);
@@ -64,8 +64,8 @@ namespace iClassic.Services.Implementation
                     case "ID":
                         list = list.OrderByDescending(m => m.Id);
                         break;
-                    case "NOTE":
-                        list = list.OrderByDescending(m => m.Note);
+                    case "PRICE":
+                        list = list.OrderByDescending(m => m.Price);
                         break;
                     case "NAME":
                         list = list.OrderByDescending(m => m.Name);

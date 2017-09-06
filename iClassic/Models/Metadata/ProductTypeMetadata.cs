@@ -7,6 +7,9 @@ namespace iClassic.Models.Metadata
         [Display(Name = "Tên sản phẩm")]
         public string Name { get; set; }
 
+        [Display(Name = "Tiền công may sản phẩm")]
+        public double Price { get; set; }
+
         [Display(Name = "Ghi chú")]
         public string Note { get; set; }
 

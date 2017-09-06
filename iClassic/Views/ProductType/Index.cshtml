@@ -36,9 +36,11 @@
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Name">Tên sản phẩm</a>              
             </th>
-            @*<th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="Note">Ghi chú</a>
-            </th>*@
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Price">
+                    @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().Price)
+                </a>
+            </th>
             <th></th>
         </tr>
 
@@ -48,9 +50,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.Note)
-                </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
                 <td>
                     <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>
                     <a href="@Url.Action("Delete", new { id=item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
