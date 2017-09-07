@@ -240,6 +240,7 @@
     <Compile Include="Models\Invoice.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PhieuSanXuatSearch.cs" />
     <Compile Include="Models\ProductTypeLoaiVai.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
@@ -314,6 +315,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Base\GenericRepository.cs" />
     <Compile Include="Services\Base\IGenericRepository.cs" />
+    <Compile Include="Services\Implementation\PhieuSanXuatRepository.cs" />
     <Compile Include="Services\Implementation\ProductTypeRepository.cs" />
     <Compile Include="Services\Implementation\PhieuChiRepository.cs" />
     <Compile Include="Services\Implementation\PhieuSuaRepository.cs" />
@@ -951,7 +953,7 @@
     <Content Include="Views\PhieuChi\NewOrEdit.cshtml" />
     <Content Include="Views\PhieuSua\NewOrEdit.cshtml" />
     <Content Include="Views\Invoice\NewOrEdit.cshtml" />
-    <Content Include="Views\Invoice\PrintPhieuHen.cshtml" />
+    <Content Include="Views\Invoice\Print.cshtml" />
     <Content Include="Views\ProductType\Index.cshtml" />
     <Content Include="Views\ProductType\NewOrEdit.cshtml" />
     <Content Include="Views\Statistic\Profit.cshtml" />

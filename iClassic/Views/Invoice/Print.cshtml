@@ -1,0 +1,60 @@
+﻿@{
+    Layout = null;    
+    var baseController = ViewContext.Controller as iClassic.Controllers.BaseController;
+}
+@model iClassic.Models.Invoice
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<title>
+    In hóa đơn - @Model.Code - iClassic
+</title>
+<style>
+    .table-noborder {
+        border-bottom: 0px !important;
+    }
+
+        .table-noborder th, .table-noborder td {
+            border: 1px !important;
+        }
+
+    .mb20 {
+        margin-bottom: 50px;
+    }
+</style>
+<script>
+    $(function () {
+        window.print();
+
+        if ($("body").find("#branch").length == 0) {
+            $(".noforinvoice").html('');
+        }
+    });
+</script>
+
+@Html.Partial("_DonHangPartial", Model)
+<table class="table table-noborder">
+    <tr>
+        <td class="text-center">
+            <strong>Khách hàng</strong><br />
+        </td>
+        <td class="text-center">
+            <strong>Người lập phiếu</strong><br />
+        </td>        
+    </tr>
+    <tr>
+        <td></td>
+        <td class="text-center">
+            <br />
+            <br />
+            <br />
+            @if (!string.IsNullOrEmpty(baseController.CurrentUser.Name))
+            {
+                @baseController.CurrentUser.Name
+            }
+            else
+            {
+                @User.Identity.Name
+            }
+        </td>
+    </tr>
+</table>

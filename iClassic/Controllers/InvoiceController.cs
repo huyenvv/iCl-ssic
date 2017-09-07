@@ -16,12 +16,14 @@ namespace iClassic.Controllers
     {
         private readonly ILog _log;
         private InvoiceRepository _invoiceRepository;
+        private PhieuSanXuatRepository _phieuSanXuatRepository;
         private LoaiVaiRepository _loaiVaiRepository;
 
         public InvoiceController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             _invoiceRepository = new InvoiceRepository(_entities);
+            _phieuSanXuatRepository = new PhieuSanXuatRepository(_entities);
             _loaiVaiRepository = new LoaiVaiRepository(_entities);
         }
 
@@ -115,6 +117,31 @@ namespace iClassic.Controllers
 
             return View(model);
         }
+        public ActionResult ChangeStatusMuaVai(int id, int idPhieusx, bool status)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var model = _invoiceRepository.GetById(id);
+                    if (model == null)
+                        return RedirectToAction("Index");
+
+                    _phieuSanXuatRepository.ChangeStatusMuaVai(idPhieusx, status);
+                    _phieuSanXuatRepository.Save();
+
+                    ShowMessageSuccess(Message.Update_Successfully);
+                    return RedirectToAction("Details", new { id = id });
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageError(Message.Update_Fail);
+
+                _log.Info(ex.ToString());
+            }
+            return RedirectToAction("Details", new { id = id });
+        }
 
         // GET: Invoicees/Delete/5
         public async Task<ActionResult> Delete(int id = 0)
@@ -145,10 +172,13 @@ namespace iClassic.Controllers
             return RedirectToAction("Index");
         }
 
-        public ViewResult PrintPhieuHen()
+        public ActionResult Print(int id)
         {
-            var list = _entities.Customer.AsQueryable();
-            return View(list);
+            var model = _invoiceRepository.GetById(id);
+            if (model == null)
+                return RedirectToAction("Index");
+
+            return View(model);
         }
 
         private void CreateLoaiVaiViewBag()

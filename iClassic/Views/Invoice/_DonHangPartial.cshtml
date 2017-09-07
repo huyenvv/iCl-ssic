@@ -5,43 +5,59 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-6">
-                <img src="@Url.Content("~/images/logo.png")" class="img-responsive mb10" alt="" />
-            </div><!-- col-sm-6 -->
-            <div class="col-sm-6">
-                <h3 class="mb10">ICLASSIC - MAY MẶC SÀNH ĐIỆU</h3>
-                <address>
-                    Địa chỉ:<strong> Số 65 Nghi Tàm - Quận Tây Hồ - Hà Nội </strong> <br>
-                    Điện thoại:<strong> 01235 811 866 - 0977906989</strong>  <br>
-                    Email:<strong> leanhtuan16989@gmail.com</strong><br />
-                    Fanpage:<strong> https://fb.com/iclassicvn </strong>  <br>
-                </address>
-            </div>
-        </div><!-- row -->
-        <hr />
-        <div class="row">
-            <div class="col-md-12">
-                <h3 class="text-center">HÓA ĐƠN MAY MẶC VÀ SỬA CHỮA </h3>
-            </div>
-            <div class="col-md-6">
-                <div>Tên khách hàng: <strong>@Model.Customer.TenKH</strong></div>
-                <div>Số điện thoại: <strong>@Model.Customer.SDT</strong></div>
-            </div>
-            <div class="col-md-6">
-                <h4><small>Số hóa đơn: </small>@Model.Code</h4>
-            </div>
-        </div>
+        <table class="table table-noborder showforinvoice hide">
+            <tr>
+                <td rowspan="2">
+                    <img src="@Url.Content("~/images/logo.png")" class="img-responsive mb10" alt="" />
+                </td>
+                <td>
+                    <h3 class="mb10" style="margin-top:0;">
+                        ICLASSIC - MAY MẶC SÀNH ĐIỆU
+                    </h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <address>
+                        Địa chỉ:<strong> Số 65 Nghi Tàm - Quận Tây Hồ - Hà Nội </strong> <br>
+                        Điện thoại:<strong> 01235 811 866 - 0977906989</strong>  <br>
+                        Email:<strong> leanhtuan16989@gmail.com</strong><br />
+                        Fanpage:<strong> https://fb.com/iclassicvn </strong>  <br>
+                    </address>
+                </td>
+            </tr>
+        </table>
+        <hr class="showforinvoice hide" />
+        <table class="table table-noborder">
+            <tr>
+                <td colspan="2">
+                    <h3 class="text-center showforinvoice hide">HÓA ĐƠN MAY MẶC VÀ SỬA CHỮA </h3>
+                    <h3 class="text-center noforinvoice">CHI TIẾT ĐƠN HÀNG </h3>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>Tên khách hàng: <strong>@Model.Customer.TenKH</strong></div>
+                    <div>Số điện thoại: <strong>@Model.Customer.SDT</strong></div>
+                </td>
+                <td>
+                    <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
+                    <div class="showforinvoice hide">
+                        Ngày @DateTime.Now.ToString("dd") tháng @DateTime.Now.ToString("MM") năm @DateTime.Now.ToString("yyyy")
+                    </div>
+                </td>
+            </tr>
+        </table>
         <div class="table-responsive">
             <table class="table table-invoice">
                 <thead>
                     <tr>
                         <th>Sản phẩm</th>
                         <th>Loại sản phẩm</th>
-                        <th>Tình trạng vải</th>
+                        <th class="noforinvoice">Tình trạng vải</th>
                         <th>Số lượng</th>
-                        <th>Đơn giá</th>
-                        <th>Thành tiền</th>
+                        <th class="text-right">Đơn giá</th>
+                        <th class="text-right">Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,15 +71,15 @@
                                 <td>
                                     May mới - @item.ProductType.Name
                                 </td>
-                                <td>                                    
-                                    @if (!item.HasVai)
+                                <td class="noforinvoice">
+                                    @if (item.HasVai)
                                     {
                                         <div class="btn-group mr5">
                                             <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
                                                 <i class="fa fa-check-square"></i>  Đã mua <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#"><i class="fa  fa-times-circle"></i> Chưa mua</a></li>
+                                                <li><a href="@Url.Action("ChangeStatusMuaVai", new {id = Model.Id,idPhieusx=item.Id ,status = false})"><i class="fa  fa-times-circle"></i> Chưa mua</a></li>
                                             </ul>
                                         </div>
                                     }
@@ -74,14 +90,14 @@
                                                 <i class="fa fa-times-circle"></i>  Chưa mua <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu">
-                                                <li><a href="@Url.Action("")"><i class="fa fa-check-square"></i> Đã mua</a></li>
+                                                <li><a href="@Url.Action("ChangeStatusMuaVai", new {id = Model.Id,idPhieusx=item.Id ,status = true})"><i class="fa fa-check-square"></i> Đã mua</a></li>
                                             </ul>
                                         </div>
                                     }
                                 </td>
                                 <td>@item.SoLuong</td>
-                                <td>@item.DonGia.ToString("N0") ₫</td>
-                                <td>@((item.DonGia * item.SoLuong).ToString("N0")) ₫</td>
+                                <td class="text-right">@item.DonGia.ToString("N0") ₫</td>
+                                <td class="text-right">@((item.DonGia * item.SoLuong).ToString("N0")) ₫</td>
                             </tr>
                         }
                         foreach (var item in Model.PhieuSua)
@@ -93,12 +109,10 @@
                                 <td>
                                     @(((PhieuSuaType)item.Type).GetDescription())
                                 </td>
-                                <td>
-                                    
-                                </td>
+                                <td></td>
                                 <td>1</td>
-                                <td>@item.SoTien.ToString("N0") ₫</td>
-                                <td>@item.SoTien.ToString("N0") ₫</td>
+                                <td class="text-right">@item.SoTien.ToString("N0") ₫</td>
+                                <td class="text-right">@item.SoTien.ToString("N0") ₫</td>
                             </tr>
                         }
                     }
@@ -139,10 +153,5 @@
                 </tfoot>
             </table>
         </div><!-- table-responsive -->
-
-        <div class="text-right btn-invoice">
-            <button class="btn btn-primary mr5"><i class="fa fa-dollar mr5"></i> Trả cho khách</button>
-            <button class="btn btn-white"><i class="fa fa-print mr5"></i> In đơn hàng</button>
-        </div>
     </div><!-- panel-body -->
 </div><!-- panel -->

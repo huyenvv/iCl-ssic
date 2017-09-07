@@ -121,7 +121,7 @@ namespace iClassic.Services.Implementation
         {
             var statusDone = (byte)TicketStatus.DaTraChoKhach;
             return Where(m => m.BranchId == branchId && m.Status == statusDone && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
-        }
+        }        
 
         public int Count(int branchId, TicketStatus status)
         {
