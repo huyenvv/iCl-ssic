@@ -42,10 +42,9 @@
 <div class="table-responsive mt10">
     <table class="table table-dark" cellspacing="0">
         <tr>
-            <th>STT</th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Code">
-                    @Html.DisplayNameFor(m=>m.FirstOrDefault().Code)
+                    @Html.DisplayNameFor(m => m.FirstOrDefault().Code)
                 </a>
             </th>
             <th>
@@ -59,15 +58,8 @@
                 </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="DatCoc">
-                    @Html.DisplayNameFor(m => m.FirstOrDefault().DatCoc)
-                </a>
-            </th>   
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="ChietKhau">
-                    @Html.DisplayNameFor(m => m.FirstOrDefault().ChietKhau)
-                </a>
-            </th>         
+                Còn thiếu
+            </th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="NgayThu">
                     @Html.DisplayNameFor(m => m.FirstOrDefault().NgayThu)
@@ -83,46 +75,63 @@
                     @Html.DisplayNameFor(m => m.FirstOrDefault().Status)
                 </a>
             </th>
-            <th></th>
+            <th>
+                Đã mua vải ?
+            </th>
         </tr>
 
         @{
-            var stt = 1;
             foreach (var item in Model)
             {
                 <tr class="stat even">
-                    <td class="ac">
-                        @(stt++)
+                    <td>
+                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })">@item.Code</a>
                     </td>
                     <td>
-                        @item.Code
+                        @item.Customer.TenKH <br />
+                        (@item.Customer.SDT)
                     </td>
-                    <td>
-                        @item.Customer.TenKH (@item.Customer.SDT)
-                    </td>
-                    <td>
+                    <td class="text-success">
                         @item.Total.ToString("N0") ₫
                     </td>
-                    <td>
-                        @item.DatCoc.ToString("N0") ₫
+                    <td class="text-danger">
+                        @((item.Total - item.DatCoc - (item.ChietKhau ?? 0)).ToString("N0")) ₫
                     </td>
-                    <td>
-                        @item.ChietKhau.ToString("N0") ₫
+                    <td title="@item.NgayThu.ToString("dd/MM/yyyy HH:mm")">
+                        @item.NgayThu.ToString("dd/MM/yyyy")
                     </td>
-                    <td>
-                        @item.NgayThu.ToString("dd/MM/yyyy HH:mm:ss")
-                    </td>
-                    <td>
-                        @item.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")
+                    <td title="@item.NgayTra.ToString("dd/MM/yyyy HH:mm")">
+                        @item.NgayTra.ToString("dd/MM/yyyy")
                     </td>
                     <td>
                         @Html.Raw(Helpers.DrawStatusTicket(item.Status))
                     </td>
                     <td>
-                        <a href="@Url.Action("PrintPhieuHen", new { id=1})" target="_blank" class="btn btn-xs btn-primary">In Phiếu</a>
-                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })" class="btn btn-xs btn-primary">Sửa</a>
-                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
+                        @if (item.PhieuSanXuat.Count > 0)
+                        {
+                            var soluongchuamua = item.PhieuSanXuat.Count(m => !m.HasVai);
+                            var soluongdamua = item.PhieuSanXuat.Count - soluongchuamua;
+
+                            if (soluongdamua > 0)
+                            {
+                                <div>Đã mua: <strong>@soluongdamua</strong></div>
+                            }
+
+                            if (soluongchuamua > 0)
+                            {
+                                <div>Chưa mua: <strong>@soluongchuamua</strong></div>
+                            }                            
+                        }
+                        else
+                        {
+                            <span>Khách chỉ sửa đồ</span>
+                        }
                     </td>
+                    @*<td>
+                            <a href="@Url.Action("PrintPhieuHen", new { id=1})" target="_blank" class="btn btn-xs btn-primary">In Phiếu</a>
+                            <a href="@Url.Action("NewOrEdit", new { id = item.Id })" class="btn btn-xs btn-primary">Sửa</a>
+                            <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
+                        </td>*@
                 </tr>
             }
         }

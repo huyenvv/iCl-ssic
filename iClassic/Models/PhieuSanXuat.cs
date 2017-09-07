@@ -24,8 +24,8 @@ namespace iClassic.Models
         public int ProductTypeId { get; set; }
         public double DonGia { get; set; }
     
-        public virtual Invoice Invoice { get; set; }
         public virtual LoaiVai LoaiVai { get; set; }
         public virtual ProductType ProductType { get; set; }
+        public virtual Invoice Invoice { get; set; }
     }
 }

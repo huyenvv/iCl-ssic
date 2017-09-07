@@ -43,12 +43,19 @@ namespace iClassic.Controllers
             var model = await _invoiceRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new Invoice {
+                model = new Invoice
+                {
                     NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
-                    NgayTra = DateTime.Now.AddDays(SoNgayThuSauKhiLam),                    
+                    NgayTra = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
                     BranchId = CurrentBranchId
                 };
-            }            
+            }
+            else
+            {
+                if (model.Status != (byte)TicketStatus.ChuaXuLy)
+                    return RedirectToAction("Details", new { id = id });
+
+            }
             CreateCustomerViewBag(model.CustomerId);
             CreateLoaiVaiViewBag();
             CreateListProductTypeViewBag();
@@ -74,6 +81,8 @@ namespace iClassic.Controllers
                     }
                     else
                     {
+                        model.ModifiedBy = CurrentUserId;
+                        model.ModifiedDate = DateTime.Now;
                         _invoiceRepository.Update(model);
                     }
                     await _invoiceRepository.SaveAsync();
@@ -92,6 +101,18 @@ namespace iClassic.Controllers
             CreateCustomerViewBag(model.CustomerId);
             CreateLoaiVaiViewBag();
             CreateListProductTypeViewBag();
+            return View(model);
+        }
+
+        public ActionResult Details(int id)
+        {
+            var model = _invoiceRepository.GetById(id);
+            if (model == null)
+                return RedirectToAction("Index");
+
+            if (model.Status == (byte)TicketStatus.ChuaXuLy)
+                return RedirectToAction("NewOrEdit", new { id = id });
+
             return View(model);
         }
 

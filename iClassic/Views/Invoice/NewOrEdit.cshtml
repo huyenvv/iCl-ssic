@@ -113,7 +113,7 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit()">Lưu</button>
+    <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit()">@(Model.Id > 0 ? "Cập nhật" : "Tạo") đơn hàng</button>
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 }
 
@@ -152,7 +152,6 @@
         var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
 
         $(function () {
-            //showSoTienLoaiVai();
 
             $('.price').maskMoney({ precision: 0 });
             $('.price').focus();
@@ -304,7 +303,7 @@
                 html += "   </div>";
                 html += "   <div class='form-group'>";
                 html += "       <div class='row'>";
-                html += "           <div class='col-sm-6'>";
+                html += "           <div class='col-sm-8'>";
                 html += "               <label>Loại vải</label>";
                 html += "               <select name='PhieuSanXuat[" + index + "].MaVaiId' class='select22 loaivai' data-placeholder='Nhập tên hoặc mã vải...' onchange='updateSoTienItem();'>";
                 $.each(loaiVai, function (i, vai) {
@@ -317,7 +316,7 @@
                 });
                 html += "               </select>";
                 html += "           </div>";
-                html += "           <div class='col-sm-6'>";
+                html += "           <div class='col-sm-4'>";
                 html += "           <div class='form-group'>";
                 html += "                    <label>Số lượng</label>";
                 html += "                    <input type='number' name='PhieuSanXuat[" + index + "].SoLuong' value='" + item.SoLuong + "' min='1' class='form-control soluong'  onchange='updateSoTienItem();' />";
@@ -441,6 +440,7 @@
                 html += "<div class='media'>";
                 html += "   <h4 class='text-warning'>" + (index + 1) + ".<span class='pull-right' onclick='removePhieuSua(this);'>x</span></h4>";
                 html += "   <div class='form-group'>";
+                html += "       <label>Miêu tả lỗi sản phẩm</label>";
                 html += "       <input type='hidden' name='PhieuSua[" + index + "].Id' value='" + item.Id + "'  class='idphieusua'/>";
                 html += "       <input type='text' name='PhieuSua[" + index + "].NoiDung' value='" + item.NoiDung + "' class='form-control noidung' placeholder='Miêu tả lỗi sản phẩm' />";
                 html += "   </div>";

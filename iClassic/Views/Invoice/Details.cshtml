@@ -1,0 +1,9 @@
+﻿@model iClassic.Models.Invoice
+
+@{
+    ViewBag.Title = "Chi tiêt đơn hàng";
+    ViewBag.Class = "fa fa-dollar";
+    ViewBag.Breadcrumbs = ViewBag.Title;
+}
+
+@Html.Partial("_DonHangPartial", Model)

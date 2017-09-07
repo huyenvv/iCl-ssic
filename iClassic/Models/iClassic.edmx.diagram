@@ -25,18 +25,18 @@
         <AssociationConnector Association="iClassicModel.FK_ProductTypeLoaiVai_ProductType" />
         <AssociationConnector Association="iClassicModel.AspNetUserRoles" />
         <EntityTypeShape EntityType="iClassicModel.Branch" Width="1.5" PointX="0.75" PointY="8.25" />
-        <EntityTypeShape EntityType="iClassicModel.Invoice" Width="1.5" PointX="13.5" PointY="8" />
         <AssociationConnector Association="iClassicModel.FK_AspNetUsers_Branch" />
         <AssociationConnector Association="iClassicModel.FK_Customer_Branch" />
-        <AssociationConnector Association="iClassicModel.FK_Invoice_Branch1" />
         <AssociationConnector Association="iClassicModel.FK_LoaiVai_Branch" />
         <AssociationConnector Association="iClassicModel.FK_PhieuChi_Branch" />
-        <AssociationConnector Association="iClassicModel.FK_Invoice_Customer" />
-        <AssociationConnector Association="iClassicModel.FK_PhieuSua_Invoice" />
         <EntityTypeShape EntityType="iClassicModel.PhieuSanXuat" Width="1.5" PointX="15.75" PointY="6.625" />
-        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Invoice" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_LoaiVai" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_ProductType" />
+        <EntityTypeShape EntityType="iClassicModel.Invoice" Width="1.5" PointX="13.5" PointY="8" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_Branch1" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_Customer" />
+        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Invoice" />
+        <AssociationConnector Association="iClassicModel.FK_PhieuSua_Invoice" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
