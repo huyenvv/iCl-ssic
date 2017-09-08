@@ -12,12 +12,14 @@ namespace iClassic.Services.Implementation
         private readonly InvoiceRepository _invoiceRepository;
         private readonly PhieuChiRepository _phieuChiRepository;
         private readonly CustomerRepository _customerRepository;
+        private readonly PhieuSuaRepository _phieuSuaRepository;
 
         public ReportServices(iClassicEntities entities)
         {
             _invoiceRepository = new InvoiceRepository(entities);
             _phieuChiRepository = new PhieuChiRepository(entities);
             _customerRepository = new CustomerRepository(entities);
+            _phieuSuaRepository = new PhieuSuaRepository(entities);
         }
 
         public ReportGraphResult[] Graph(StatisticSearch model)
@@ -136,9 +138,21 @@ namespace iClassic.Services.Implementation
                     Customer = m,
                     SoLanMay = m.Invoice.Sum(n => n.PhieuSanXuat.Count),
                     SoLanSua = m.Invoice.Sum(n => n.PhieuSua.Count),
-                    Total = m.Invoice.Sum(n=>(double?)n.Total) ?? 0
+                    Total = m.Invoice.Sum(n => (double?)n.Total) ?? 0
                 });
             return allCustomers;
+        }
+
+        public IQueryable<ReportErrors> GetErrorsInProcessing(StatisticSearch model)
+        {
+            var allErrors = _phieuSuaRepository.GetAll().GroupBy(m => new { m.ProblemType, m.ProblemTypeOther })
+                .Select(m => new ReportErrors
+                {
+                    TypeError = (LoiPhieuSuaType)m.Key.ProblemType,
+                    OtherError = m.Key.ProblemTypeOther,
+                    Count = m.Count()
+                });
+            return allErrors;
         }
     }
 }

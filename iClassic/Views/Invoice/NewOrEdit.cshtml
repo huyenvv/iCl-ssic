@@ -113,8 +113,12 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit()">@(Model.Id > 0 ? "Cập nhật" : "Tạo") đơn hàng</button>
-    <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
+    <div class="text-right">
+        <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit()">@(Model.Id > 0 ? "Cập nhật" : "Tạo") đơn hàng</button>
+        <a class="btn btn-white" href="@Url.Action("Print", new { id = Model.Id })" target="_blank"><i class="fa fa-print mr5"></i> In đơn hàng</a>
+        <a href="@Url.Action("Index")" class="btn btn-default pull-left">Quay lại</a>
+    </div>
+    
 }
 
 @section Styles {
@@ -350,14 +354,9 @@
         var phieuSuaModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSua.Select(m=>new {m.Id,m.NoiDung,m.ProblemType,m.SoTien,m.Type,m.ProblemTypeOther}))".replace(/&quot;/g, '"'));
         var phieuSuaTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetPhieuSuaTypeList())".replace(/&quot;/g, '"'));
         var loiPhieuSuaTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetLoiPhieuSuaTypeList())".replace(/&quot;/g, '"'));
+        var lydokhacValue = parseInt("@((byte)LoiPhieuSuaType.LyDoKhac)");
 
         $(function () {
-
-            var loiphieusuakhac = {
-                Key: '',
-                Value: 'Lý do khác'
-            };
-            loiPhieuSuaTypes.unshift(loiphieusuakhac);
 
             bindPhieuSua();
             updateSoTienItem();
@@ -369,8 +368,6 @@
                 var newPhieuSua = {
                     Id: 0,
                     NoiDung: '',
-                    ProblemType: 0,
-                    Type: 0,
                     ProblemTypeOther: '',
                     SoTien: 0
                 };
@@ -398,11 +395,12 @@
             var obj = $(e);
             var value = $(e).val();
             var other = obj.parents(".media").find(".problemTypeOther");
-            if (value) {
+
+            if (value == lydokhacValue) {
+                other.slideDown();
+            } else {
                 other.slideUp();
                 other.val('');
-            } else {
-                other.slideDown();
             }
         }
         function removePhieuSua(e) {
@@ -463,7 +461,7 @@
                     html += "               </option>";
                 });
                 html += "               </select>";
-                html += "       <input type='text' name='PhieuSua[" + index + "].ProblemTypeOther' value='" + item.ProblemTypeOther + "' class='form-control problemTypeOther mt5' style='display:" + (item.ProblemType ? "none" : "block") + "' />";
+                html += "       <input type='text' name='PhieuSua[" + index + "].ProblemTypeOther' value='" + item.ProblemTypeOther + "' class='form-control problemTypeOther mt5' style='display:" + (item.ProblemType != lydokhacValue ? "none" : "block") + "' />";
                 html += "   </div>";
                 html += "   <div class='form-group boxtien " + (item.Type == '@((byte)PhieuSuaType.BaoHanh)' ? "hide" : "") + "'>";
                 html += "       <label>Giá tiền</label>";
@@ -475,8 +473,10 @@
 
             $("#soluongspcansua").html("(" + phieuSuaModels.length + ")");
 
+            var currentPosition = $(document).scrollTop();
             $('.price').maskMoney({ precision: 0 });
             $('.price').focus();
+            $(document).scrollTop(currentPosition);
         }
     </script>
 

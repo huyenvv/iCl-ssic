@@ -54,6 +54,7 @@
                     <tr>
                         <th>Sản phẩm</th>
                         <th>Loại sản phẩm</th>
+                        <th class="noforinvoice">Loại vải</th>
                         <th class="noforinvoice">Tình trạng vải</th>
                         <th>Số lượng</th>
                         <th class="text-right">Đơn giá</th>
@@ -72,7 +73,17 @@
                                     May mới - @item.ProductType.Name
                                 </td>
                                 <td class="noforinvoice">
-                                    @if (item.HasVai)
+                                    @if (item.MaVaiId.HasValue)
+                                    {
+                                     <span>@item.LoaiVai.Name (@item.LoaiVai.MaVai)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Khách mang vải đến</span>
+                                    }
+                                </td>
+                                <td class="noforinvoice">
+                                    @if (item.MaVaiId.HasValue && item.HasVai)
                                     {
                                         <div class="btn-group mr5">
                                             <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -83,7 +94,8 @@
                                             </ul>
                                         </div>
                                     }
-                                    else
+
+                                    @if (item.MaVaiId.HasValue && !item.HasVai)
                                     {
                                         <div class="btn-group mr5">
                                             <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -109,7 +121,8 @@
                                 <td>
                                     @(((PhieuSuaType)item.Type).GetDescription())
                                 </td>
-                                <td></td>
+                                <td class="noforinvoice"></td>
+                                <td class="noforinvoice"></td>                                
                                 <td>1</td>
                                 <td class="text-right">@item.SoTien.ToString("N0") ₫</td>
                                 <td class="text-right">@item.SoTien.ToString("N0") ₫</td>
@@ -118,8 +131,9 @@
                     }
                 </tbody>
                 <tfoot>
+                    @{ var colspan = 6;}
                     <tr>
-                        <td colspan="5" class="text-right">
+                        <td colspan="@colspan" class="text-right">
                             <strong>Tổng</strong>
                         </td>
                         <td class="text-right text-success">
@@ -127,7 +141,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="5" class="text-right">
+                        <td colspan="@colspan" class="text-right">
                             <strong>Đặt cọc</strong>
                         </td>
                         <td class="text-right">
@@ -135,7 +149,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="5" class="text-right">
+                        <td colspan="@colspan" class="text-right">
                             <strong>Chiết khấu</strong>
                         </td>
                         <td class="text-right">
@@ -143,7 +157,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="5" class="text-right">
+                        <td colspan="@colspan" class="text-right">
                             <strong>Còn thiếu</strong>
                         </td>
                         <td class="text-right text-danger" =">

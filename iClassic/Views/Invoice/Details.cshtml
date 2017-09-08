@@ -9,6 +9,27 @@
 @Html.Partial("_DonHangPartial", Model)
 <div class="text-right btn-invoice">
     <a href="@Url.Action("Index")" class="pull-left btn btn-default">Quay lại</a>
-    <button class="btn btn-primary mr5"><i class="fa fa-dollar mr5"></i> Xác nhận đã trả hàng cho khách</button>
-    <a class="btn btn-white" href="@Url.Action("Print", new { id = Model.Id })" target="_blank"><i class="fa fa-print mr5"></i> In đơn hàng</a>
+    <div class="btn-group">
+        <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-print mr5"></i> In <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Đơn hàng</a></li>
+            <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Phiếu sản xuất</a></li>
+            <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Phiếu sửa</a></li>
+        </ul>
+    </div>
+    @if (Model.Status == (byte)iClassic.Helper.TicketStatus.DaXuLy)
+    {
+        <button class="btn btn-primary mr5"><i class="fa fa-dollar mr5"></i> Đã trả hàng</button>
+    }
+
 </div>
+
+@section Styles{
+    <style>
+        .btn-group {
+            margin-bottom: 0;
+        }
+    </style>
+}

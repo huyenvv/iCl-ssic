@@ -55,6 +55,14 @@ namespace iClassic.Controllers
             return View(data.OrderByDescending(m=>m.SoLanMay).ThenByDescending(m=>m.SoLanSua).ToPagedList(pageNumber, pageSize));
         }
 
+        public ActionResult GetErrorsInProcessing(StatisticSearch model)
+        {
+            model.BranchId = CurrentBranchId;
+            var data = _reportServices.GetErrorsInProcessing(model);
+            ViewBag.SearchModel = model;
+            return View(data);
+        }
+
         private string GetGraphJson(StatisticSearch model)
         {
             var type = model.Type.HasValue ? model.Type.Value : ReportTypes.SevenDaysRecent;

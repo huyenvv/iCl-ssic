@@ -8,7 +8,7 @@ namespace iClassic.Helper
 {
     public enum TicketStatus
     {
-        [Description("Chưa xử lý")]
+        [Description("Tiếp nhận và chờ xử lý")]
         ChuaXuLy,
 
         [Description("Đã xử lý")]
@@ -37,6 +37,9 @@ namespace iClassic.Helper
 
         [Description("Người ĐO")]
         NguoiDo = 3,
+
+        [Description("Lý do khác")]
+        LyDoKhac = 4,
     }
 
     public enum ReportTypes

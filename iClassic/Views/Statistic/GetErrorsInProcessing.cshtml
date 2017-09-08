@@ -1,11 +1,11 @@
 ﻿@using iClassic.Helper;
 @using iClassic.Models;
 @using PagedList.Mvc;
-@model PagedList.IPagedList<ReportCustomVip>
+@model IQueryable<ReportErrors>
 
 @{
-    ViewBag.Title = "Khách hàng thường xuyên";
-    ViewBag.Class = "fa fa-bar-chart-o";
+    ViewBag.Title = "Lỗi trong quá trinh sản xuất";
+    ViewBag.Class = "fa fa-exclamation-circle";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Thống kê</a>" +
                           "<span>" + ViewBag.Title + "</span>";
     var searchModel = ViewBag.SearchModel as StatisticSearch;
@@ -38,16 +38,10 @@
         <tr>
             <th>STT</th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="KH">Khách hàng</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Total">Lỗi do ai?</a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="SolanMay">Số lần may</a>
-            </th>
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="SolanSua">Số lần sửa</a>
-            </th>
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="Total">Tổng tiền</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Soluong">Số lượng</a>
             </th>
         </tr>
 
@@ -60,35 +54,18 @@
                         @(stt++)
                     </td>
                     <td>
-                        @item.Customer.MaKH -
-                        @item.Customer.TenKH (@item.Customer.SDT)
+                        @(((LoiPhieuSuaType)item.TypeError).GetDescription())
+                        @if (!string.IsNullOrWhiteSpace(item.OtherError))
+                        {
+                            <br />
+                            @item.OtherError
+                        }
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.SoLanMay)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SoLanSua)
-                    </td>
-                    <td>
-                        @item.Total.ToString("N0") ₫
+                        @Html.DisplayFor(modelItem => item.Count)
                     </td>
                 </tr>
             }
         }
     </table>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-        @Html.PagedListPager(Model, page => Url.Action("Index",
-        new
-        {
-            page,
-            searchModel.BranchId,
-            searchModel.SearchText,
-            searchModel.SortOrder,
-            searchModel.PageSize
-        }))
-    </div>
 </div>

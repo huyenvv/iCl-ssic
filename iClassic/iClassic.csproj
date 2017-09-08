@@ -306,6 +306,7 @@
     <Compile Include="Models\ProductTypeValue.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ReportErrors.cs" />
     <Compile Include="Models\ReportCustomVip.cs" />
     <Compile Include="Models\ReportGraphResult.cs" />
     <Compile Include="Models\ReportProfit.cs" />
@@ -961,6 +962,7 @@
     <Content Include="Views\Manage\_ChangeBranch.cshtml" />
     <Content Include="Views\Invoice\Details.cshtml" />
     <Content Include="Views\Invoice\_DonHangPartial.cshtml" />
+    <Content Include="Views\Statistic\GetErrorsInProcessing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
