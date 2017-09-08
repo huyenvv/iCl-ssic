@@ -14,8 +14,8 @@
             </div>
             <div class="panel-body text-center">
                 <h3 class="today">
-                    <a href="@Url.Action("Index","PhieuSanXuat", new {Status = (byte)TicketStatus.ChuaXuLy })">
-                        Chưa sản xuất xong: <strong class="text-danger">@Model.ChuaMay</strong>
+                    <a href="@Url.Action("Index","Invoice", new {Status = (byte)TicketStatus.ChuaXuLy })">
+                        Đơn hàng chưa xử lý: <strong class="text-danger">@Model.ChuaMay</strong>
                     </a>
                 </h3>
             </div><!-- panel-body -->
@@ -29,40 +29,8 @@
             </div>
             <div class="panel-body text-center">
                 <h3 class="today">
-                    <a href="@Url.Action("Index","PhieuSanXuat", new {Status = (byte)TicketStatus.DaXuLy })">
-                        Sản xuất xong chưa trả: <strong class="text-danger">@Model.DaMayChuaTra</strong>
-                    </a>
-                </h3>
-            </div><!-- panel-body -->
-        </div><!-- panel -->
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-6">
-        <div class="panel panel-danger panel-alt widget-today">
-            <div class="panel-heading text-center">
-                <i class="fa fa-wrench"></i>
-            </div>
-            <div class="panel-body text-center">
-                <h3 class="today">
-                    <a href="@Url.Action("Index","PhieuSua", new {Status = (byte)TicketStatus.ChuaXuLy })">
-                        Chưa sửa xong: <strong class="text-danger">@Model.ChuaSua</strong>
-                    </a>
-                </h3>
-            </div><!-- panel-body -->
-        </div><!-- panel -->
-    </div>
-
-    <div class="col-xs-6">
-        <div class="panel panel-warning panel-alt widget-time">
-            <div class="panel-heading text-center">
-                <i class="glyphicon glyphicon-time"></i>
-            </div>
-            <div class="panel-body text-center">
-                <h3 class="today">
-                    <a href="@Url.Action("Index","PhieuSua", new {Status = (byte)TicketStatus.DaXuLy })">
-                        Sửa xong chưa trả:
-                        <strong class="text-danger">@Model.DaSuaChuaTra</strong>
+                    <a href="@Url.Action("Index","Invoice", new {Status = (byte)TicketStatus.DaXuLy })">
+                        Đơn hàng chưa trả: <strong class="text-danger">@Model.DaMayChuaTra</strong>
                     </a>
                 </h3>
             </div><!-- panel-body -->
