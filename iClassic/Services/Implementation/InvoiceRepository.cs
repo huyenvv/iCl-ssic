@@ -189,6 +189,9 @@ namespace iClassic.Services.Implementation
                 objForUpdate.SoLuong = t.SoLuong;
                 objForUpdate.TenSanPham = t.TenSanPham;
                 objForUpdate.Status = t.Status;
+                objForUpdate.ThoDoId = t.ThoDoId;
+                objForUpdate.ThoCatId = t.ThoCatId;
+                objForUpdate.ThoMayId = t.ThoMayId;                
                 objForUpdate.DonGia = t.MaVaiId.HasValue
                     ? context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0
                     : context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
@@ -215,6 +218,7 @@ namespace iClassic.Services.Implementation
                 objForUpdate.ProblemTypeOther = !string.IsNullOrEmpty(t.ProblemTypeOther) ? t.ProblemTypeOther : string.Empty;
                 objForUpdate.Type = t.Type;
                 objForUpdate.Status = t.Status;
+                objForUpdate.ThoId = t.ThoId;
                 objForUpdate.SoTien = t.Type == (byte)PhieuSuaType.BaoHanh ? 0 : t.SoTien;
             });
             listRemovePhieusua.ToList().ForEach(t => obj.PhieuSua.Remove(t));

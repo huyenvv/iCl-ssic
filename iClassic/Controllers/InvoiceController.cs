@@ -18,6 +18,7 @@ namespace iClassic.Controllers
         private InvoiceRepository _invoiceRepository;
         private PhieuSanXuatRepository _phieuSanXuatRepository;
         private LoaiVaiRepository _loaiVaiRepository;
+        private ThoRepository _thoRepository;
 
         public InvoiceController()
         {
@@ -25,6 +26,7 @@ namespace iClassic.Controllers
             _invoiceRepository = new InvoiceRepository(_entities);
             _phieuSanXuatRepository = new PhieuSanXuatRepository(_entities);
             _loaiVaiRepository = new LoaiVaiRepository(_entities);
+            _thoRepository = new ThoRepository(_entities);
         }
 
         // GET: Invoicees
@@ -61,6 +63,7 @@ namespace iClassic.Controllers
             CreateCustomerViewBag(model.CustomerId);
             CreateLoaiVaiViewBag();
             CreateListProductTypeViewBag();
+            CreateDanhSachThoViewBag();
             return View(model);
         }
 
@@ -103,6 +106,7 @@ namespace iClassic.Controllers
             CreateCustomerViewBag(model.CustomerId);
             CreateLoaiVaiViewBag();
             CreateListProductTypeViewBag();
+            CreateDanhSachThoViewBag();
             return View(model);
         }
 
@@ -181,9 +185,33 @@ namespace iClassic.Controllers
             return View(model);
         }
 
+        public ActionResult PrintPhieuSanXuat(int id)
+        {
+            var model = _invoiceRepository.GetById(id);
+            if (model == null)
+                return RedirectToAction("Index");
+
+            CreateListProductTypeViewBag();
+            return View(model);
+        }
+
+        public ActionResult PrintPhieuSua(int id)
+        {
+            var model = _invoiceRepository.GetById(id);
+            if (model == null)
+                return RedirectToAction("Index");
+
+            return View(model);
+        }
+
         private void CreateLoaiVaiViewBag()
         {
             ViewBag.MaVaiId = _loaiVaiRepository.GetByBranchId(CurrentBranchId);
+        }
+
+        private void CreateDanhSachThoViewBag()
+        {
+            ViewBag.ListThoMayDo = _thoRepository.GetAll();
         }
 
         protected override void Dispose(bool disposing)

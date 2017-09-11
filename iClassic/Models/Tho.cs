@@ -12,29 +12,29 @@ namespace iClassic.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class LoaiVai
+    public partial class Tho
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public LoaiVai()
+        public Tho()
         {
             this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
-            this.ProductTypeLoaiVai = new HashSet<ProductTypeLoaiVai>();
+            this.PhieuSanXuat1 = new HashSet<PhieuSanXuat>();
+            this.PhieuSanXuat2 = new HashSet<PhieuSanXuat>();
+            this.PhieuSua = new HashSet<PhieuSua>();
         }
     
         public int Id { get; set; }
-        public string MaVai { get; set; }
         public string Name { get; set; }
-        public Nullable<double> SoTienNhapVao { get; set; }
-        public string Note { get; set; }
-        public System.DateTime Created { get; set; }
-        public int BranchId { get; set; }
-        public string CreateBy { get; set; }
+        public Nullable<int> XuongId { get; set; }
+        public int Type { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
-        public virtual Branch Branch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductTypeLoaiVai> ProductTypeLoaiVai { get; set; }
+        public virtual ICollection<PhieuSanXuat> PhieuSanXuat1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSanXuat> PhieuSanXuat2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
     }
 }

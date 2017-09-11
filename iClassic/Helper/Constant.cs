@@ -14,5 +14,15 @@ namespace iClassic.Helper
         public const string SESSION_MessageError = "SESSION_MESSAGE_ERROR";
 
         public const string SESSION_CurrentBrach = "SESSION_CurrentBrach";
+
+        public static Dictionary<int, string> ListKenhQuangCao = new Dictionary<int, string>()
+        {
+            {1, "Google"},
+            {2, "Facebook"},
+            {3, "Khách cũ"},
+            {4, "Khách qua giới thiệu"},
+            {5, "Khách vãng lai"},
+            {6, "Người quen"},
+        };
     }
 }

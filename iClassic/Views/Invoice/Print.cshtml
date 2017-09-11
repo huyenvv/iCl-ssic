@@ -20,6 +20,34 @@
     .mb20 {
         margin-bottom: 50px;
     }
+    .page {
+        width: 21cm;
+        min-height: 29.7cm;
+        padding: 1cm;
+        margin: 1cm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    @@page {
+        size: A4;
+        margin: 0;
+    }
+
+    @@media print {
+        .page {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            width: initial;
+            min-height: initial;
+            box-shadow: initial;
+            background: initial;
+            page-break-after: always;
+        }
+    }
 </style>
 <script>
     $(function () {
@@ -32,30 +60,32 @@
     });
 </script>
 
-@Html.Partial("_DonHangPartial", Model)
-<table class="table table-noborder">
-    <tr>
-        <td class="text-center">
-            <strong>Khách hàng</strong><br />
-        </td>
-        <td class="text-center">
-            <strong>Người lập phiếu</strong><br />
-        </td>        
-    </tr>
-    <tr>
-        <td></td>
-        <td class="text-center">
-            <br />
-            <br />
-            <br />
-            @if (!string.IsNullOrEmpty(baseController.CurrentUser.Name))
+<div class="page">
+    @Html.Partial("_DonHangPartial", Model)
+    <table class="table table-noborder">
+        <tr>
+            <td class="text-center">
+                <strong>Khách hàng</strong><br />
+            </td>
+            <td class="text-center">
+                <strong>Người lập phiếu</strong><br />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="text-center">
+                <br />
+                <br />
+                <br />
+                @if (!string.IsNullOrEmpty(baseController.CurrentUser.Name))
             {
-                @baseController.CurrentUser.Name
-            }
-            else
-            {
-                @User.Identity.Name
-            }
-        </td>
-    </tr>
-</table>
+                    @baseController.CurrentUser.Name
+                }
+                else
+                {
+                    @User.Identity.Name
+                }
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,147 @@
+﻿@using iClassic.Helper;
+@using iClassic.Models;
+@{
+    Layout = null;
+    var baseController = ViewContext.Controller as iClassic.Controllers.BaseController;
+    var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
+}
+@model Invoice
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<title>
+    Phiếu Sản Xuất - @Model.Code - iClassic
+</title>
+<style>
+    .table-noborder {
+        border-bottom: 0px !important;
+    }
+
+        .table-noborder th, .table-noborder td {
+            border: 1px !important;
+        }
+
+    .mb20 {
+        margin-bottom: 50px;
+    }
+
+    .page {
+        width: 21cm;
+        min-height: 29.7cm;
+        padding: 1cm;
+        margin: 1cm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    @@page {
+        size: A4;
+        margin: 0;
+    }
+
+    @@media print {
+        .page {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            width: initial;
+            min-height: initial;
+            box-shadow: initial;
+            background: initial;
+            page-break-after: always;
+        }
+    }
+</style>
+<script>
+    $(function () {
+        window.print();
+
+        if ($("body").find("#branch").length == 0) {
+            $(".noforinvoice").html('');
+        }
+        $(".showforinvoice").removeClass("hide");
+    });
+</script>
+
+@foreach (var item in Model.PhieuSanXuat)
+{
+    <div class="page">
+        <table class="table table-noborder showforinvoice hide">
+            <tr>
+                <td rowspan="2">
+                    <img src="@Url.Content("~/images/logo.png")" class="img-responsive mb10" alt="" />
+                </td>
+                <td>
+                    <address>
+                        <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
+                        Mã KH: <strong>@Model.Customer.MaKH</strong> <br>
+                        Khách hàng:<strong> @Model.Customer.TenKH</strong> <br>
+                        Ngày thử:<strong> @Model.NgayThu.ToString("dd/MM/yyyy")</strong><br />
+                        Ngày lấy:<strong> @Model.NgayTra.ToString("dd/MM/yyyy")</strong><br />
+                    </address>
+                </td>
+            </tr>
+        </table>
+        <h3 class="text-center showforinvoice hide"><u>@item.ProductType.Name - MÃ VẢI: @(item.MaVaiId.HasValue ? item.LoaiVai.MaVai.ToUpper() : "KHÁCH MANG VẢI ĐẾN")</u></h3>
+        <table class="table">
+            <tr>
+                @{
+                    var column = 12 / listProductType.Count();
+                    foreach (var productType in listProductType)
+                    {
+                        <td>
+                            <table class="">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            @productType.Name
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (productType.ProductTyeField.Any())
+                                    {
+                                        foreach (var productTypeField in productType.ProductTyeField.ToArray())
+                                        {
+                                            var productTypeValue = Model.Customer.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == productTypeField.Id);
+                                            <tr>
+                                                <td>@productTypeField.Name</td>
+                                                <td>
+                                                    @(productTypeValue != null ? productTypeValue.Value : "")
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    }
+                }
+            </tr>
+        </table>
+        <h4><strong>Mô tả</strong></h4>
+        <div>
+            @item.TenSanPham
+        </div>
+        <br />
+        <h4><strong>Đặc điểm dáng người</strong></h4>
+        <div>            
+            @Model.Customer.DangNguoi
+        </div>
+        <table>
+            <tr>
+                <td>Người đo</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Người cắt</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Người người may</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+                    }

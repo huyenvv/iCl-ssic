@@ -17,15 +17,15 @@ namespace iClassic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Customer()
         {
-            this.ProductTypeValue = new HashSet<ProductTypeValue>();
             this.Invoice = new HashSet<Invoice>();
+            this.ProductTypeValue = new HashSet<ProductTypeValue>();
         }
     
         public int Id { get; set; }
         public string MaKH { get; set; }
         public string TenKH { get; set; }
         public string SDT { get; set; }
-        public string KenhQC { get; set; }
+        public Nullable<int> KenhQC { get; set; }
         public string DangNguoi { get; set; }
         public string Address { get; set; }
         public string Image { get; set; }
@@ -35,10 +35,10 @@ namespace iClassic.Models
         public string CreateBy { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductTypeValue> ProductTypeValue { get; set; }
         public virtual Branch Branch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Invoice> Invoice { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductTypeValue> ProductTypeValue { get; set; }
     }
 }

@@ -54,4 +54,16 @@ namespace iClassic.Helper
 
         AllTime = 5,
     }
+
+    public enum ThoTypes
+    {
+        [Description("Thợ đo")]
+        Do = 1,
+
+        [Description("Thợ cắt")]
+        Cat = 2,
+
+        [Description("Thợ may")]
+        May = 3
+    }
 }

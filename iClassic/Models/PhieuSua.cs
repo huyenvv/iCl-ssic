@@ -22,7 +22,9 @@ namespace iClassic.Models
         public int InvoiceId { get; set; }
         public Nullable<int> ProblemType { get; set; }
         public string ProblemTypeOther { get; set; }
+        public int ThoId { get; set; }
     
         public virtual Invoice Invoice { get; set; }
+        public virtual Tho Tho { get; set; }
     }
 }

@@ -11,6 +11,7 @@
 
     var loaivai = ViewBag.MaVaiId as IQueryable<LoaiVai>;
     var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
+    var listTho = ViewBag.ListThoMayDo as IQueryable<Tho>;
 }
 
 <div class="row mb10 mt10">
@@ -154,6 +155,10 @@
         var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.ProductTypeId,m.MaVaiId,m.SoLuong}))".replace(/&quot;/g, '"'));
         var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price}))".replace(/&quot;/g, '"'));
         var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
+        var listTho = JSON.parse("@JsonConvert.SerializeObject(listTho.Select(m=> new {m.Id, m.Name, m.Type}))".replace(/&quot;/g, '"'));
+        var listThoDo = JSON.parse("@JsonConvert.SerializeObject(listTho.Where(m=>m.Type == (byte)ThoTypes.Do).Select(m=> new {m.Id, m.Name, m.Type}))".replace(/&quot;/g, '"'));
+        var listThoCat = JSON.parse("@JsonConvert.SerializeObject(listTho.Where(m=>m.Type == (byte)ThoTypes.Cat).Select(m=> new {m.Id, m.Name, m.Type}))".replace(/&quot;/g, '"'));
+        var listThoMay = JSON.parse("@JsonConvert.SerializeObject(listTho.Where(m=>m.Type == (byte)ThoTypes.May).Select(m=> new {m.Id, m.Name, m.Type}))".replace(/&quot;/g, '"'));
 
         $(function () {
 
@@ -328,6 +333,40 @@
                 html += "           </div>";
                 html += "       </div>";
                 html += "   </div>";
+                html += "   <div class='form-group'>";
+                html += "       <div class='row'>";
+                html += "           <div class='col-sm-4 col-xs-6'>";
+                html += "               <label>Thợ đo</label>";
+                html += "               <select name='PhieuSanXuat[" + index + "].ThoDoId' class='select22' data-placeholder='Nhập tên thợ...'>";
+                $.each(listThoDo, function (i, tho) {
+                    html += "               <option value='" + tho.Id + "'" + (tho.Id == tho.ThoDoId ? "selected" : "") + ">";
+                    html += "                   " + tho.Name;                    
+                    html += "               </option>";
+                });
+                html += "               </select>";
+                html += "           </div>";
+                html += "           <div class='col-sm-4 col-xs-6'>";
+                html += "               <label>Thợ cắt</label>";
+                html += "               <select name='PhieuSanXuat[" + index + "].ThoCatId' class='select22' data-placeholder='Nhập tên thợ...'>";
+                $.each(listThoCat, function (i, tho) {
+                    html += "               <option value='" + tho.Id + "'" + (tho.Id == tho.ThoCatId ? "selected" : "") + ">";
+                    html += "                   " + tho.Name;
+                    html += "               </option>";
+                });
+                html += "               </select>";
+                html += "           </div>";
+                html += "           <div class='col-sm-4 col-xs-6'>";
+                html += "               <label>Thợ may</label>";
+                html += "               <select name='PhieuSanXuat[" + index + "].ThoMayId' class='select22' data-placeholder='Nhập tên thợ...'>";
+                $.each(listThoMay, function (i, tho) {
+                    html += "               <option value='" + tho.Id + "'" + (tho.Id == tho.ThoMayId ? "selected" : "") + ">";
+                    html += "                   " + tho.Name;
+                    html += "               </option>";
+                });
+                html += "               </select>";
+                html += "           </div>";
+                html += "       </div>";
+                html += "   </div>";
                 html += "   <label>Giá tiền: <strong class='text-success giatien'>" + giatien + "</strong></label>";
                 html += "</div>";
             });
@@ -463,6 +502,16 @@
                 html += "               </select>";
                 html += "       <input type='text' name='PhieuSua[" + index + "].ProblemTypeOther' value='" + item.ProblemTypeOther + "' class='form-control problemTypeOther mt5' style='display:" + (item.ProblemType != lydokhacValue ? "none" : "block") + "' />";
                 html += "   </div>";
+                html += "   <div class='form-group'>";
+                html += "       <label>Ai sẽ sửa?</label>";
+                html += "       <select name='PhieuSanXuat[" + index + "].ThoDoId' class='select223' data-placeholder='Nhập tên thợ...'>";
+                $.each(listTho, function (i, tho) {
+                    html += "       <option value='" + tho.Id + "'" + (tho.Id == tho.ThoId ? "selected" : "") + ">";
+                    html += "           " + tho.Name;
+                    html += "       </option>";
+                });
+                html += "       </select>";
+                html += "   </div>";
                 html += "   <div class='form-group boxtien " + (item.Type == '@((byte)PhieuSuaType.BaoHanh)' ? "hide" : "") + "'>";
                 html += "       <label>Giá tiền</label>";
                 html += "       <input type='text' name='PhieuSua[" + index + "].SoTien' value='" + item.SoTien + "' class='form-control price sotien'  onchange='updateSoTienItem();' />";
@@ -476,6 +525,9 @@
             var currentPosition = $(document).scrollTop();
             $('.price').maskMoney({ precision: 0 });
             $('.price').focus();
+            jQuery(".select223").select2({
+                width: '100%'
+            });
             $(document).scrollTop(currentPosition);
         }
     </script>

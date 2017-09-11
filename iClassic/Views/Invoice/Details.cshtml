@@ -15,8 +15,8 @@
         </button>
         <ul class="dropdown-menu" role="menu">
             <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Đơn hàng</a></li>
-            <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Phiếu sản xuất</a></li>
-            <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Phiếu sửa</a></li>
+            <li><a href="@Url.Action("PrintPhieuSanXuat", new { id = Model.Id })" target="_blank">Phiếu sản xuất</a></li>
+            <li><a href="@Url.Action("PrintPhieuSua", new { id = Model.Id })" target="_blank">Phiếu sửa</a></li>
         </ul>
     </div>
     @if (Model.Status == (byte)iClassic.Helper.TicketStatus.DaXuLy)
