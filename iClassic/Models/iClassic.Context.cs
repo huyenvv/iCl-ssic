@@ -28,6 +28,7 @@ namespace iClassic.Models
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Branch> Branch { get; set; }
+        public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
         public virtual DbSet<LoaiVai> LoaiVai { get; set; }
         public virtual DbSet<PhieuChi> PhieuChi { get; set; }
@@ -38,6 +39,5 @@ namespace iClassic.Models
         public virtual DbSet<ProductTypeLoaiVai> ProductTypeLoaiVai { get; set; }
         public virtual DbSet<ProductTypeValue> ProductTypeValue { get; set; }
         public virtual DbSet<Tho> Tho { get; set; }
-        public virtual DbSet<Customer> Customer { get; set; }
     }
 }

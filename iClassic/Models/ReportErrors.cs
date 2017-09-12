@@ -8,8 +8,8 @@ namespace iClassic.Models
 {
     public class ReportErrors
     {
-        public LoiPhieuSuaType TypeError { get; set; }
-        public string OtherError { get; set; }
+        public int ThoId { get; set; }
+        public string Name { get; set; }
         public int Count { get; set; }
     }
 }

@@ -121,17 +121,6 @@ namespace iClassic.Helper
             }
             return result;
         }
-        public static HashSet<KeyValuePair<int, string>> GetLoiPhieuSuaTypeList()
-        {
-            var result = new HashSet<KeyValuePair<int, string>>();
-            var list = Enum.GetValues(typeof(LoiPhieuSuaType));
-            foreach (int enumItem in list)
-            {
-                var keyValueItem = new KeyValuePair<int, string>(enumItem, ((LoiPhieuSuaType)enumItem).GetDescription());
-                result.Add(keyValueItem);
-            }
-            return result;
-        }
         public static HashSet<KeyValuePair<int, string>> GetDSThoTypeList()
         {
             var result = new HashSet<KeyValuePair<int, string>>();
@@ -149,9 +138,12 @@ namespace iClassic.Helper
             var className = "";
             switch (statusEnum)
             {
+                case TicketStatus.DangXuLy:
+                    className = "default";
+                    break;
                 case TicketStatus.DaXuLy:
                     className = "warning";
-                    break;
+                    break;                
                 case TicketStatus.DaTraChoKhach:
                     className = "success";
                     break;

@@ -146,7 +146,31 @@ namespace iClassic.Controllers
             }
             return RedirectToAction("Details", new { id = id });
         }
+        public ActionResult Proccess(int id, int status)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var model = _invoiceRepository.GetById(id);
+                    if (model == null)
+                        return RedirectToAction("Index");
 
+                    _invoiceRepository.ChangeStatus(model, status);
+                    _invoiceRepository.Save();
+
+                    ShowMessageSuccess(Message.Update_Successfully);
+                    return RedirectToAction("Details", new { id = id });
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageError(Message.Update_Fail);
+
+                _log.Info(ex.ToString());
+            }
+            return RedirectToAction("Details", new { id = id });
+        }
         // GET: Invoicees/Delete/5
         public async Task<ActionResult> Delete(int id = 0)
         {

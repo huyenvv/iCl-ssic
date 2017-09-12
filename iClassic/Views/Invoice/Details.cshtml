@@ -1,4 +1,5 @@
-﻿@model iClassic.Models.Invoice
+﻿@using iClassic.Helper;
+@model iClassic.Models.Invoice
 
 @{
     ViewBag.Title = "Chi tiêt đơn hàng";
@@ -7,11 +8,18 @@
 }
 
 @Html.Partial("_DonHangPartial", Model)
-<div class="text-right btn-invoice">
-    <a href="@Url.Action("Index")" class="pull-left btn btn-default">Quay lại</a>
+<div class="btn-invoice">
+    @if (Model.Status == (byte)iClassic.Helper.TicketStatus.DangXuLy)
+    {
+        <a class="btn btn-warning btnConfirm" href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DaXuLy})"><i class="fa fa-scissors mr5"></i>Đã xử lý</a>
+    }
+    @if (Model.Status == (byte)iClassic.Helper.TicketStatus.DaXuLy)
+    {
+        <a class="btn btn-success btnConfirm" href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DaTraChoKhach})"><i class="fa fa-check-square mr5"></i> Đã trả hàng</a>
+    }
     <div class="btn-group">
         <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-print mr5"></i> In <span class="caret"></span>
+            <i class="fa fa-print"></i> In <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
             <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Đơn hàng</a></li>
@@ -19,11 +27,7 @@
             <li><a href="@Url.Action("PrintPhieuSua", new { id = Model.Id })" target="_blank">Phiếu sửa</a></li>
         </ul>
     </div>
-    @if (Model.Status == (byte)iClassic.Helper.TicketStatus.DaXuLy)
-    {
-        <button class="btn btn-primary mr5"><i class="fa fa-dollar mr5"></i> Đã trả hàng</button>
-    }
-
+    <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 </div>
 
 @section Styles{
@@ -32,4 +36,10 @@
             margin-bottom: 0;
         }
     </style>
+}
+
+@section Scripts{
+    <script>
+
+    </script>    
 }

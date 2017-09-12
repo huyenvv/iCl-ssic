@@ -145,11 +145,11 @@ namespace iClassic.Services.Implementation
 
         public IQueryable<ReportErrors> GetErrorsInProcessing(StatisticSearch model)
         {
-            var allErrors = _phieuSuaRepository.GetAll().GroupBy(m => new { m.ProblemType, m.ProblemTypeOther })
+            var allErrors = _phieuSuaRepository.GetAll().Where(m => m.Type == (byte)PhieuSuaType.BaoHanh).GroupBy(m => new { m.ProblemBy, Name = m.ProblemBy.HasValue ? m.Tho.Name : string.Empty })
                 .Select(m => new ReportErrors
                 {
-                    TypeError = (LoiPhieuSuaType)m.Key.ProblemType,
-                    OtherError = m.Key.ProblemTypeOther,
+                    ThoId = m.Key.ProblemBy ?? 0,
+                    Name = m.Key.Name,
                     Count = m.Count()
                 });
             return allErrors;

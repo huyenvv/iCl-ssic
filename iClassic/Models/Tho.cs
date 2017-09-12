@@ -21,6 +21,7 @@ namespace iClassic.Models
             this.PhieuSanXuat1 = new HashSet<PhieuSanXuat>();
             this.PhieuSanXuat2 = new HashSet<PhieuSanXuat>();
             this.PhieuSua = new HashSet<PhieuSua>();
+            this.PhieuSua1 = new HashSet<PhieuSua>();
         }
     
         public int Id { get; set; }
@@ -36,5 +37,7 @@ namespace iClassic.Models
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSua> PhieuSua { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSua> PhieuSua1 { get; set; }
     }
 }

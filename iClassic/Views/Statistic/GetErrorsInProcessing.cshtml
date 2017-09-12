@@ -54,12 +54,7 @@
                         @(stt++)
                     </td>
                     <td>
-                        @(((LoiPhieuSuaType)item.TypeError).GetDescription())
-                        @if (!string.IsNullOrWhiteSpace(item.OtherError))
-                        {
-                            <br />
-                            @item.OtherError
-                        }
+                        @(item.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Count)

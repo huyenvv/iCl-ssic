@@ -42,4 +42,9 @@ namespace iClassic.Models
     public partial class ProductType
     {
     }
+
+    [MetadataType(typeof(ThoMetadata))]
+    public partial class Tho
+    {
+    }
 }

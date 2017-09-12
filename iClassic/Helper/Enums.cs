@@ -11,7 +11,10 @@ namespace iClassic.Helper
         [Description("Tiếp nhận và chờ xử lý")]
         ChuaXuLy,
 
-        [Description("Đã xử lý")]
+        [Description("Đang xử lý")]
+        DangXuLy,
+
+        [Description("Đã xử lý và chờ trả cho khách")]
         DaXuLy,
 
         [Description("Đã trả cho khách")]
@@ -25,22 +28,7 @@ namespace iClassic.Helper
 
         [Description("Khách nhờ sửa")]
         KhachNhoSua,
-    }
-
-    public enum LoiPhieuSuaType
-    {
-        [Description("Người CẮT")]
-        NguoiCat = 1,
-
-        [Description("Người MAY")]
-        NguoiMay = 2,
-
-        [Description("Người ĐO")]
-        NguoiDo = 3,
-
-        [Description("Lý do khác")]
-        LyDoKhac = 4,
-    }
+    }    
 
     public enum ReportTypes
     {

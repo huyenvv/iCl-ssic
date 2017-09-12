@@ -39,7 +39,6 @@
                                     <option value="@item.Key" @(item.Key == Model.Id ? "selected" : "")>@item.Value</option>
                                 }
                             </select>                           
-                            @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                         </div>
                     </div>

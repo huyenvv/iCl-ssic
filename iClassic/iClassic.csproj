@@ -238,6 +238,7 @@
     <Compile Include="Models\Branch.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Metadata\ThoMetadata.cs" />
     <Compile Include="Models\ThoSearch.cs" />
     <Compile Include="Models\Invoice.cs">
       <DependentUpon>iClassic.tt</DependentUpon>

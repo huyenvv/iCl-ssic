@@ -121,7 +121,7 @@ namespace iClassic.Services.Implementation
         {
             var statusDone = (byte)TicketStatus.DaTraChoKhach;
             return Where(m => m.BranchId == branchId && m.Status == statusDone && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
-        }        
+        }
 
         public int Count(int branchId, TicketStatus status)
         {
@@ -148,10 +148,38 @@ namespace iClassic.Services.Implementation
             {
                 var objForUpdate = model.PhieuSua.FirstOrDefault(m => m.Id == t.Id);
                 objForUpdate.Status = (int)TicketStatus.ChuaXuLy;
-                objForUpdate.SoTien = t.Type == (byte)PhieuSuaType.BaoHanh ? 0 : t.SoTien;
+                if (t.Type == (byte)PhieuSuaType.BaoHanh)
+                {
+                    objForUpdate.SoTien = 0;
+                    objForUpdate.ProblemBy = t.ProblemBy;
+                }
+                else
+                {
+                    objForUpdate.SoTien = t.SoTien;
+                    objForUpdate.ProblemBy = null;
+                }
+                model.PhieuSua.Add(t);
             }
             );
             base.Insert(model);
+        }
+
+        public void ChangeStatus(Invoice model, int status)
+        {
+            if (model.Status == (byte)TicketStatus.ChuaXuLy && status == (byte)TicketStatus.DangXuLy)
+            {
+                model.Status = (byte)TicketStatus.DangXuLy;
+            }
+
+            if (model.Status == (byte)TicketStatus.DangXuLy && status == (byte)TicketStatus.DaXuLy)
+            {
+                model.Status = (byte)TicketStatus.DaXuLy;
+            }
+
+            if (model.Status == (byte)TicketStatus.DaXuLy && status == (byte)TicketStatus.DaTraChoKhach)
+            {
+                model.Status = (byte)TicketStatus.DaTraChoKhach;
+            }
         }
 
         public override void Update(Invoice model)
@@ -191,7 +219,7 @@ namespace iClassic.Services.Implementation
                 objForUpdate.Status = t.Status;
                 objForUpdate.ThoDoId = t.ThoDoId;
                 objForUpdate.ThoCatId = t.ThoCatId;
-                objForUpdate.ThoMayId = t.ThoMayId;                
+                objForUpdate.ThoMayId = t.ThoMayId;
                 objForUpdate.DonGia = t.MaVaiId.HasValue
                     ? context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0
                     : context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
@@ -206,7 +234,18 @@ namespace iClassic.Services.Implementation
 
             listNewPhieusua.ToList().ForEach(t =>
                 {
-                    t.SoTien = t.Type == (byte)PhieuSuaType.BaoHanh ? 0 : t.SoTien;
+                    var objForUpdate = model.PhieuSua.FirstOrDefault(m => m.Id == t.Id);
+                    objForUpdate.Status = (int)TicketStatus.ChuaXuLy;
+                    if (t.Type == (byte)PhieuSuaType.BaoHanh)
+                    {
+                        objForUpdate.SoTien = 0;
+                        objForUpdate.ProblemBy = t.ProblemBy;
+                    }
+                    else
+                    {
+                        objForUpdate.SoTien = t.SoTien;
+                        objForUpdate.ProblemBy = null;
+                    }
                     obj.PhieuSua.Add(t);
                 }
             );
@@ -214,10 +253,9 @@ namespace iClassic.Services.Implementation
             {
                 var objForUpdate = obj.PhieuSua.FirstOrDefault(m => m.Id == t.Id);
                 objForUpdate.NoiDung = t.NoiDung;
-                objForUpdate.ProblemType = t.ProblemType;
-                objForUpdate.ProblemTypeOther = !string.IsNullOrEmpty(t.ProblemTypeOther) ? t.ProblemTypeOther : string.Empty;
+                objForUpdate.ProblemBy = t.ProblemBy;
                 objForUpdate.Type = t.Type;
-                objForUpdate.Status = t.Status;
+                //objForUpdate.Status = t.Status;
                 objForUpdate.ThoId = t.ThoId;
                 objForUpdate.SoTien = t.Type == (byte)PhieuSuaType.BaoHanh ? 0 : t.SoTien;
             });
