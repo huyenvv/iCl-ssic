@@ -115,8 +115,7 @@
         </div>
     </div>
     <div class="">
-        <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit()">@(Model.Id > 0 ? "Lưu" : "Tạo") đơn hàng</button>
-        <a class="btn btn-warning btnConfirm" href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DaXuLy})"><i class="fa fa-scissors mr5"></i>Xử lý</a>
+        <a class="btn btn-warning" href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DaXuLy})" onclick="return btnConfirmXuLy();"><i class="glyphicon glyphicon-hand-up mr5"></i>Xử lý</a>
         <div class="btn-group">
             <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-print"></i> In <span class="caret"></span>
@@ -127,9 +126,15 @@
                 <li><a href="@Url.Action("PrintPhieuSua", new { id = Model.Id })" target="_blank">Phiếu sửa</a></li>
             </ul>
         </div>
+        @if (Model.Id > 0)
+        {
+            <a class="btn btn-danger btnConfirm" href="@Url.Action("Delete", new {id=Model.Id})"><i class="fa fa-times mr5"></i>Xóa</a>
+        }
+    </div>
+    <div class="mb40 mt10">
+        <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit()">@(Model.Id > 0 ? "Lưu" : "Tạo mới")</button>
         <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
     </div>
-
 }
 
 @section Styles {
@@ -399,6 +404,10 @@
                 var value = $this.val().replace(/,/g, '');
                 $this.val(value);
             });
+        }
+
+        function btnConfirmXuLy() {
+            return confirm("Bạn có chắc chắn muốn xử lý đơn hàng này?");
         }
     </script>
 

@@ -17,8 +17,8 @@ namespace iClassic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public LoaiVai()
         {
-            this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
             this.ProductTypeLoaiVai = new HashSet<ProductTypeLoaiVai>();
+            this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
         }
     
         public int Id { get; set; }
@@ -33,8 +33,8 @@ namespace iClassic.Models
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Branch Branch { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductTypeLoaiVai> ProductTypeLoaiVai { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
     }
 }

@@ -181,7 +181,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _invoiceRepository.GetByIdAsync(id);
-                if (obj == null || !IsValidBranch(obj.BranchId))
+                if (obj == null || !IsValidBranch(obj.BranchId) || obj.Status != (byte)TicketStatus.ChuaXuLy)
                 {
                     return HttpNotFound();
                 }

@@ -1,18 +1,18 @@
-﻿@using iClassic.Helper;
+﻿
+@using iClassic.Helper;
 @using iClassic.Models;
-@using PagedList.Mvc;
-@model IQueryable<ReportErrors>
+@model IQueryable<ReportCustomChanelAdvertising>
 
 @{
-    ViewBag.Title = "Lỗi trong quá trinh sản xuất";
-    ViewBag.Class = "fa fa-exclamation-circle";
+    ViewBag.Title = "Kênh quảng cáo";
+    ViewBag.Class = "fa fa-globe";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Thống kê</a>" +
                           "<span>" + ViewBag.Title + "</span>";
     var searchModel = ViewBag.SearchModel as StatisticSearch;
 }
 
 <div class="row mb10 mt10">
-    <div class="col-md-12">       
+    <div class="col-md-12">        
         <h3 class="panel-title">
             @ViewBag.Title
         </h3>
@@ -37,7 +37,7 @@
         <tr>
             <th>STT</th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="Total">Lỗi do ai?</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Chanel">Kênh quảng cáo?</a>
             </th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Soluong">Số lượng</a>
@@ -53,7 +53,7 @@
                         @(stt++)
                     </td>
                     <td>
-                        @(item.Name)
+                        @(Constant.ListKenhQuangCao.FirstOrDefault(m => m.Key == item.Type).Value)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Count)

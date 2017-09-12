@@ -63,6 +63,17 @@ namespace iClassic.Controllers
             return View(data);
         }
 
+        public ActionResult CustomerChanelAvertising(StatisticSearch model)
+        {
+            model.BranchId = CurrentBranchId;
+            var data = _reportServices.CustomerChanelAvertising(model);
+            int pageSize = model?.PageSize ?? _pageSize;
+            int pageNumber = (model?.Page ?? 1);
+
+            ViewBag.SearchModel = model;
+            return View(data);
+        }
+
         private string GetGraphJson(StatisticSearch model)
         {
             var type = model.Type.HasValue ? model.Type.Value : ReportTypes.SevenDaysRecent;

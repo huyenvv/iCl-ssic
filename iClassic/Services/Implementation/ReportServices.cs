@@ -143,6 +143,17 @@ namespace iClassic.Services.Implementation
             return allCustomers;
         }
 
+        public IQueryable<ReportCustomChanelAdvertising> CustomerChanelAvertising(StatisticSearch model)
+        {
+            var allCustomers = _customerRepository.GetAll().GroupBy(m => m.KenhQC)
+                .Select(m => new ReportCustomChanelAdvertising
+                {
+                    Type = m.Key,
+                    Count = m.Count()
+                });
+            return allCustomers.OrderBy(m=>m.Type);
+        }
+
         public IQueryable<ReportErrors> GetErrorsInProcessing(StatisticSearch model)
         {
             var allErrors = _phieuSuaRepository.GetAll().Where(m => m.Type == (byte)PhieuSuaType.BaoHanh).GroupBy(m => new { m.ProblemBy, Name = m.ProblemBy.HasValue ? m.Tho.Name : string.Empty })

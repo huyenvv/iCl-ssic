@@ -1,12 +1,15 @@
-﻿@{
+﻿@using iClassic.Helper;
+@using iClassic.Models;
+@{
     Layout = null;
     var baseController = ViewContext.Controller as iClassic.Controllers.BaseController;
+    var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
 }
-@model iClassic.Models.Invoice
+@model Invoice
 <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <title>
-    In hóa đơn - @Model.Code - iClassic
+    Phiếu Sửa - @Model.Code - iClassic
 </title>
 <style>
     .table-noborder {
@@ -20,6 +23,35 @@
     .mb20 {
         margin-bottom: 50px;
     }
+
+    .page {
+        width: 21cm;
+        min-height: 29.7cm;
+        padding: 1cm;
+        margin: 1cm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    @@page {
+        size: A4;
+        margin: 0;
+    }
+
+    @@media print {
+        .page {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            width: initial;
+            min-height: initial;
+            box-shadow: initial;
+            background: initial;
+            page-break-after: always;
+        }
+    }
 </style>
 <script>
     $(function () {
@@ -32,30 +64,40 @@
     });
 </script>
 
-@Html.Partial("_DonHangPartial", Model)
-<table class="table table-noborder">
-    <tr>
-        <td class="text-center">
-            <strong>Khách hàng</strong><br />
-        </td>
-        <td class="text-center">
-            <strong>Người lập phiếu</strong><br />
-        </td>
-    </tr>
-    <tr>
-        <td></td>
-        <td class="text-center">
-            <br />
-            <br />
-            <br />
-            @if (!string.IsNullOrEmpty(baseController.CurrentUser.Name))
-            {
-                @baseController.CurrentUser.Name
-            }
-            else
-            {
-                @User.Identity.Name
-            }
-        </td>
-    </tr>
-</table>
+@foreach (var item in Model.PhieuSua)
+{
+    <div class="page">
+        <table class="table table-noborder showforinvoice hide">
+            <tr>
+                <td rowspan="2">
+                    <img src="@Url.Content("~/images/logo.png")" class="img-responsive mb10" alt="" />
+                </td>
+                <td>
+                    <address>
+                        <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
+                        Mã KH: <strong>@Model.Customer.MaKH</strong> <br>
+                        Khách hàng:<strong> @Model.Customer.TenKH</strong> <br>
+                        Ngày tạo phiếu:<strong> @DateTime.Now.ToString("dd/MM/yyyy")</strong><br />
+                        Ngày lấy:<strong> @Model.NgayTra.ToString("dd/MM/yyyy")</strong><br />
+                    </address>
+                </td>
+            </tr>
+        </table>
+        <h3 class="text-center showforinvoice hide"><u>PHIẾU SỬA</u></h3>
+        
+        <h4><strong>Lý do sửa</strong></h4>
+        <div>
+            @(((PhieuSuaType)item.Type).GetDescription())
+        </div>
+        <br />
+        <h4><strong>Mô tả</strong></h4>
+        <div>
+            @item.NoiDung
+        </div>
+        <br />        
+        <h4><strong>Thợ sửa</strong></h4>
+        <div>
+            @item.Tho.Name
+        </div>
+    </div>
+                    }
