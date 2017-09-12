@@ -24,7 +24,7 @@
     @*@Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")*@
 </head>
-<body class="leftpanel-collapsed">
+<body class="">
     <section>
         <div class="leftpanel">
             <div class="logopanel">
@@ -79,7 +79,7 @@
                                 @if (isSupperAdmin)
                                 {
                                     <li><a href="@Url.Action("Index", "ProductType")" data-href="Index/ProductType/NewOrEdit"><i class="fa fa-list-ol"></i> <span>Sản phẩm</span></a></li>
-                                    <li><a href="@Url.Action("Index", "Tho")" data-href="Index/ProductType/NewOrEdit"><i class="fa fa-user"></i> <span>Danh sách Thợ</span></a></li>
+                                    <li><a href="@Url.Action("Index", "Tho")" data-href="Index/Tho/NewOrEdit"><i class="fa fa-user"></i> <span>Danh sách Thợ</span></a></li>
                                 }
                             </ul>
                         </li>
@@ -214,7 +214,7 @@
             return isConfirm;
         }
         jQuery(document).ready(function () {
-            "use strict";
+            "use strict";            
 
             $(".btnConfirm").click(function () {
                 return cfmDelete();
@@ -240,7 +240,7 @@
             // Select2
             jQuery(".select2").select2({
                 width: '100%'
-            });
+            });            
         });
     </script>
     @RenderSection("scripts", required: false)

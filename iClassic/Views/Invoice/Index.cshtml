@@ -95,7 +95,7 @@
                         @item.Total.ToString("N0") ₫
                     </td>
                     <td class="text-danger">
-                        @((item.Total - item.DatCoc - (item.ChietKhau ?? 0)).ToString("N0")) ₫
+                        @((item.Total - item.DatCoc ?? 0 - (item.ChietKhau ?? 0)).ToString("N0")) ₫
                     </td>
                     <td title="@item.NgayThu.ToString("dd/MM/yyyy HH:mm")">
                         @item.NgayThu.ToString("dd/MM/yyyy")
@@ -120,7 +120,7 @@
                             if (soluongchuamua > 0)
                             {
                                 <div class="text-danger">Chưa mua: <strong>@soluongchuamua</strong></div>
-                            }                          
+                            }
                         }
                         else
                         {

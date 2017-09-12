@@ -11,9 +11,8 @@ namespace iClassic.Models.Metadata
 
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Tổng tiền")]
-        public double Total { get; set; }        
+        public double Total { get; set; }
 
-        [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Đặt cọc")]
         public double DatCoc { get; set; }
 

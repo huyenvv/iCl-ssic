@@ -20,10 +20,6 @@
             border: 1px !important;
         }
 
-    .mb20 {
-        margin-bottom: 50px;
-    }
-
     .page {
         width: 21cm;
         min-height: 29.7cm;
@@ -33,6 +29,10 @@
         border-radius: 5px;
         background: white;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .tableSodo tbody > tr > td {
+        padding: 2px 0;
     }
 
     @@page {
@@ -83,65 +83,55 @@
                 </td>
             </tr>
         </table>
-        <h3 class="text-center showforinvoice hide"><u>@item.ProductType.Name - MÃ VẢI: @(item.MaVaiId.HasValue ? item.LoaiVai.MaVai.ToUpper() : "KHÁCH MANG VẢI ĐẾN")</u></h3>
-        <table class="table">
-            <tr>
-                @{
-                    var column = 12 / listProductType.Count();
-                    foreach (var productType in listProductType)
+        <h3 class="text-center showforinvoice hide">
+            PHIẾU SẢN XUẤT: @item.ProductType.Name
+        </h3>
+        <h4 class="text-center showforinvoice hide">(MÃ VẢI: @(item.MaVaiId.HasValue ? item.LoaiVai.MaVai.ToUpper() : "KHÁCH MANG VẢI ĐẾN"))</h4>
+        @{
+            var productType = listProductType.FirstOrDefault(m => m.Id == item.ProductTypeId);
+            <table class="table tableSodo">
+                <tbody>
+                    @if (productType.ProductTyeField.Any())
                     {
-                        <td>
-                            <table class="">
-                                <thead>
-                                    <tr>
-                                        <th colspan="2">
-                                            @productType.Name
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (productType.ProductTyeField.Any())
-                                    {
-                                        foreach (var productTypeField in productType.ProductTyeField.ToArray())
-                                        {
-                                            var productTypeValue = Model.Customer.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == productTypeField.Id);
-                                            <tr>
-                                                <td>@productTypeField.Name</td>
-                                                <td>
-                                                    @(productTypeValue != null ? productTypeValue.Value : "")
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </td>
+                        foreach (var productTypeField in productType.ProductTyeField.ToArray())
+                        {
+                            var productTypeValue = Model.Customer.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == productTypeField.Id);
+                            <tr>
+                                <td>@productTypeField.Name</td>
+                                <td>
+                                    @(productTypeValue != null ? productTypeValue.Value : "")
+                                </td>
+                            </tr>
+                        }
                     }
-                }
-            </tr>
-        </table>
+                </tbody>
+            </table>
+        }
         <h4><strong>Mô tả</strong></h4>
         <div>
             @item.TenSanPham
         </div>
         <br />
         <h4><strong>Đặc điểm dáng người</strong></h4>
-        <div>            
+        <div>
             @Model.Customer.DangNguoi
         </div>
-        <table>
+        <br />
+        <table class="table">
             <tr>
-                <td>Người đo</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Người cắt</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Người người may</td>
-                <td></td>
+                <td class="text-center">
+                    @(((ThoTypes)item.ThoDoId).GetDescription())
+                    <br />    <strong>@item.Tho.Name</strong>
+                </td>
+                <td class="text-center">
+                    @(((ThoTypes)item.ThoCatId).GetDescription())
+                    <br />    <strong>@item.Tho2.Name</strong>
+                </td>
+                <td class="text-center">
+                    @(((ThoTypes)item.ThoMayId).GetDescription())
+                    <br />    <strong>@item.Tho1.Name</strong>
+                </td>
             </tr>
         </table>
     </div>
-                    }
+            }

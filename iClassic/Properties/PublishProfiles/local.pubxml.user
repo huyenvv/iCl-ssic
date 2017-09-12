@@ -25,7 +25,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/07/2017 14:16:09</publishTime>
     </File>
     <File Include="bin/iClassic.dll">
-      <publishTime>09/01/2017 21:26:50</publishTime>
+      <publishTime>09/12/2017 19:35:47</publishTime>
     </File>
     <File Include="bin/log4net.dll">
       <publishTime>08/16/2017 16:31:22</publishTime>
@@ -1705,7 +1705,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/07/2017 14:16:09</publishTime>
     </File>
     <File Include="Models/iClassic.edmx.diagram">
-      <publishTime>09/01/2017 15:14:03</publishTime>
+      <publishTime>09/12/2017 19:35:03</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>08/25/2017 18:17:34</publishTime>
@@ -1729,7 +1729,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/11/2017 20:09:06</publishTime>
     </File>
     <File Include="Scripts/iClassic.js">
-      <publishTime>08/29/2017 16:26:58</publishTime>
+      <publishTime>09/06/2017 17:26:38</publishTime>
     </File>
     <File Include="Scripts/jquery-1.10.2.js">
       <publishTime>08/07/2017 14:16:08</publishTime>
@@ -1834,7 +1834,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/01/2017 15:14:03</publishTime>
     </File>
     <File Include="Views/Customer/NewOrEdit.cshtml">
-      <publishTime>09/01/2017 21:31:06</publishTime>
+      <publishTime>09/12/2017 14:13:02</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>08/07/2017 14:16:08</publishTime>
@@ -1843,13 +1843,34 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/07/2017 14:16:08</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>08/25/2017 18:37:57</publishTime>
+      <publishTime>09/12/2017 18:42:47</publishTime>
+    </File>
+    <File Include="Views/Invoice/Details.cshtml">
+      <publishTime>09/12/2017 14:13:02</publishTime>
+    </File>
+    <File Include="Views/Invoice/Index.cshtml">
+      <publishTime>09/12/2017 19:36:48</publishTime>
+    </File>
+    <File Include="Views/Invoice/NewOrEdit.cshtml">
+      <publishTime>09/12/2017 19:38:07</publishTime>
+    </File>
+    <File Include="Views/Invoice/Print.cshtml">
+      <publishTime>09/12/2017 14:13:02</publishTime>
+    </File>
+    <File Include="Views/Invoice/PrintPhieuSanXuat.cshtml">
+      <publishTime>09/12/2017 19:22:22</publishTime>
+    </File>
+    <File Include="Views/Invoice/PrintPhieuSua.cshtml">
+      <publishTime>09/12/2017 18:32:39</publishTime>
+    </File>
+    <File Include="Views/Invoice/_DonHangPartial.cshtml">
+      <publishTime>09/12/2017 19:38:55</publishTime>
     </File>
     <File Include="Views/LoaiVai/Index.cshtml">
-      <publishTime>09/01/2017 15:14:03</publishTime>
+      <publishTime>09/06/2017 17:26:38</publishTime>
     </File>
     <File Include="Views/LoaiVai/NewOrEdit.cshtml">
-      <publishTime>09/01/2017 15:14:03</publishTime>
+      <publishTime>09/06/2017 17:26:38</publishTime>
     </File>
     <File Include="Views/Manage/AddEmployee.cshtml">
       <publishTime>09/01/2017 15:14:03</publishTime>
@@ -1885,10 +1906,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/01/2017 15:14:03</publishTime>
     </File>
     <File Include="Views/PhieuChi/Index.cshtml">
-      <publishTime>08/21/2017 19:29:03</publishTime>
+      <publishTime>09/06/2017 17:26:38</publishTime>
     </File>
     <File Include="Views/PhieuChi/NewOrEdit.cshtml">
-      <publishTime>09/01/2017 15:14:03</publishTime>
+      <publishTime>09/06/2017 17:26:38</publishTime>
     </File>
     <File Include="Views/PhieuSanXuat/Index.cshtml">
       <publishTime>09/01/2017 15:14:03</publishTime>
@@ -1906,10 +1927,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/01/2017 15:14:03</publishTime>
     </File>
     <File Include="Views/ProductType/Index.cshtml">
-      <publishTime>08/22/2017 21:35:18</publishTime>
+      <publishTime>09/12/2017 18:55:49</publishTime>
     </File>
     <File Include="Views/ProductType/NewOrEdit.cshtml">
-      <publishTime>08/25/2017 17:59:16</publishTime>
+      <publishTime>09/12/2017 18:54:31</publishTime>
     </File>
     <File Include="Views/Shared/AccessDenied.cshtml">
       <publishTime>08/09/2017 20:12:25</publishTime>
@@ -1921,19 +1942,31 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/07/2017 14:16:08</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>09/01/2017 15:52:13</publishTime>
+      <publishTime>09/12/2017 19:29:49</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>09/01/2017 15:14:03</publishTime>
     </File>
+    <File Include="Views/Statistic/CustomerChanelAvertising.cshtml">
+      <publishTime>09/12/2017 17:37:30</publishTime>
+    </File>
     <File Include="Views/Statistic/CustomerVip.cshtml">
-      <publishTime>09/01/2017 15:14:03</publishTime>
+      <publishTime>09/08/2017 18:04:02</publishTime>
+    </File>
+    <File Include="Views/Statistic/GetErrorsInProcessing.cshtml">
+      <publishTime>09/12/2017 17:37:49</publishTime>
     </File>
     <File Include="Views/Statistic/Index.cshtml">
       <publishTime>09/01/2017 15:14:03</publishTime>
     </File>
     <File Include="Views/Statistic/Profit.cshtml">
       <publishTime>09/01/2017 15:14:03</publishTime>
+    </File>
+    <File Include="Views/Tho/Index.cshtml">
+      <publishTime>09/12/2017 14:13:02</publishTime>
+    </File>
+    <File Include="Views/Tho/NewOrEdit.cshtml">
+      <publishTime>09/12/2017 14:13:02</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>08/07/2017 14:16:08</publishTime>
@@ -1942,7 +1975,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/07/2017 14:16:08</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/01/2017 21:26:51</publishTime>
+      <publishTime>09/12/2017 19:41:11</publishTime>
     </File>
   </ItemGroup>
 </Project>

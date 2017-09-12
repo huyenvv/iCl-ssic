@@ -24,7 +24,7 @@ namespace iClassic.Models
         public int Id { get; set; }
         public string Code { get; set; }
         public double Total { get; set; }
-        public double DatCoc { get; set; }
+        public Nullable<double> DatCoc { get; set; }
         public Nullable<double> ChietKhau { get; set; }
         public System.DateTime NgayThu { get; set; }
         public System.DateTime NgayTra { get; set; }
