@@ -102,5 +102,10 @@ namespace iClassic.Services.Implementation
             obj.Status = model.Status;
             base.Update(obj);
         }
+
+        internal object GetByBranchId(int branchId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -138,7 +138,7 @@ namespace iClassic.Services.Implementation
             model.PhieuSanXuat.ToList().ForEach(t =>
             {
                 var objForUpdate = model.PhieuSanXuat.FirstOrDefault(m => m.Id == t.Id);
-                objForUpdate.HasVai = false;
+                objForUpdate.HasVai = t.MaVaiId.HasValue ? t.HasVai : false;
                 objForUpdate.Status = (int)TicketStatus.ChuaXuLy;
                 objForUpdate.DonGia = t.MaVaiId.HasValue
                     ? context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0
@@ -220,6 +220,7 @@ namespace iClassic.Services.Implementation
                 objForUpdate.ThoDoId = t.ThoDoId;
                 objForUpdate.ThoCatId = t.ThoCatId;
                 objForUpdate.ThoMayId = t.ThoMayId;
+                objForUpdate.HasVai = t.MaVaiId.HasValue ? t.HasVai : false;
                 objForUpdate.DonGia = t.MaVaiId.HasValue
                     ? context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0
                     : context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;

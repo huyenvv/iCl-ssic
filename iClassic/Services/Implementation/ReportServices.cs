@@ -145,18 +145,18 @@ namespace iClassic.Services.Implementation
 
         public IQueryable<ReportCustomChanelAdvertising> CustomerChanelAvertising(StatisticSearch model)
         {
-            var allCustomers = _customerRepository.GetAll().GroupBy(m => m.KenhQC)
+            var allCustomers = _customerRepository.GetByBranchId(model.BranchId).GroupBy(m => m.KenhQC)
                 .Select(m => new ReportCustomChanelAdvertising
                 {
                     Type = m.Key,
                     Count = m.Count()
                 });
-            return allCustomers.OrderBy(m=>m.Type);
+            return allCustomers.OrderBy(m => m.Type);
         }
 
         public IQueryable<ReportErrors> GetErrorsInProcessing(StatisticSearch model)
         {
-            var allErrors = _phieuSuaRepository.GetAll().Where(m => m.Type == (byte)PhieuSuaType.BaoHanh).GroupBy(m => new { m.ProblemBy, Name = m.ProblemBy.HasValue ? m.Tho.Name : string.Empty })
+            var allErrors = _phieuSuaRepository.Where(m => m.Type == (byte)PhieuSuaType.BaoHanh).GroupBy(m => new { m.ProblemBy, Name = m.ProblemBy.HasValue ? m.Tho.Name : string.Empty })
                 .Select(m => new ReportErrors
                 {
                     ThoId = m.Key.ProblemBy ?? 0,

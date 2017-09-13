@@ -172,6 +172,7 @@ namespace iClassic.Controllers
             return RedirectToAction("Details", new { id = id });
         }
         // GET: Invoicees/Delete/5
+        [Override.Authorize(RoleList.Admin, RoleList.SupperAdmin)]
         public async Task<ActionResult> Delete(int id = 0)
         {
             try
@@ -181,7 +182,7 @@ namespace iClassic.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 var obj = await _invoiceRepository.GetByIdAsync(id);
-                if (obj == null || !IsValidBranch(obj.BranchId) || obj.Status != (byte)TicketStatus.ChuaXuLy)
+                if (obj == null || !IsValidBranch(obj.BranchId))
                 {
                     return HttpNotFound();
                 }

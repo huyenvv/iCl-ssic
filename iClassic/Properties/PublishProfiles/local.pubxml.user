@@ -1731,6 +1731,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Scripts/iClassic.js">
       <publishTime>09/06/2017 17:26:38</publishTime>
     </File>
+    <File Include="Scripts/jquery-1.10.2.intellisense.js">
+      <publishTime>08/07/2017 14:16:08</publishTime>
+    </File>
     <File Include="Scripts/jquery-1.10.2.js">
       <publishTime>08/07/2017 14:16:08</publishTime>
     </File>
@@ -1748,6 +1751,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Scripts/jquery.unobtrusive-ajax.min.js">
       <publishTime>08/16/2017 16:33:28</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate-vsdoc.js">
+      <publishTime>08/07/2017 14:16:08</publishTime>
     </File>
     <File Include="Scripts/jquery.validate.js">
       <publishTime>08/07/2017 14:16:08</publishTime>

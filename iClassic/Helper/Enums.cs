@@ -23,11 +23,14 @@ namespace iClassic.Helper
 
     public enum PhieuSuaType
     {
-        [Description("Bảo hành")]
-        BaoHanh,
+        [Description("Bảo hành do thợ làm hỏng")]
+        BaoHanh,        
 
         [Description("Khách nhờ sửa")]
         KhachNhoSua,
+
+        [Description("Bảo hành khách tăng giảm kg")]
+        BaoHanhKhachTangGiamCan,
     }    
 
     public enum ReportTypes

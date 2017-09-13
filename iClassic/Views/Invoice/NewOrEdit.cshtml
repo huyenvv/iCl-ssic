@@ -67,13 +67,9 @@
                         @Html.ValidationMessageFor(model => model.NgayTra, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Status)
-                        <select name="Status" class="form-control">
-                            @foreach (var item in Helpers.GetTicketStatusList())
-                            {
-                                <option value="@item.Key" @(item.Key == Model.Status ? "selected" : "")>@item.Value</option>
-                            }
-                        </select>
+                        @Html.LabelFor(model => model.Status):
+                        @Html.Raw(Helpers.DrawStatusTicket((byte)TicketStatus.ChuaXuLy))
+                        @Html.HiddenFor(model => model.Status)
                         @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -171,7 +167,7 @@
 
     <script>
 
-        var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId}))".replace(/&quot;/g, '"'));
+        var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId,m.HasVai}))".replace(/&quot;/g, '"'));
         var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price}))".replace(/&quot;/g, '"'));
         var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
         var listTho = JSON.parse("@JsonConvert.SerializeObject(listTho.Select(m=> new {m.Id, m.Name, m.Type}))".replace(/&quot;/g, '"'));
@@ -227,6 +223,12 @@
                 var soluong = parseInt(obj.find(".soluong").val()) | 0;
                 var productTypeId = parseInt(obj.find("input[type='radio']:checked").val()) | 0;
 
+                // hide if customer has vai
+                if (loaivaiId == 0) {
+                    obj.find(".HasVai").parent().slideUp();
+                } else {
+                    obj.find(".HasVai").parent().slideDown();
+                }
                 var dongia = getPrice(loaivaiId, productTypeId);
                 var thanhtien = dongia * soluong;
                 obj.find(".giatien").html(formatMoney(thanhtien));
@@ -294,7 +296,7 @@
                 phieusx.ProductTypeId = parseInt(obj.find("input[type='radio']:checked").val()) | 0;
                 phieusx.MaVaiId = parseInt(obj.find("select.loaivai").val()) | 0;
                 phieusx.SoLuong = parseInt(obj.find(".soluong").val()) | 0;
-
+                phieusx.HasVai = obj.find(".HasVai").val() == 'true';
                 phieuSanXuatModels.push(phieusx);
             });
         }
@@ -310,13 +312,8 @@
                 html += "<div class='media'>";
                 html += "   <h4 class='text-warning'>" + (index + 1) + ".<span class='pull-right' onclick='removePhieuSx(this);'>x</span></h4>";
                 html += "   <div class='form-group'>";
-                html += "       <input type='hidden' name='PhieuSanXuat[" + index + "].Id' value='" + item.Id + "'  class='idsanpham'/>";
-                html += "       <input type='text' name='PhieuSanXuat[" + index + "].TenSanPham' value='" + item.TenSanPham + "' class='form-control tensanpham' placeholder='Tên sản phẩm' />";
-                html += "   </div>";
-                html += "   <div class='form-group'>";
                 html += "       <label>Loại sản phẩm ?</label>";
                 html += "       <br />";
-
                 var typecount = 0;
                 $.each(listProductType, function (i, product) {
                     var id = "rdoProductType" + index + "-" + typecount;
@@ -327,11 +324,15 @@
                     html += "   </div>";
                     typecount++;
                 });
-
+                html += "   </div>";
+                html += "   <div class='form-group'>";
+                html += "       <input type='hidden' name='PhieuSanXuat[" + index + "].Id' value='" + item.Id + "'  class='idsanpham'/>";
+                html += "       <label>Kiểu cách ?</label>";
+                html += "       <textarea name='PhieuSanXuat[" + index + "].TenSanPham' class='form-control tensanpham' placeholder='Kiểu cách'>" + item.TenSanPham + "</textarea>";
                 html += "   </div>";
                 html += "   <div class='form-group'>";
                 html += "       <div class='row'>";
-                html += "           <div class='col-sm-8'>";
+                html += "           <div class='col-sm-6'>";
                 html += "               <label>Loại vải</label>";
                 html += "               <select name='PhieuSanXuat[" + index + "].MaVaiId' class='select22 loaivai' data-placeholder='Nhập tên hoặc mã vải...' onchange='updateSoTienItem();'>";
                 $.each(loaiVai, function (i, vai) {
@@ -344,8 +345,15 @@
                 });
                 html += "               </select>";
                 html += "           </div>";
-                html += "           <div class='col-sm-4'>";
-                html += "           <div class='form-group'>";
+                html += "           <div class='col-sm-4' style='display: " + (item.MaVaiId ? 'block' : 'none') + "'>";
+                html += "               <label>Tình trạng vải</label>";
+                html += "               <select name='PhieuSanXuat[" + index + "].HasVai' class='form-control HasVai'>";
+                html += "                   <option value='true'" + (item.HasVai ? "selected" : "") + ">Đã mua vải</option>";
+                html += "                   <option value='false'" + (!item.HasVai ? "selected" : "") + ">Chưa mua vải</option>";
+                html += "               </select>";
+                html += "           </div>";
+                html += "           <div class='col-sm-2'>";
+                html += "               <div class='form-group'>";
                 html += "                    <label>Số lượng</label>";
                 html += "                    <input type='number' name='PhieuSanXuat[" + index + "].SoLuong' value='" + item.SoLuong + "' min='1' class='form-control soluong'  onchange='updateSoTienItem();' />";
                 html += "               </div>";
