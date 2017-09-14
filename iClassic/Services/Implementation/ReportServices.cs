@@ -136,7 +136,8 @@ namespace iClassic.Services.Implementation
                 .Select(m => new ReportCustomVip
                 {
                     Customer = m,
-                    SoLanMay = m.Invoice.Sum(n => n.PhieuSanXuat.Count),
+                    SoSanPhamDaMay = m.Invoice.Sum(n => n.PhieuSanXuat.Count),
+                    SoLanMay = m.Invoice.Count,
                     SoLanSua = m.Invoice.Sum(n => n.PhieuSua.Count),
                     Total = m.Invoice.Sum(n => (double?)n.Total) ?? 0
                 });

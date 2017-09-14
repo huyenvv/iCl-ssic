@@ -106,11 +106,12 @@
                     <td>
                         @Html.Raw(Helpers.DrawStatusTicket(item.Status))
                     </td>
-                    <td>
+                    <td>                        
                         @if (item.PhieuSanXuat.Count > 0)
                         {
-                            var soluongchuamua = item.PhieuSanXuat.Count(m => !m.HasVai);
-                            var soluongdamua = item.PhieuSanXuat.Count - soluongchuamua;
+                            var soluongchuamua = item.PhieuSanXuat.Count(m => m.MaVaiId.HasValue && !m.HasVai);
+                            var soluongdamua = item.PhieuSanXuat.Count(m => m.MaVaiId.HasValue && m.HasVai);
+                            var soluongmangvaiden = item.PhieuSanXuat.Count - soluongchuamua - soluongdamua;
 
                             if (soluongdamua > 0)
                             {
@@ -121,9 +122,14 @@
                             {
                                 <div class="text-danger">Chưa mua: <strong>@soluongchuamua</strong></div>
                             }
+                            if (soluongmangvaiden > 0)
+                            {
+                                <div class="text-info">Khách mang vải đến: <strong>@soluongmangvaiden</strong></div>
+                            }
                         }
-                        else
+                        else if (item.PhieuSua.Count > 0)
                         {
+
                             <span>Khách chỉ sửa đồ</span>
                         }
                     </td>

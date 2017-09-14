@@ -10,6 +10,7 @@ namespace iClassic.Models
         public Customer Customer { get; set; }
         public int SoLanSua { get; set; }
         public int SoLanMay { get; set; }
+        public int SoSanPhamDaMay { get; set; }
         public double Total { get; set; }
     }
 }

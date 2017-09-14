@@ -956,11 +956,9 @@
     <Content Include="Views\Statistic\Index.cshtml" />
     <Content Include="Views\PhieuChi\Index.cshtml" />
     <Content Include="Views\Invoice\Index.cshtml" />
-    <Content Include="Views\PhieuSua\Index.cshtml" />
     <Content Include="Views\Account\Settings.cshtml" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\PhieuChi\NewOrEdit.cshtml" />
-    <Content Include="Views\PhieuSua\NewOrEdit.cshtml" />
     <Content Include="Views\Invoice\NewOrEdit.cshtml" />
     <Content Include="Views\Invoice\Print.cshtml" />
     <Content Include="Views\ProductType\Index.cshtml" />
