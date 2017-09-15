@@ -44,6 +44,17 @@
                         @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
+                        @Html.LabelFor(model => model.Group)
+                        <select name="Group" class="form-control">
+                            @foreach (var item in Constant.CustomerGroup)
+                            {
+                                <option value="@item.Key" @(item.Key == Model.Group ? "selected" : "")>@item.Value</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Group, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
                         @Html.LabelFor(model => model.KenhQC)
                         <select name="KenhQC" class="form-control">
                             @foreach (var item in Constant.ListKenhQuangCao)

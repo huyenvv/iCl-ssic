@@ -2,11 +2,13 @@
 @model iClassic.Models.ReportProfit
 
 @{
-    ViewBag.Title = "Doanh thu";
+    var searchModel = ViewBag.SearchModel as iClassic.Models.StatisticSearch;
+
+    ViewBag.Title = "Doanh thu " + (searchModel.StartDate.HasValue ? "từ ngày: " + searchModel.StartDate.Value.ToString("dd/MM/yyyy") : "từ trước") +
+        (searchModel.EndDate.HasValue ? " đến ngày: " + searchModel.EndDate.Value.ToString("dd/MM/yyyy") : " đến nay");
     ViewBag.Class = "fa fa-bar-chart-o";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Thống kê</a>" +
                           "<span>" + ViewBag.Title + "</span>";
-    var searchModel = ViewBag.SearchModel as iClassic.Models.StatisticSearch;
 }
 
 <div class="row mb10 mt10">
@@ -29,34 +31,53 @@
                 </div>
                 <button class="btn btn-lightblue" type="submit">Tìm kiếm</button>
             </div>
-            <hr />
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="text-center">Thống kê thời gian từ ngày: @(searchModel.StartDate.HasValue?searchModel.StartDate.Value.ToString("dd/MM/yyyy"):"")
-                    đến ngày: @(searchModel.EndDate.HasValue ? searchModel.EndDate.Value.ToString("dd/MM/yyyy") : "")
-                    </h3>
-                    <h4>
-                        Tổng doanh thu:
-                        <strong class="text-primary">
-                            @Model.Thu.ToString("N0") ₫
-                        </strong>
-                    </h4>
-                    <h4>
-                        Tổng đã chi:
-                        <strong class="text-danger">
-                            @Model.Chi.ToString("N0") ₫
-                        </strong>
-                    </h4>
-                    <h4>
-                        Tổng lợi nhuận:
-                        <strong class="text-success">
-                            @Model.LoiNhuan.ToString("N0") ₫
-                        </strong>
-                    </h4>
-                </div>
+            <br />
+            <div class="table-responsive">
+                <table class="table">
+
+                    <tr>
+                        <td>
+                            <h4>Tổng doanh thu (Gồm hóa đơn đã chốt + chưa chốt):</h4>
+                        </td>
+                        <td>
+                            <h4 class="text-primary">
+                                @Model.TongThuThucTe.ToString("N0") ₫
+                            </h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Tổng doanh thu (Chỉ hóa đơn đã chốt):</h4>
+                        </td>
+                        <td>
+                            <h4 class="text-primary">
+                                @Model.Thu.ToString("N0") ₫
+                            </h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>Tổng đã chi:</h4>
+                        </td>
+                        <td>
+                            <h4 class="text-danger">
+                                @Model.Chi.ToString("N0") ₫
+                            </h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h4>Tổng lợi nhuận:</h4></td>
+                        <td>
+                            <h4 class="text-success">
+                                @Model.LoiNhuan.ToString("N0") ₫
+                            </h4>
+                        </td>
+                    </tr>
+
+                </table>
             </div>
         </div>
-    </div>    
+    </div>
 }
 
 @section Styles{

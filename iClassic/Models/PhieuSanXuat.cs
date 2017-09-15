@@ -16,6 +16,7 @@ namespace iClassic.Models
     {
         public int Id { get; set; }
         public string TenSanPham { get; set; }
+        public string DangNguoi { get; set; }
         public Nullable<int> MaVaiId { get; set; }
         public int SoLuong { get; set; }
         public int Status { get; set; }
@@ -27,11 +28,11 @@ namespace iClassic.Models
         public int ThoMayId { get; set; }
         public int ThoDoId { get; set; }
     
+        public virtual Invoice Invoice { get; set; }
         public virtual LoaiVai LoaiVai { get; set; }
         public virtual ProductType ProductType { get; set; }
         public virtual Tho Tho { get; set; }
         public virtual Tho Tho1 { get; set; }
         public virtual Tho Tho2 { get; set; }
-        public virtual Invoice Invoice { get; set; }
     }
 }

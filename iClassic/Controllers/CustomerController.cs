@@ -43,7 +43,7 @@ namespace iClassic.Controllers
             var model = await _customerRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new Customer() { BranchId = CurrentBranchId };
+                model = new Customer() { BranchId = CurrentBranchId, Group = (byte)CustomerTypes.ThongThuong };
             }
             CreateListProductTypeViewBag();
             return View(model);
@@ -56,7 +56,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenKH,Address,SDT,ProductTypeValue,BranchId,Note,KenhQC,DangNguoi")] Customer model, HttpPostedFileBase fileImage)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,TenKH,Address,SDT,ProductTypeValue,BranchId,Note,KenhQC,DangNguoi,Group")] Customer model, HttpPostedFileBase fileImage)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace iClassic.Controllers
                 _log.Info(ex.ToString());
             }
             return RedirectToAction("Index");
-        }       
+        }
 
         protected override void Dispose(bool disposing)
         {

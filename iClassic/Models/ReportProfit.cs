@@ -7,6 +7,6 @@ namespace iClassic.Models
 {
     public class ReportProfit : ReportGraphResult
     {
-
+        public double TongThuThucTe { get; set; }
     }
 }

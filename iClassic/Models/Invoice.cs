@@ -17,8 +17,8 @@ namespace iClassic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Invoice()
         {
-            this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
             this.PhieuSua = new HashSet<PhieuSua>();
+            this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
         }
     
         public int Id { get; set; }
@@ -37,10 +37,10 @@ namespace iClassic.Models
         public System.DateTime ModifiedDate { get; set; }
     
         public virtual Branch Branch { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
     }
 }

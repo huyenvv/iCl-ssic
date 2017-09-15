@@ -24,14 +24,14 @@ namespace iClassic.Helper
     public enum PhieuSuaType
     {
         [Description("Bảo hành do thợ làm hỏng")]
-        BaoHanh,        
+        BaoHanh,
 
         [Description("Khách nhờ sửa")]
         KhachNhoSua,
 
         [Description("Bảo hành khách tăng giảm kg")]
         BaoHanhKhachTangGiamCan,
-    }    
+    }
 
     public enum ReportTypes
     {
@@ -56,5 +56,17 @@ namespace iClassic.Helper
 
         [Description("Thợ may")]
         May = 3
+    }
+
+    public enum CustomerTypes
+    {
+        [Description("Thông thường")]
+        ThongThuong = 1,
+
+        [Description("Tiềm năng")]
+        TiemNang = 2,
+
+        [Description("VIP")]
+        VIP = 3
     }
 }

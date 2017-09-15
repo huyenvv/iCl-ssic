@@ -11,7 +11,7 @@
 <div class="btn-invoice">
     @if (Model.Status == (byte)iClassic.Helper.TicketStatus.DangXuLy)
     {
-        <a class="btn btn-warning btnConfirm" href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DaXuLy})"><i class="fa fa-scissors mr5"></i>Đã xử lý</a>
+        <a class="btn btn-warning btnConfirm" href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DaXuLy})"><i class="glyphicon glyphicon-check mr5"></i>Đã xử lý</a>
     }
     @if (Model.Status == (byte)iClassic.Helper.TicketStatus.DaXuLy)
     {
@@ -34,7 +34,7 @@
     <style>
         .btn-group {
             margin-bottom: 0;
-        }
+        }        
     </style>
 }
 

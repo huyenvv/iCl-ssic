@@ -23,8 +23,8 @@ namespace iClassic.Models
         public Nullable<int> ProblemBy { get; set; }
         public int ThoId { get; set; }
     
+        public virtual Invoice Invoice { get; set; }
         public virtual Tho Tho { get; set; }
         public virtual Tho Tho1 { get; set; }
-        public virtual Invoice Invoice { get; set; }
     }
 }

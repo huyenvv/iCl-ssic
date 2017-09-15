@@ -27,6 +27,8 @@ namespace iClassic.Controllers
             model.ChuaMay = _invoiceRepository.Count(CurrentBranchId, TicketStatus.ChuaXuLy);
             model.DaMayChuaTra = _invoiceRepository.Count(CurrentBranchId, TicketStatus.DaXuLy);
             model.DangXuly = _invoiceRepository.Count(CurrentBranchId, TicketStatus.DangXuLy);
+
+            model.ChuaMuaVai = _invoiceRepository.CountChuaMuaVai(CurrentBranchId);
             return View(model);
         }
     }

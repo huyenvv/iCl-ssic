@@ -59,6 +59,11 @@ namespace iClassic.Services.Implementation
                 );
             }
 
+            if (model.StatusVai.HasValue)
+            {
+                list = list.Where(m => m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && n.HasVai == model.StatusVai.Value));
+            }
+
             var sortNameUpper = !string.IsNullOrEmpty(model.SortName) ? model.SortName.ToUpper() : "";
             if (model.SortOrder == SortDirection.Ascending)
             {
@@ -118,15 +123,19 @@ namespace iClassic.Services.Implementation
         }
 
         public IQueryable<Invoice> GetByDateRange(int branchId, DateTime? startDate, DateTime? endDate)
-        {
-            var statusDone = (byte)TicketStatus.DaTraChoKhach;
-            return Where(m => m.BranchId == branchId && m.Status == statusDone && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
+        {            
+            return Where(m => m.BranchId == branchId && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
         }
 
         public int Count(int branchId, TicketStatus status)
         {
             var stt = (byte)status;
             return Where(m => m.BranchId == branchId && m.Status == stt).Count();
+        }
+
+        public int CountChuaMuaVai(int branchId)
+        {
+            return Where(m => m.BranchId == branchId && m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && !n.HasVai)).Count();
         }
 
         public override void Insert(Invoice model)

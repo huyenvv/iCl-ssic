@@ -24,5 +24,13 @@ namespace iClassic.Helper
             {5, "Khách vãng lai"},
             {6, "Người quen"},
         };
+
+        public static Dictionary<int, string> CustomerGroup = new Dictionary<int, string>()
+        {
+            {0, "-Tất cả-"},
+            {1, CustomerTypes.ThongThuong.GetDescription()},
+            {2, CustomerTypes.TiemNang.GetDescription()},
+            {3, CustomerTypes.VIP.GetDescription()}
+        };
     }
 }

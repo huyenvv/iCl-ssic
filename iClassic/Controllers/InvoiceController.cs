@@ -50,7 +50,7 @@ namespace iClassic.Controllers
                 model = new Invoice
                 {
                     NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
-                    NgayTra = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
+                    NgayTra = DateTime.Now.AddDays(SoNgayTraSauKhiSua),
                     BranchId = CurrentBranchId
                 };
             }

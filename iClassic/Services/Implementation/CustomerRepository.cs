@@ -41,6 +41,11 @@ namespace iClassic.Services.Implementation
                 list = list.Where(m => m.BranchId == model.BranchId);
             }
 
+            if (model.Group > 0)
+            {
+                list = list.Where(m => m.Group == model.Group);
+            }
+
             if (!string.IsNullOrWhiteSpace(model.SearchText))
             {
                 model.SearchText = model.SearchText.ToUpper();
@@ -69,9 +74,9 @@ namespace iClassic.Services.Implementation
                     case "ADDRESS":
                         list = list.OrderBy(m => m.Address);
                         break;
-                    //case "SODO":
-                    //    list = list.OrderBy(m => m.SoDo);
-                    //    break;
+                    case "GROUP":
+                        list = list.OrderBy(m => m.Group);
+                        break;
                     case "CREATEDATE":
                         list = list.OrderBy(m => m.Created);
                         break;
@@ -96,9 +101,9 @@ namespace iClassic.Services.Implementation
                     case "ADDRESS":
                         list = list.OrderByDescending(m => m.Address);
                         break;
-                    //case "SODO":
-                    //    list = list.OrderByDescending(m => m.SoDo);
-                    //    break;
+                    case "GROUP":
+                        list = list.OrderByDescending(m => m.Group);
+                        break;
                     case "CREATEDATE":
                         list = list.OrderByDescending(m => m.Created);
                         break;
@@ -131,6 +136,7 @@ namespace iClassic.Services.Implementation
             obj.BranchId = model.BranchId;
             obj.DangNguoi = model.DangNguoi;
             obj.KenhQC = model.KenhQC;
+            obj.Group = model.Group;
 
             var listNew = model.ProductTypeValue.Where(m => !obj.ProductTypeValue.Any(n => n.ProductTypeFieldId == m.ProductTypeFieldId));
             var lisUpdate = model.ProductTypeValue.Where(m => obj.ProductTypeValue.Any(n => n.ProductTypeFieldId == m.ProductTypeFieldId));

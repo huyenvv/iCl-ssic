@@ -80,7 +80,7 @@
                 <div class="panel-heading">
                     <div class="panel-btns">
                         <a href="" class="minimize">−</a>
-                        <h4>Sản phẩm cần may? <span id="soluongspcanmay"></span></h4>
+                        <h4>Sản phẩm cần may? (<span id="soluongspcanmay"></span>)</h4>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -96,7 +96,7 @@
                 <div class="panel-heading">
                     <div class="panel-btns">
                         <a href="" class="minimize">−</a>
-                        <h4>Sản phẩm cần sửa? <span id="soluongspcansua"></span></h4>
+                        <h4>Sản phẩm cần sửa? (<span id="soluongspcansua"></span>)</h4>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -113,7 +113,7 @@
     <div class="">
         @if (Model.Id > 0)
         {
-            <a class="btn btn-warning" href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DangXuLy})" onclick="return btnConfirmXuLy();"><i class="glyphicon glyphicon-hand-up mr5"></i>Xử lý</a>
+            <a class="btn btn-default btn-xuly"  href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DangXuLy})" onclick="return btnConfirmXuLy();"><i class="fa fa-scissors mr5"></i>Xử lý</a>
             <div class="btn-group">
                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-print"></i> In <span class="caret"></span>
@@ -128,7 +128,7 @@
         }
     </div>
     <div class="mb40 mt10">
-        <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit()">@(Model.Id > 0 ? "Lưu" : "Tạo mới")</button>
+        <button class="btn btn-lightblue" type="submit" onclick="return beforeSubmit();">@(Model.Id > 0 ? "Lưu" : "Tạo mới")</button>
         <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
     </div>
 }
@@ -154,6 +154,11 @@
 
         .btn-group {
             margin-bottom: 0;
+        }
+
+        .btn-xuly{
+            background: #777;
+            color:#fff;
         }
     </style>
 }
@@ -399,7 +404,7 @@
             });
             box.html(html);
 
-            $("#soluongspcanmay").html("(" + phieuSanXuatModels.length + ")");
+            $("#soluongspcanmay").html(phieuSanXuatModels.length);
 
             jQuery(".select22").select2({
                 width: '100%'
@@ -412,6 +417,14 @@
                 var value = $this.val().replace(/,/g, '');
                 $this.val(value);
             });
+
+            var countPhieuSx = parseInt($("#soluongspcanmay").text()) | 0;
+            var countSua = parseInt($("#soluongspcansua").text()) | 0;
+            if (countPhieuSx == 0 && countSua == 0) {
+                alert("Không có sản phẩm may hoặc sản phẩm sửa nào!");
+                return false;
+            }
+            return true;
         }
 
         function btnConfirmXuLy() {
@@ -540,7 +553,7 @@
             });
             box.html(html);
 
-            $("#soluongspcansua").html("(" + phieuSuaModels.length + ")");
+            $("#soluongspcansua").html(phieuSuaModels.length);
 
             var currentPosition = $(document).scrollTop();
             $('.price').maskMoney({ precision: 0 });

@@ -18,10 +18,10 @@ namespace iClassic.Models
         public Branch()
         {
             this.AspNetUsers = new HashSet<AspNetUsers>();
-            this.Customer = new HashSet<Customer>();
+            this.Invoice = new HashSet<Invoice>();
             this.LoaiVai = new HashSet<LoaiVai>();
             this.PhieuChi = new HashSet<PhieuChi>();
-            this.Invoice = new HashSet<Invoice>();
+            this.Customer = new HashSet<Customer>();
         }
     
         public int Id { get; set; }
@@ -33,12 +33,12 @@ namespace iClassic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Customer> Customer { get; set; }
+        public virtual ICollection<Invoice> Invoice { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LoaiVai> LoaiVai { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuChi> PhieuChi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Invoice> Invoice { get; set; }
+        public virtual ICollection<Customer> Customer { get; set; }
     }
 }

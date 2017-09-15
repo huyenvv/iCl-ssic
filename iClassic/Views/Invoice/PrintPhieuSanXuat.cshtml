@@ -78,7 +78,7 @@
                         Mã KH: <strong>@Model.Customer.MaKH</strong> <br>
                         Khách hàng:<strong> @Model.Customer.TenKH</strong> <br>
                         Ngày thử:<strong> @Model.NgayThu.ToString("dd/MM/yyyy")</strong><br />
-                        Ngày lấy:<strong> @Model.NgayTra.ToString("dd/MM/yyyy")</strong><br />
+                        Ngày lấy:<strong> @Model.NgayTra.AddDays(-3).ToString("dd/MM/yyyy")</strong><br />
                     </address>
                 </td>
             </tr>

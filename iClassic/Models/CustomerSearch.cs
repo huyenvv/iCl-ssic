@@ -8,5 +8,7 @@ namespace iClassic.Models
     public class CustomerSearch : SortPagingBase
     {
         public int BranchId { get; set; }
+
+        public int Group { get; set; }
     }
 }

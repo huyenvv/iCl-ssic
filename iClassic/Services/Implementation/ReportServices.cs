@@ -120,10 +120,18 @@ namespace iClassic.Services.Implementation
 
         public ReportProfit GetProfit(StatisticSearch model)
         {
-            var tongThu = _invoiceRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (double?)(m.Total));
+            var statusDone = (byte)TicketStatus.DaTraChoKhach;
+
+            var tongthuThucTe = _invoiceRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate)
+                .Sum(m => m.Status == statusDone ? (double?)(m.Total) :
+                            (double?)(m.DatCoc));
+            var tongThu = _invoiceRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate)
+                .Where(m => m.Status == statusDone)
+                .Sum(m => (double?)(m.Total));
             var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (double?)(m.SoTien));
 
             var profit = new ReportProfit();
+            profit.TongThuThucTe = tongthuThucTe ?? 0;
             profit.Thu = tongThu ?? 0;
             profit.Chi = tongChi ?? 0;
             profit.LoiNhuan = profit.Thu - profit.Chi;

@@ -50,6 +50,9 @@
                 <a href="javascript:void(0)" class="sortField" data-sortName="SolanSua">Sản phẩm đã sửa</a>
             </th>
             <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="NhomKH">Nhóm KH</a>
+            </th>
+            <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Total">Tổng tiền</a>
             </th>
         </tr>
@@ -74,6 +77,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.SoLanSua)
+                    </td>
+                    <td>
+                        @(((CustomerTypes)item.Customer.Group).GetDescription())
                     </td>
                     <td>
                         @item.Total.ToString("N0") ₫

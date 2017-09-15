@@ -25,6 +25,7 @@
     <div class="row">
         <div class="col-md-3">
             <select name="Status" class="form-control" onchange="this.form.submit();">
+                <option value="">-Tất cả-</option>
                 @foreach (var item in Helpers.GetTicketStatusList())
                 {
                     <option value="@item.Key" @(item.Key == searchModel.Status ? "selected" : "")>@item.Value</option>
