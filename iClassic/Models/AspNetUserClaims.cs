@@ -12,17 +12,13 @@ namespace iClassic.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PhieuChi
+    public partial class AspNetUserClaims
     {
         public int Id { get; set; }
-        public string MucChi { get; set; }
-        public double SoTien { get; set; }
-        public string NguoiNhanPhieu { get; set; }
-        public int BranchId { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime Created { get; set; }
+        public string UserId { get; set; }
+        public string ClaimType { get; set; }
+        public string ClaimValue { get; set; }
     
-        public virtual Branch Branch { get; set; }
         public virtual AspNetUsers AspNetUsers { get; set; }
     }
 }

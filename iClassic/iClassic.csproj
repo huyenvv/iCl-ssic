@@ -232,6 +232,9 @@
     <Compile Include="Models\AspNetRoles.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AspNetUserClaims.cs">
+      <DependentUpon>iClassic.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AspNetUsers.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
@@ -974,6 +977,8 @@
     <Content Include="Views\Tho\Index.cshtml" />
     <Content Include="Views\Tho\NewOrEdit.cshtml" />
     <Content Include="Views\Statistic\CustomerChanelAvertising.cshtml" />
+    <Content Include="Views\Customer\_FormPartial.cshtml" />
+    <Content Include="Views\Customer\_NewOrEditPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

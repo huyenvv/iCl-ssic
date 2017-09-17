@@ -91,7 +91,6 @@ namespace iClassic.Services.Implementation
 
         public override void Insert(PhieuChi model)
         {
-            model.Created = DateTime.Now;
             base.Insert(model);
         }
 
@@ -102,6 +101,7 @@ namespace iClassic.Services.Implementation
             obj.SoTien = model.SoTien;
             obj.NguoiNhanPhieu = model.NguoiNhanPhieu;
             obj.BranchId = model.BranchId;
+            obj.Created = model.Created;
             base.Update(obj);
         }
     }

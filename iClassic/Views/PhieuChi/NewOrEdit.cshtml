@@ -41,6 +41,11 @@
                         @Html.TextAreaFor(model => model.NguoiNhanPhieu, new { @class = "form-control", rows = "5" })
                         @Html.ValidationMessageFor(model => model.NguoiNhanPhieu, "", new { @class = "text-danger" })
                     </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Created)
+                        <input type="text" name="Created" value="@Model.Created.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                        @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,9 +53,13 @@
     <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 }
-
+@section Styles {
+    <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" />
+}
 @section Scripts {
     <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
+<script src="@Url.Content("~/Scripts/moment.min.js")"></script>
+<script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
     <script>
         function beforeSubmit() {
             var sotienObj = $("#SoTien");
@@ -58,7 +67,12 @@
             sotienObj.val(value);
         }
         $(function () {
-            $('#SoTien').maskMoney({ precision: 0});
+            $('#SoTien').maskMoney({ precision: 0 });
+            $('#SoTien').focus();
+
+            $('.datepicker').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm:ss'
+            });
         })
     </script>
     @Scripts.Render("~/bundles/jqueryval")

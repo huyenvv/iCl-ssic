@@ -91,7 +91,7 @@
 
                                     @if (item.MaVaiId.HasValue && item.HasVai)
                                     {
-                                        if (item.Status == (byte)TicketStatus.DangXuLy)
+                                        if (Model.Status == (byte)TicketStatus.DangXuLy)
                                         {
                                             <div class="btn-group mr5">
                                                 <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -111,7 +111,7 @@
 
                                     @if (item.MaVaiId.HasValue && !item.HasVai)
                                     {
-                                        if (item.Status == (byte)TicketStatus.DangXuLy)
+                                        if (Model.Status == (byte)TicketStatus.DangXuLy)
                                         {
                                             <div class="btn-group mr5">
                                                 <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">

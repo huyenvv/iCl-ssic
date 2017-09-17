@@ -25,57 +25,72 @@
 {
     @Html.AntiForgeryToken()
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-btns">
+                        <a href="" class="minimize">−</a>
+                        <h4>Thông tin hóa đơn</h4>
+                    </div>
+                </div>
                 <div class="panel-body">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.Id)
                     @Html.HiddenFor(model => model.BranchId)
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.CustomerId)
-                        @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
-                        <a href="@Url.Action("NewOrEdit","Customer")">+ Thêm mới khách hàng</a>
-                        @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            @Html.HiddenFor(m => m.Total)
-                            Tổng tiền: <strong id="lblTotal" class="text-success">0 ₫</strong>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.DatCoc)
-                        @Html.EditorFor(model => model.DatCoc, new { htmlAttributes = new { @class = "form-control price", onchange = "updateSoTienItem();" } })
-                        @Html.ValidationMessageFor(model => model.DatCoc, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.ChietKhau)
-                        @Html.EditorFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control price", onchange = "updateSoTienItem();" } })
-                        @Html.ValidationMessageFor(model => model.ChietKhau, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        <label class="text-danger">Còn thiếu: <strong id="TienConThieu"></strong></label>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.NgayThu)
-                        <input type="text" name="NgayThu" value="@Model.NgayThu.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
-                        @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.NgayTra)
-                        <input type="text" name="NgayTra" value="@Model.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
-                        @Html.ValidationMessageFor(model => model.NgayTra, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Status):
-                        @Html.Raw(Helpers.DrawStatusTicket((byte)TicketStatus.ChuaXuLy))
-                        @Html.HiddenFor(model => model.Status)
-                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CustomerId)
+                                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
+                                <a href="javascript:void(0)" onclick="showNewCustomerModal()">+ Thêm mới khách hàng</a>
+                                @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NgayThu)
+                                <input type="text" name="NgayThu" value="@Model.NgayThu.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                                @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NgayTra)
+                                <input type="text" name="NgayTra" value="@Model.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                                @Html.ValidationMessageFor(model => model.NgayTra, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Status):
+                                @Html.Raw(Helpers.DrawStatusTicket((byte)TicketStatus.ChuaXuLy))
+                                @Html.HiddenFor(model => model.Status)
+                                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group tongtiengroup">
+                                <label>
+                                    @Html.HiddenFor(m => m.Total)
+                                    Tổng tiền: <strong id="lblTotal" class="text-success">0 ₫</strong>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DatCoc)
+                                @Html.EditorFor(model => model.DatCoc, new { htmlAttributes = new { @class = "form-control price", onchange = "updateSoTienItem();" } })
+                                @Html.ValidationMessageFor(model => model.DatCoc, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ChietKhau)
+                                @Html.EditorFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control price", onchange = "updateSoTienItem();" } })
+                                @Html.ValidationMessageFor(model => model.ChietKhau, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <label class="text-danger">Còn thiếu: <strong id="TienConThieu"></strong></label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-btns">
@@ -92,6 +107,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-btns">
@@ -113,18 +130,18 @@
     <div class="">
         @if (Model.Id > 0)
         {
-            <a class="btn btn-default btn-xuly"  href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DangXuLy})" onclick="return btnConfirmXuLy();"><i class="fa fa-scissors mr5"></i>Xử lý</a>
-            <div class="btn-group">
-                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-print"></i> In <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Đơn hàng</a></li>
-                    <li><a href="@Url.Action("PrintPhieuSanXuat", new { id = Model.Id })" target="_blank">Phiếu sản xuất</a></li>
-                    <li><a href="@Url.Action("PrintPhieuSua", new { id = Model.Id })" target="_blank">Phiếu sửa</a></li>
-                </ul>
-            </div>
-            <a class="btn btn-danger btnConfirm" href="@Url.Action("Delete", new {id=Model.Id})"><i class="fa fa-times mr5"></i>Xóa</a>
+        <a class="btn btn-default btn-xuly" href="@Url.Action("Proccess", new {id=Model.Id, status = (byte)TicketStatus.DangXuLy})" onclick="return btnConfirmXuLy();"><i class="fa fa-scissors mr5"></i>Xử lý</a>
+        <div class="btn-group">
+            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-print"></i> In <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="@Url.Action("Print", new { id = Model.Id })" target="_blank">Đơn hàng</a></li>
+                <li><a href="@Url.Action("PrintPhieuSanXuat", new { id = Model.Id })" target="_blank">Phiếu sản xuất</a></li>
+                <li><a href="@Url.Action("PrintPhieuSua", new { id = Model.Id })" target="_blank">Phiếu sửa</a></li>
+            </ul>
+        </div>
+        <a class="btn btn-danger btnConfirm" href="@Url.Action("Delete", new {id=Model.Id})"><i class="fa fa-times mr5"></i>Xóa</a>
         }
     </div>
     <div class="mb40 mt10">
@@ -136,6 +153,12 @@
 @section Styles {
     <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" />
     <style>
+        @@media (min-width: 768px) {
+            .tongtiengroup {
+                margin: 50px 0 27px 0;
+            }
+        }
+
         .widget-bloglist .media {
             border-bottom: 1px solid #1d2939;
             padding-bottom: 10px;
@@ -156,9 +179,9 @@
             margin-bottom: 0;
         }
 
-        .btn-xuly{
+        .btn-xuly {
             background: #777;
-            color:#fff;
+            color: #fff;
         }
     </style>
 }
@@ -171,8 +194,30 @@
     @*Sản phẩm may*@
 
     <script>
+        function addCustomerSuccessed(model) {
+            $('#modalDefault').modal('hide');
+            $('#CustomerId').select2('destroy');
+            $('#CustomerId').append('<option value="' + model.Id + '">' + model.TenKH + '(' + model.SDT + ')</option>');
+            $('#CustomerId').val(model.Id);
+            $('#CustomerId').select2({ width: '100%' });
+        }
+        function showNewCustomerModal() {
+            $.ajax({
+                url: '@Url.Action("NewOrEdit", "Customer")',
+                dataType: "html",
+                type: "GET",
+                contentType: 'application/html; charset=utf-8',
+                success: function (data) {
+                    $("#modalDefault").html(data);
+                    $("#modalDefault").modal("show");
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                }
+            });
+        }
 
-        var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId,m.HasVai}))".replace(/&quot;/g, '"'));
+        var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.DangNguoi,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId,m.HasVai}))".replace(/&quot;/g, '"'));
         var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price}))".replace(/&quot;/g, '"'));
         var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
         var listTho = JSON.parse("@JsonConvert.SerializeObject(listTho.Select(m=> new {m.Id, m.Name, m.Type}))".replace(/&quot;/g, '"'));
@@ -207,6 +252,7 @@
                 var newPhieusx = {
                     Id: 0,
                     TenSanPham: '',
+                    DangNguoi: '',
                     ProductTypeId: 0,
                     MaVaiId: 0,
                     SoLuong: 1,
@@ -298,6 +344,7 @@
                 var phieusx = {};
                 phieusx.Id = parseInt(obj.find(".idsanpham").val()) | 0;
                 phieusx.TenSanPham = obj.find(".tensanpham").val();
+                phieusx.DangNguoi = obj.find(".DangNguoi").val();
                 phieusx.ProductTypeId = parseInt(obj.find("input[type='radio']:checked").val()) | 0;
                 phieusx.MaVaiId = parseInt(obj.find("select.loaivai").val()) | 0;
                 phieusx.SoLuong = parseInt(obj.find(".soluong").val()) | 0;
@@ -332,8 +379,12 @@
                 html += "   </div>";
                 html += "   <div class='form-group'>";
                 html += "       <input type='hidden' name='PhieuSanXuat[" + index + "].Id' value='" + item.Id + "'  class='idsanpham'/>";
-                html += "       <label>Kiểu cách ?</label>";
-                html += "       <textarea name='PhieuSanXuat[" + index + "].TenSanPham' class='form-control tensanpham' placeholder='Kiểu cách'>" + item.TenSanPham + "</textarea>";
+                html += "       <label>Kiểu cách</label>";
+                html += "       <textarea name='PhieuSanXuat[" + index + "].TenSanPham' class='form-control tensanpham' placeholder='Kiểu cách'>" + (item.TenSanPham ? item.TenSanPham : '') + "</textarea>";
+                html += "   </div>";
+                html += "   <div class='form-group'>";
+                html += "       <label>Dáng người</label>";
+                html += "       <textarea name='PhieuSanXuat[" + index + "].DangNguoi' class='form-control DangNguoi' placeholder='Dáng người'>" + (item.DangNguoi ? item.DangNguoi : '') + "</textarea>";
                 html += "   </div>";
                 html += "   <div class='form-group'>";
                 html += "       <div class='row'>";

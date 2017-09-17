@@ -225,6 +225,7 @@ namespace iClassic.Services.Implementation
                 objForUpdate.ProductTypeId = t.ProductTypeId;
                 objForUpdate.SoLuong = t.SoLuong;
                 objForUpdate.TenSanPham = t.TenSanPham;
+                objForUpdate.DangNguoi = t.DangNguoi;
                 objForUpdate.Status = t.Status;
                 objForUpdate.ThoDoId = t.ThoDoId;
                 objForUpdate.ThoCatId = t.ThoCatId;

@@ -15,3 +15,9 @@
 .headermenu .btn-group {
     height: 50px;
 }
+
+.header-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

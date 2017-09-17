@@ -1,0 +1,36 @@
+﻿@using iClassic.Helper;
+@using iClassic.Models;
+@model Customer
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Thêm mới khách hàng</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Ajax.BeginForm("NewOrEdit", "Customer", null, new AjaxOptions
+                    {
+                        HttpMethod = "Post",
+                        AllowCache = false,
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = "modalDefault"
+                    }, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new { @class = "text-danger" })
+                        @Html.Partial("_FormPartial", Model)
+                        <div class="form-group">
+                            <input type="submit" value="Tạo mới" class="btn btn-primary" />
+                            <a href="javascript:void(0)" class="btn btn-default" data-dismiss="modal">Đóng</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryvalajax")
+

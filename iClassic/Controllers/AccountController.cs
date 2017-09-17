@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using iClassic.Models;
+using iClassic.Services.Implementation;
 using log4net;
 using iClassic.Helper;
 
@@ -20,10 +21,12 @@ namespace iClassic.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private ILog _log;
+        private UsersRepository _usersRepository;
 
         public AccountController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            _usersRepository = new UsersRepository(_entities);
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -31,6 +34,7 @@ namespace iClassic.Controllers
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
             UserManager = userManager;
             SignInManager = signInManager;
+            _usersRepository = new UsersRepository(_entities);
         }
 
         public ApplicationSignInManager SignInManager
@@ -84,7 +88,14 @@ namespace iClassic.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    var user = _usersRepository.FirstOrDefault(m => m.UserName.ToUpper() == model.Email.ToUpper());
+                    if (user.IsActive)
+                    {
+                        SessionHelpers.Set(Constant.SESSION_CurrentBrach, user.Branch);
+                        return RedirectToLocal(returnUrl);
+                    }
+                    ModelState.AddModelError("", "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị để được giải đáp.");
+                    return View(model);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -412,12 +423,7 @@ namespace iClassic.Controllers
         public ViewResult AccessDenied()
         {
             return View();
-        }
-
-        public ViewResult Settings()
-        {
-            return View(CurrentUser);
-        }
+        }        
 
         public ActionResult ChangePassword()
         {
@@ -453,6 +459,11 @@ namespace iClassic.Controllers
             return PartialView("_ChangePasswordPartial", model);
         }
 
+        public ViewResult Settings()
+        {
+            return View(CurrentUser);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Settings([Bind(Include = "Id,Name,UserName,PhoneNumber,Email")] AspNetUsers model)
@@ -465,7 +476,7 @@ namespace iClassic.Controllers
 
                     user.Email = string.IsNullOrWhiteSpace(model.Email) ? user.UserName + "@iclassic.vn" : model.Email;
                     user.PhoneNumber = model.PhoneNumber;
-                    user.Name = model.Name;
+                    user.Name = model.Name;                    
 
                     var result = await UserManager.UpdateAsync(user);
                     if (result.Succeeded)

@@ -43,17 +43,7 @@ namespace iClassic.Controllers
         {
             get
             {
-                Branch branch;
-                if (SessionHelpers.Exist(Constant.SESSION_CurrentBrach))
-                {
-                    branch = SessionHelpers.Get(Constant.SESSION_CurrentBrach) as Branch;
-                }
-                else
-                {
-                    branch = CurrentUser.Branch;
-                    SessionHelpers.Set(Constant.SESSION_CurrentBrach, branch);
-                }
-                return branch;
+                return CurrentUser.Branch;
             }
         }
 
@@ -61,7 +51,7 @@ namespace iClassic.Controllers
         {
             get
             {
-                return CurrentBrach.Id;
+                return CurrentUser.BranchId;
             }
         }
 

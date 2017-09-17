@@ -40,7 +40,7 @@ namespace iClassic.Controllers
             var model = await _phieuChiRepository.GetByIdAsync(id);
             if (model == null)
             {
-                model = new PhieuChi { BranchId = CurrentBranchId };
+                model = new PhieuChi { BranchId = CurrentBranchId, Created = DateTime.Now};
             }
             return View(model);
         }
@@ -50,7 +50,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,MucChi,SoTien,NguoiNhanPhieu,BranchId")] PhieuChi model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,MucChi,SoTien,NguoiNhanPhieu,BranchId,Created")] PhieuChi model)
         {
             try
             {

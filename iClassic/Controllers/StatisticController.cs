@@ -42,7 +42,7 @@ namespace iClassic.Controllers
             var data = _reportServices.GetProfit(model);
             ViewBag.SearchModel = model;
             return View(data);
-        }
+        }        
 
         public ActionResult CustomerVip(StatisticSearch model)
         {

@@ -44,7 +44,7 @@
             <th><a href="javascript:void(0)" class="sortField" data-sortName="Branch">Chi nhánh</a></th>
             <th><a href="javascript:void(0)" class="sortField" data-sortName="Role">Vai trò</a></th>
             <th><a href="javascript:void(0)" class="sortField" data-sortName="Status">Trạng thái</a></th>
-            <th><a href="javascript:void(0)" class="sortField" data-sortName="PhoneNumber">Số điện thoại</a></th>
+            <th>Số hóa đơn đã xử lý</th>
             <th></th>
         </tr>
 
@@ -58,6 +58,9 @@
                     </td>
                     <td>
                         <a href="@Url.Action("EditEmployee", new { id = item.Id })" title="@item.Name">@item.Name</a>
+                        <br />
+                        @(!string.IsNullOrEmpty(item.PhoneNumber) ? "(" + item.PhoneNumber + ")" : "")
+
                     </td>
                     <td>
                         <a href="@Url.Action("EditEmployee", new { id = item.Id })" title="@item.UserName">@item.UserName</a>
@@ -82,7 +85,7 @@
                         }
                     </td>
                     <td>
-                        @item.PhoneNumber
+                        @item.Invoice1.Count
                     </td>
                     <td>
                         <a href="@Url.Action("EditEmployee", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>

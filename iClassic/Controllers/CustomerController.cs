@@ -8,6 +8,7 @@ using PagedList;
 using log4net;
 using iClassic.Helper;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace iClassic.Controllers
 {
@@ -46,6 +47,11 @@ namespace iClassic.Controllers
                 model = new Customer() { BranchId = CurrentBranchId, Group = (byte)CustomerTypes.ThongThuong };
             }
             CreateListProductTypeViewBag();
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_NewOrEditPartial", model);
+            }
             return View(model);
         }
 
@@ -86,6 +92,11 @@ namespace iClassic.Controllers
 
                     ShowMessageSuccess(Message.Update_Successfully);
 
+                    if (Request.IsAjaxRequest())
+                    {
+                        var data = JsonConvert.SerializeObject(new { model.Id, model.TenKH, model.SDT });
+                        return Content("<script>addCustomerSuccessed(" + data + ");</script>");
+                    }
                     return RedirectToAction("Index");
                 }
             }
@@ -96,6 +107,11 @@ namespace iClassic.Controllers
                 _log.Info(ex.ToString());
             }
             CreateListProductTypeViewBag();
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_NewOrEditPartial", model);
+            }
             return View(model);
         }
 
