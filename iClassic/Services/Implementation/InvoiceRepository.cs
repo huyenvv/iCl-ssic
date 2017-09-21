@@ -178,16 +178,19 @@ namespace iClassic.Services.Implementation
             if (model.Status == (byte)TicketStatus.ChuaXuLy && status == (byte)TicketStatus.DangXuLy)
             {
                 model.Status = (byte)TicketStatus.DangXuLy;
+                model.ModifiedDate = DateTime.Now;
             }
 
             if (model.Status == (byte)TicketStatus.DangXuLy && status == (byte)TicketStatus.DaXuLy)
             {
                 model.Status = (byte)TicketStatus.DaXuLy;
+                model.ModifiedDate = DateTime.Now;
             }
 
             if (model.Status == (byte)TicketStatus.DaXuLy && status == (byte)TicketStatus.DaTraChoKhach)
             {
                 model.Status = (byte)TicketStatus.DaTraChoKhach;
+                model.ModifiedDate = DateTime.Now;
             }
         }
 

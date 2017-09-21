@@ -52,6 +52,9 @@ namespace iClassic.Services.Implementation
                     case "NAME":
                         list = list.OrderBy(m => m.Name);
                         break;
+                    case "ISFITTING":
+                        list = list.OrderBy(m => m.IsFitting);
+                        break;
                     default:
                         list = list.OrderBy(m => m.Id);
                         break;
@@ -69,7 +72,10 @@ namespace iClassic.Services.Implementation
                         break;
                     case "NAME":
                         list = list.OrderByDescending(m => m.Name);
-                        break;                    
+                        break;
+                    case "ISFITTING":
+                        list = list.OrderByDescending(m => m.IsFitting);
+                        break;
                     default:
                         list = list.OrderByDescending(m => m.Id);
                         break;
@@ -88,6 +94,7 @@ namespace iClassic.Services.Implementation
             var obj = GetById(model.Id);
             obj.Note = model.Note;
             obj.Name = model.Name;
+            obj.IsFitting = model.IsFitting;
             var listNew = model.ProductTyeField.Where(m => !obj.ProductTyeField.Any(n => n.Id == m.Id));
             var lisUpdate = model.ProductTyeField.Where(m => obj.ProductTyeField.Any(n => n.Id == m.Id));
             var listRemove = obj.ProductTyeField.Where(m => !model.ProductTyeField.Any(n => n.Id == m.Id));

@@ -18,13 +18,14 @@ namespace iClassic.Models
         public string NoiDung { get; set; }
         public Nullable<double> SoTien { get; set; }
         public int Status { get; set; }
+        public int StatusGiaoNhan { get; set; }
         public int Type { get; set; }
         public int InvoiceId { get; set; }
         public Nullable<int> ProblemBy { get; set; }
         public int ThoId { get; set; }
     
+        public virtual Invoice Invoice { get; set; }
         public virtual Tho Tho { get; set; }
         public virtual Tho Tho1 { get; set; }
-        public virtual Invoice Invoice { get; set; }
     }
 }

@@ -49,9 +49,6 @@ namespace iClassic.Services.Implementation
                     case "MAVAI":
                         list = list.OrderBy(m => m.MaVai);
                         break;
-                    case "SOTIENNHAPVAO":
-                        list = list.OrderBy(m => m.SoTienNhapVao);
-                        break;
                     default:
                         list = list.OrderBy(m => m.Created);
                         break;
@@ -66,9 +63,6 @@ namespace iClassic.Services.Implementation
                         break;
                     case "MAVAI":
                         list = list.OrderByDescending(m => m.MaVai);
-                        break;
-                    case "SOTIENNHAPVAO":
-                        list = list.OrderByDescending(m => m.SoTienNhapVao);
                         break;
                     default:
                         list = list.OrderByDescending(m => m.Created);
@@ -89,7 +83,6 @@ namespace iClassic.Services.Implementation
             var obj = GetById(model.Id);
             obj.MaVai = model.MaVai;
             obj.Name = model.Name;
-            obj.SoTienNhapVao = model.SoTienNhapVao;
             obj.Note = model.Note;
             obj.BranchId = model.BranchId;
 

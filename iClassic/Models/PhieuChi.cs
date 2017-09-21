@@ -22,7 +22,7 @@ namespace iClassic.Models
         public string CreateBy { get; set; }
         public System.DateTime Created { get; set; }
     
-        public virtual Branch Branch { get; set; }
         public virtual AspNetUsers AspNetUsers { get; set; }
+        public virtual Branch Branch { get; set; }
     }
 }

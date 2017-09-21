@@ -46,11 +46,6 @@
                 </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="SoTienNhapVao">
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().SoTienNhapVao)
-                </a>
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Note)
             </th>
             <th>
@@ -73,10 +68,7 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @(item.SoTienNhapVao.HasValue ? item.SoTienNhapVao.Value.ToString("N0") + " ₫" : "")
-                    </td>
+                    </td>                    
                     <td>
                         @Html.DisplayFor(modelItem => item.Note)
                     </td>

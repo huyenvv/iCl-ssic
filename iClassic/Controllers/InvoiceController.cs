@@ -131,6 +131,8 @@ namespace iClassic.Controllers
                     if (model == null)
                         return RedirectToAction("Index");
 
+                    model.ModifiedBy = CurrentUserId;
+                    model.ModifiedDate = DateTime.Now;
                     _phieuSanXuatRepository.ChangeStatusMuaVai(idPhieusx, status);
                     _phieuSanXuatRepository.Save();
 
@@ -156,6 +158,7 @@ namespace iClassic.Controllers
                     if (model == null)
                         return RedirectToAction("Index");
 
+                    model.ModifiedBy = CurrentUserId;
                     _invoiceRepository.ChangeStatus(model, status);
                     _invoiceRepository.Save();
 

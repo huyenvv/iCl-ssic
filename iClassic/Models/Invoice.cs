@@ -36,8 +36,6 @@ namespace iClassic.Models
         public System.DateTime Created { get; set; }
         public System.DateTime ModifiedDate { get; set; }
     
-        public virtual AspNetUsers UserCreate { get; set; }
-        public virtual AspNetUsers UserModified { get; set; }
         public virtual Branch Branch { get; set; }
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

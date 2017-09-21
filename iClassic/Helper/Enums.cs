@@ -21,6 +21,42 @@ namespace iClassic.Helper
         DaTraChoKhach
     }
 
+    public enum PhieuSanXuatStatus
+    {
+        [Description("Chưa xử lý")]
+        None,
+
+        [Description("Đã giao cho thợ cắt")]
+        DaGiaoChoThoCat,
+
+        [Description("Đã nhận từ thợ cắt")]
+        DaNhanTuThoCat,
+
+        [Description("Đã giao cho thợ may")]
+        DaGiaoChoThoMay,
+
+        [Description("Đã nhận từ thợ may")]
+        DaNhanTuThoMay,
+
+        [Description("Đã giao cho khách")]
+        DaGiaoChoKhach
+    }
+
+    public enum PhieuSuaStatus
+    {
+        [Description("Chưa xử lý")]
+        None,
+
+        [Description("Đã giao cho thợ sửa")]
+        DaGiaoChoTho,
+
+        [Description("Đã nhận từ thợ sửa")]
+        DaNhanThoSua,
+
+        [Description("Đã giao cho khách")]
+        DaGiaoChoKhach
+    }
+
     public enum PhieuSuaType
     {
         [Description("Bảo hành do thợ làm hỏng")]
@@ -55,7 +91,10 @@ namespace iClassic.Helper
         Cat = 2,
 
         [Description("Thợ may")]
-        May = 3
+        May = 3,
+
+        [Description("Thợ cắt & may")]
+        CatMay = 4
     }
 
     public enum CustomerTypes

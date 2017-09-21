@@ -52,7 +52,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,SoTienNhapVao,ProductTypeLoaiVai,PhieuSanXuat,MaVai,Note,BranchId")] LoaiVai model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Name,ProductTypeLoaiVai,PhieuSanXuat,MaVai,Note,BranchId")] LoaiVai model)
         {
             try
             {

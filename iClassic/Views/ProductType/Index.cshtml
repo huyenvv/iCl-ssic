@@ -37,6 +37,9 @@
                 <a href="javascript:void(0)" class="sortField" data-sortName="Name">Tên sản phẩm</a>              
             </th>
             <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="IsFitting">Có fitting không/</a>
+            </th>
+            <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Price">
                     @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().Price)
                 </a>
@@ -52,6 +55,16 @@
                 </td>
                 <td>
                     @item.Price.ToString("N0") ₫
+                </td>
+                <td>
+                    @if (item.IsFitting)
+                    {
+                        <label class="label label-success">Có</label>
+                    }
+                    else
+                    {
+                        <label class="label label-default">Không</label>
+                    }
                 </td>
                 <td>
                     <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>

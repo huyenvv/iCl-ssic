@@ -7,6 +7,6 @@ namespace iClassic.Models
 {
     public class ProductTypeSearch : SortPagingBase
     {
-
+        
     }
 }

@@ -232,9 +232,6 @@
     <Compile Include="Models\AspNetRoles.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AspNetUserClaims.cs">
-      <DependentUpon>iClassic.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\AspNetUsers.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
@@ -243,6 +240,9 @@
     </Compile>
     <Compile Include="Models\Metadata\ThoMetadata.cs" />
     <Compile Include="Models\ReportCustomChanelAdvertising.cs" />
+    <Compile Include="Models\Salary.cs">
+      <DependentUpon>iClassic.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ThoSearch.cs" />
     <Compile Include="Models\Invoice.cs">
       <DependentUpon>iClassic.tt</DependentUpon>

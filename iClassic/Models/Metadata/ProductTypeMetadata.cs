@@ -10,6 +10,9 @@ namespace iClassic.Models.Metadata
         [Display(Name = "Tiền công may sản phẩm")]
         public double Price { get; set; }
 
+        [Display(Name = "Có fitting không?")]
+        public bool IsFitting { get; set; }
+
         [Display(Name = "Ghi chú")]
         public string Note { get; set; }
 

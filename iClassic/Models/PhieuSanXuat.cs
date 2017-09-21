@@ -20,6 +20,7 @@ namespace iClassic.Models
         public Nullable<int> MaVaiId { get; set; }
         public int SoLuong { get; set; }
         public int Status { get; set; }
+        public int StatusGiaoNhan { get; set; }
         public bool HasVai { get; set; }
         public int InvoiceId { get; set; }
         public int ProductTypeId { get; set; }
@@ -28,11 +29,11 @@ namespace iClassic.Models
         public int ThoMayId { get; set; }
         public int ThoDoId { get; set; }
     
+        public virtual Invoice Invoice { get; set; }
         public virtual LoaiVai LoaiVai { get; set; }
         public virtual ProductType ProductType { get; set; }
         public virtual Tho Tho { get; set; }
         public virtual Tho Tho1 { get; set; }
         public virtual Tho Tho2 { get; set; }
-        public virtual Invoice Invoice { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace iClassic.Models
         public int ProductTypeFieldId { get; set; }
         public int CustomerId { get; set; }
     
-        public virtual ProductTyeField ProductTyeField { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual ProductTyeField ProductTyeField { get; set; }
     }
 }

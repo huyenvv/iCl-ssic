@@ -12,13 +12,17 @@ namespace iClassic.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUserClaims
+    public partial class Salary
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
-        public string ClaimType { get; set; }
-        public string ClaimValue { get; set; }
+        public System.DateTime FromDate { get; set; }
+        public System.DateTime ToDate { get; set; }
+        public Nullable<int> WorkerId { get; set; }
+        public string EmployeeId { get; set; }
+        public double TotalSalary { get; set; }
+        public string Note { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
+        public virtual Tho Tho { get; set; }
     }
 }
