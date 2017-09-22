@@ -7,15 +7,6 @@
     <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
   </EntityType>
-  <EntityType Name="AspNetUserClaims">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="ClaimType" Type="nvarchar(max)" />
-    <Property Name="ClaimValue" Type="nvarchar(max)" />
-  </EntityType>
   <EntityType Name="AspNetUserRoles">
     <Key>
       <PropertyRef Name="UserId" />
@@ -32,6 +23,7 @@
     <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" />
     <Property Name="Email" Type="nvarchar" MaxLength="256" />
+    <Property Name="Salary" Type="float" />
     <Property Name="IsActive" Type="bit" Nullable="false" />
     <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
     <Property Name="PasswordHash" Type="nvarchar(max)" />
@@ -81,7 +73,7 @@
     <Property Name="Total" Type="float" Nullable="false" />
     <Property Name="DatCoc" Type="float" />
     <Property Name="ChietKhau" Type="float" />
-    <Property Name="NgayThu" Type="datetime" Nullable="false" />
+    <Property Name="NgayThu" Type="datetime" />
     <Property Name="NgayTra" Type="datetime" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="CustomerId" Type="int" Nullable="false" />
@@ -98,7 +90,6 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="MaVai" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
-    <Property Name="SoTienNhapVao" Type="float" />
     <Property Name="Note" Type="nvarchar" MaxLength="500" />
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
     <Property Name="BranchId" Type="int" Nullable="false" />
@@ -126,6 +117,7 @@
     <Property Name="MaVaiId" Type="int" />
     <Property Name="SoLuong" Type="int" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="StatusGiaoNhan" Type="int" Nullable="false" />
     <Property Name="HasVai" Type="bit" Nullable="false" />
     <Property Name="InvoiceId" Type="int" Nullable="false" />
     <Property Name="ProductTypeId" Type="int" Nullable="false" />
@@ -142,6 +134,7 @@
     <Property Name="NoiDung" Type="nvarchar" MaxLength="500" Nullable="false" />
     <Property Name="SoTien" Type="float" />
     <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="StatusGiaoNhan" Type="int" Nullable="false" />
     <Property Name="Type" Type="int" Nullable="false" />
     <Property Name="InvoiceId" Type="int" Nullable="false" />
     <Property Name="ProblemBy" Type="int" />
@@ -163,6 +156,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
     <Property Name="Price" Type="float" Nullable="false" />
+    <Property Name="IsFitting" Type="bit" Nullable="false" />
     <Property Name="Note" Type="nvarchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="ProductTypeLoaiVai">
@@ -183,6 +177,18 @@
     <Property Name="ProductTypeFieldId" Type="int" Nullable="false" />
     <Property Name="CustomerId" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="Salary">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="FromDate" Type="date" Nullable="false" />
+    <Property Name="ToDate" Type="date" Nullable="false" />
+    <Property Name="WorkerId" Type="int" />
+    <Property Name="EmployeeId" Type="nvarchar" MaxLength="128" />
+    <Property Name="TotalSalary" Type="float" Nullable="false" />
+    <Property Name="Note" Type="nvarchar" MaxLength="500" />
+  </EntityType>
   <EntityType Name="Tho">
     <Key>
       <PropertyRef Name="Id" />
@@ -190,6 +196,9 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="XuongId" Type="int" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="Salary" Type="float" />
+    <Property Name="SalaryPercent" Type="int" />
     <Property Name="Type" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_AspNetUsers_Branch">
@@ -225,20 +234,6 @@
       </Principal>
       <Dependent Role="Customer">
         <PropertyRef Name="BranchId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AspNetUserClaims">
-        <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -548,9 +543,32 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Salary_AspNetUsers">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+    <End Role="Salary" Type="Self.Salary" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Salary">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Salary_Tho">
+    <End Role="Tho" Type="Self.Tho" Multiplicity="0..1" />
+    <End Role="Salary" Type="Self.Salary" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tho">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Salary">
+        <PropertyRef Name="WorkerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="iClassicModelStoreContainer">
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Branch" EntityType="Self.Branch" Schema="dbo" store:Type="Tables" />
@@ -564,6 +582,7 @@
     <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductTypeLoaiVai" EntityType="Self.ProductTypeLoaiVai" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductTypeValue" EntityType="Self.ProductTypeValue" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Salary" EntityType="Self.Salary" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tho" EntityType="Self.Tho" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_AspNetUsers_Branch" Association="Self.FK_AspNetUsers_Branch">
       <End Role="Branch" EntitySet="Branch" />
@@ -576,10 +595,6 @@
     <AssociationSet Name="FK_Customer_Branch" Association="Self.FK_Customer_Branch">
       <End Role="Branch" EntitySet="Branch" />
       <End Role="Customer" EntitySet="Customer" />
-    </AssociationSet>
-    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
     </AssociationSet>
     <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -676,6 +691,14 @@
     <AssociationSet Name="FK_ProductTypeValue_ProductTyeField" Association="Self.FK_ProductTypeValue_ProductTyeField">
       <End Role="ProductTyeField" EntitySet="ProductTyeField" />
       <End Role="ProductTypeValue" EntitySet="ProductTypeValue" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Salary_AspNetUsers" Association="Self.FK_Salary_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Salary" EntitySet="Salary" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Salary_Tho" Association="Self.FK_Salary_Tho">
+      <End Role="Tho" EntitySet="Tho" />
+      <End Role="Salary" EntitySet="Salary" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

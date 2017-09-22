@@ -5,23 +5,25 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="adf06491c88c4bb8a265b6624547db2f" Name="Diagram1">
-        <EntityTypeShape EntityType="iClassicModel.AspNetRoles" Width="1.5" PointX="1.5" PointY="23.75" />
-        <EntityTypeShape EntityType="iClassicModel.AspNetUsers" Width="1.5" PointX="1.5" PointY="16.875" />
-        <EntityTypeShape EntityType="iClassicModel.Branch" Width="1.5" PointX="1.5" PointY="26.875" />
-        <EntityTypeShape EntityType="iClassicModel.Customer" Width="1.5" PointX="1.5" PointY="11.375" />
-        <EntityTypeShape EntityType="iClassicModel.Invoice" Width="1.5" PointX="3.75" PointY="13.125" />
-        <EntityTypeShape EntityType="iClassicModel.LoaiVai" Width="1.5" PointX="0.75" PointY="30.75" />
-        <EntityTypeShape EntityType="iClassicModel.PhieuChi" Width="1.5" PointX="3.75" PointY="22" />
-        <EntityTypeShape EntityType="iClassicModel.PhieuSanXuat" Width="1.5" PointX="3" PointY="5.25" />
-        <EntityTypeShape EntityType="iClassicModel.PhieuSua" Width="1.5" PointX="6" PointY="2" />
-        <EntityTypeShape EntityType="iClassicModel.ProductTyeField" Width="1.5" PointX="4.5" PointY="27.375" />
-        <EntityTypeShape EntityType="iClassicModel.ProductType" Width="1.5" PointX="0.75" PointY="2.5" />
-        <EntityTypeShape EntityType="iClassicModel.ProductTypeLoaiVai" Width="1.5" PointX="4" PointY="19.125" />
-        <EntityTypeShape EntityType="iClassicModel.ProductTypeValue" Width="1.5" PointX="6.75" PointY="12.375" />
-        <EntityTypeShape EntityType="iClassicModel.Salary" Width="1.5" PointX="6" PointY="6.25" />
-        <EntityTypeShape EntityType="iClassicModel.Tho" Width="1.5" PointX="0.75" PointY="5.875" />
+        <EntityTypeShape EntityType="iClassicModel.AspNetRoles" Width="1.5" PointX="0.75" PointY="8.5" />
+        <EntityTypeShape EntityType="iClassicModel.AspNetUsers" Width="1.5" PointX="3" PointY="10.5" />
+        <EntityTypeShape EntityType="iClassicModel.Branch" Width="1.5" PointX="0.75" PointY="11.875" />
+        <EntityTypeShape EntityType="iClassicModel.Customer" Width="1.5" PointX="5.25" PointY="16.25" />
+        <EntityTypeShape EntityType="iClassicModel.Invoice" Width="1.5" PointX="10.5" PointY="16.125" />
+        <EntityTypeShape EntityType="iClassicModel.LoaiVai" Width="1.5" PointX="8.25" PointY="11.75" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuChi" Width="1.5" PointX="5.25" PointY="12" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuSanXuat" Width="1.5" PointX="12.75" PointY="13.875" />
+        <EntityTypeShape EntityType="iClassicModel.PhieuSua" Width="1.5" PointX="12.75" PointY="19.875" />
+        <EntityTypeShape EntityType="iClassicModel.ProductTyeField" Width="1.5" PointX="5.25" PointY="21.25" />
+        <EntityTypeShape EntityType="iClassicModel.ProductType" Width="1.5" PointX="8.25" PointY="8" />
+        <EntityTypeShape EntityType="iClassicModel.ProductTypeLoaiVai" Width="1.5" PointX="10.5" PointY="12.25" />
+        <EntityTypeShape EntityType="iClassicModel.ProductTypeValue" Width="1.5" PointX="7.5" PointY="17.25" />
+        <EntityTypeShape EntityType="iClassicModel.Salary" Width="1.5" PointX="5.25" PointY="8" />
+        <EntityTypeShape EntityType="iClassicModel.Tho" Width="1.5" PointX="3" PointY="5.625" />
         <AssociationConnector Association="iClassicModel.FK_AspNetUsers_Branch" />
         <AssociationConnector Association="iClassicModel.FK_Customer_AspNetUsers" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_UserCreate" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_UserModified" />
         <AssociationConnector Association="iClassicModel.FK_LoaiVai_AspNetUsers" />
         <AssociationConnector Association="iClassicModel.FK_PhieuChi_AspNetUsers" />
         <AssociationConnector Association="iClassicModel.FK_Salary_AspNetUsers" />

@@ -14,10 +14,7 @@ namespace iClassic.Models.Metadata
         [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Mã vải")]
         public string MaVai { get; set; }
-
-        [Display(Name = "Giá mua vào")]
-        public Nullable<double> SoTienNhapVao { get; set; }
-
+        
         [Display(Name = "Ghi chú")]
         public string Note { get; set; }
 

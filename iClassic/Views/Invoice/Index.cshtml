@@ -98,8 +98,8 @@
                     <td class="text-danger">
                         @((item.Total - item.DatCoc ?? 0 - (item.ChietKhau ?? 0)).ToString("N0")) ₫
                     </td>
-                    <td title="@item.NgayThu.ToString("dd/MM/yyyy HH:mm")">
-                        @item.NgayThu.ToString("dd/MM/yyyy")
+                    <td title="@(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")">
+                        @(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy"): "")
                     </td>
                     <td title="@item.NgayTra.ToString("dd/MM/yyyy HH:mm")">
                         @item.NgayTra.ToString("dd/MM/yyyy")

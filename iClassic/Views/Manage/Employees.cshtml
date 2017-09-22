@@ -45,6 +45,7 @@
             <th><a href="javascript:void(0)" class="sortField" data-sortName="Role">Vai trò</a></th>
             <th><a href="javascript:void(0)" class="sortField" data-sortName="Status">Trạng thái</a></th>
             <th>Số hóa đơn đã xử lý</th>
+            <th>Lương cứng</th>
             <th></th>
         </tr>
 
@@ -86,6 +87,9 @@
                     </td>
                     <td>
                         @item.Invoice1.Count
+                    </td>
+                    <td>
+                        @((item.Salary.HasValue? item.Salary.Value: 0).ToString("N0")) đ
                     </td>
                     <td>
                         <a href="@Url.Action("EditEmployee", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>

@@ -47,7 +47,7 @@
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(model => model.NgayThu)
-                                <input type="text" name="NgayThu" value="@Model.NgayThu.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                                <input type="text" name="NgayThu" value="@(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")" class="form-control datepicker" />
                                 @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group">

@@ -144,9 +144,9 @@ namespace iClassic.Services.Implementation
                 .Select(m => new ReportCustomVip
                 {
                     Customer = m,
-                    SoSanPhamDaMay = m.Invoice.Sum(n => n.PhieuSanXuat.Count),
+                    SoSanPhamDaMay = m.Invoice.Sum(n => (int?)n.PhieuSanXuat.Count) ?? 0,
                     SoLanMay = m.Invoice.Count,
-                    SoLanSua = m.Invoice.Sum(n => n.PhieuSua.Count),
+                    SoLanSua = m.Invoice.Sum(n => (int?)n.PhieuSua.Count) ?? 0,
                     Total = m.Invoice.Sum(n => (double?)n.Total) ?? 0
                 });
             return allCustomers;

@@ -78,7 +78,7 @@
           <Property Name="Total" Type="float" Nullable="false" />
           <Property Name="DatCoc" Type="float" />
           <Property Name="ChietKhau" Type="float" />
-          <Property Name="NgayThu" Type="datetime" Nullable="false" />
+          <Property Name="NgayThu" Type="datetime" />
           <Property Name="NgayTra" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
@@ -291,6 +291,30 @@
             </Principal>
             <Dependent Role="Invoice">
               <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_UserCreate">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_UserModified">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="ModifiedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -593,6 +617,14 @@
             <End Role="Customer" EntitySet="Customer" />
             <End Role="Invoice" EntitySet="Invoice" />
           </AssociationSet>
+          <AssociationSet Name="FK_Invoice_UserCreate" Association="Self.FK_Invoice_UserCreate">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_UserModified" Association="Self.FK_Invoice_UserModified">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
           <AssociationSet Name="FK_LoaiVai_AspNetUsers" Association="Self.FK_LoaiVai_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="LoaiVai" EntitySet="LoaiVai" />
@@ -701,6 +733,14 @@
           <AssociationSet Name="FK_Customer_AspNetUsers" Association="iClassicModel.FK_Customer_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_UserCreate" Association="iClassicModel.FK_Invoice_UserCreate">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_UserModified" Association="iClassicModel.FK_Invoice_UserModified">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Invoice" EntitySet="Invoice" />
           </AssociationSet>
           <AssociationSet Name="FK_LoaiVai_AspNetUsers" Association="iClassicModel.FK_LoaiVai_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -829,6 +869,8 @@
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Branch" Relationship="iClassicModel.FK_AspNetUsers_Branch" FromRole="AspNetUsers" ToRole="Branch" />
           <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_Customer_AspNetUsers" FromRole="AspNetUsers" ToRole="Customer" />
+          <NavigationProperty Name="Invoice" Relationship="iClassicModel.FK_Invoice_UserCreate" FromRole="AspNetUsers" ToRole="Invoice" />
+          <NavigationProperty Name="Invoice1" Relationship="iClassicModel.FK_Invoice_UserModified" FromRole="AspNetUsers" ToRole="Invoice" />
           <NavigationProperty Name="LoaiVai" Relationship="iClassicModel.FK_LoaiVai_AspNetUsers" FromRole="AspNetUsers" ToRole="LoaiVai" />
           <NavigationProperty Name="PhieuChi" Relationship="iClassicModel.FK_PhieuChi_AspNetUsers" FromRole="AspNetUsers" ToRole="PhieuChi" />
           <NavigationProperty Name="Salary1" Relationship="iClassicModel.FK_Salary_AspNetUsers" FromRole="AspNetUsers" ToRole="Salary" />
@@ -880,7 +922,7 @@
           <Property Name="Total" Type="Double" Nullable="false" />
           <Property Name="DatCoc" Type="Double" />
           <Property Name="ChietKhau" Type="Double" />
-          <Property Name="NgayThu" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NgayThu" Type="DateTime" Precision="3" />
           <Property Name="NgayTra" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
@@ -889,6 +931,8 @@
           <Property Name="BranchId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="AspNetUsers" Relationship="iClassicModel.FK_Invoice_UserCreate" FromRole="Invoice" ToRole="AspNetUsers" />
+          <NavigationProperty Name="AspNetUsers1" Relationship="iClassicModel.FK_Invoice_UserModified" FromRole="Invoice" ToRole="AspNetUsers" />
           <NavigationProperty Name="Branch" Relationship="iClassicModel.FK_Invoice_Branch1" FromRole="Invoice" ToRole="Branch" />
           <NavigationProperty Name="Customer" Relationship="iClassicModel.FK_Invoice_Customer" FromRole="Invoice" ToRole="Customer" />
           <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_Invoice" FromRole="Invoice" ToRole="PhieuSanXuat" />
@@ -1065,6 +1109,30 @@
             </Principal>
             <Dependent Role="Customer">
               <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_UserCreate">
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="iClassicModel.Invoice" Role="Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="CreateBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoice_UserModified">
+          <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="iClassicModel.Invoice" Role="Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="ModifiedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
