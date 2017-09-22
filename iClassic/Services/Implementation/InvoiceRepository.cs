@@ -61,7 +61,7 @@ namespace iClassic.Services.Implementation
 
             if (model.StatusVai.HasValue)
             {
-                list = list.Where(m => m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && n.HasVai == model.StatusVai.Value));
+                list = list.Where(m => m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && n.VaiType == model.StatusVai.Value));
             }
 
             var sortNameUpper = !string.IsNullOrEmpty(model.SortName) ? model.SortName.ToUpper() : "";
@@ -123,7 +123,7 @@ namespace iClassic.Services.Implementation
         }
 
         public IQueryable<Invoice> GetByDateRange(int branchId, DateTime? startDate, DateTime? endDate)
-        {            
+        {
             return Where(m => m.BranchId == branchId && (!startDate.HasValue || startDate <= m.NgayTra) && (!endDate.HasValue || m.NgayTra <= endDate));
         }
 
@@ -135,7 +135,7 @@ namespace iClassic.Services.Implementation
 
         public int CountChuaMuaVai(int branchId)
         {
-            return Where(m => m.BranchId == branchId && m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && !n.HasVai)).Count();
+            return Where(m => m.BranchId == branchId && m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && n.VaiType == (byte)VaiTypes.KhongCoSan)).Count();
         }
 
         public override void Insert(Invoice model)
@@ -147,11 +147,25 @@ namespace iClassic.Services.Implementation
             model.PhieuSanXuat.ToList().ForEach(t =>
             {
                 var objForUpdate = model.PhieuSanXuat.FirstOrDefault(m => m.Id == t.Id);
-                objForUpdate.HasVai = t.MaVaiId.HasValue ? t.HasVai : false;
+                objForUpdate.VaiType = t.VaiType;
                 objForUpdate.Status = (int)TicketStatus.ChuaXuLy;
-                objForUpdate.DonGia = t.MaVaiId.HasValue
-                    ? context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0
-                    : context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
+                objForUpdate.HasVai = false;
+
+                var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
+                switch ((VaiTypes)t.VaiType)
+                {
+                    case VaiTypes.KhachMangVaiDen:
+                        objForUpdate.DonGia = tienCong;
+                        break;
+                    case VaiTypes.KhongCoSan:
+                        var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0;
+                        objForUpdate.DonGia = tienCong + tienVai;
+                        objForUpdate.HasVai = t.HasVai;
+                        break;
+                    case VaiTypes.VaiMauCuaHang:
+                        objForUpdate.DonGia = tienCong + t.GiaVaiMau ?? 0;
+                        break;
+                }
             });
             model.PhieuSua.ToList().ForEach(t =>
             {
@@ -233,10 +247,23 @@ namespace iClassic.Services.Implementation
                 objForUpdate.ThoDoId = t.ThoDoId;
                 objForUpdate.ThoCatId = t.ThoCatId;
                 objForUpdate.ThoMayId = t.ThoMayId;
-                objForUpdate.HasVai = t.MaVaiId.HasValue ? t.HasVai : false;
-                objForUpdate.DonGia = t.MaVaiId.HasValue
-                    ? context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0
-                    : context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
+                objForUpdate.HasVai = false;
+
+                var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
+                switch ((VaiTypes)t.VaiType)
+                {
+                    case VaiTypes.KhachMangVaiDen:
+                        objForUpdate.DonGia = tienCong;
+                        break;
+                    case VaiTypes.KhongCoSan:
+                        var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0;
+                        objForUpdate.DonGia = tienCong + tienVai;
+                        objForUpdate.HasVai = t.HasVai;
+                        break;
+                    case VaiTypes.VaiMauCuaHang:
+                        objForUpdate.DonGia = tienCong + t.GiaVaiMau ?? 0;
+                        break;
+                }                
             });
             listRemove.ToList().ForEach(t => obj.PhieuSanXuat.Remove(t));
             #endregion

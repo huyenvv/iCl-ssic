@@ -132,6 +132,18 @@ namespace iClassic.Helper
             }
             return result;
         }
+
+        public static HashSet<KeyValuePair<int, string>> GetVaiTypeList()
+        {
+            var result = new HashSet<KeyValuePair<int, string>>();
+            var list = Enum.GetValues(typeof(VaiTypes));
+            foreach (int enumItem in list)
+            {
+                var keyValueItem = new KeyValuePair<int, string>(enumItem, ((VaiTypes)enumItem).GetDescription());
+                result.Add(keyValueItem);
+            }
+            return result;
+        }
         public static string DrawStatusTicket(int status)
         {
             var statusEnum = (TicketStatus)status;

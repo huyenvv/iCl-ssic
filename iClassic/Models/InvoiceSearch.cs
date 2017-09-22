@@ -9,7 +9,7 @@ namespace iClassic.Models
     {
         public int BranchId { get; set; }
         public int? Status { get; set; }
-        public bool? StatusVai { get; set; }
+        public int? StatusVai { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
     }

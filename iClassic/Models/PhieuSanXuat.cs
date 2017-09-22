@@ -21,13 +21,15 @@ namespace iClassic.Models
         public int SoLuong { get; set; }
         public int Status { get; set; }
         public int StatusGiaoNhan { get; set; }
-        public bool HasVai { get; set; }
+        public int VaiType { get; set; }
+        public Nullable<double> GiaVaiMau { get; set; }
         public int InvoiceId { get; set; }
         public int ProductTypeId { get; set; }
         public double DonGia { get; set; }
         public int ThoCatId { get; set; }
         public int ThoMayId { get; set; }
         public int ThoDoId { get; set; }
+        public bool HasVai { get; set; }
     
         public virtual Invoice Invoice { get; set; }
         public virtual LoaiVai LoaiVai { get; set; }
