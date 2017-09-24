@@ -206,6 +206,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\GiaoNhanController.cs" />
+    <Compile Include="Controllers\SalaryController.cs" />
     <Compile Include="Controllers\ThoController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\PhieuChiController.cs" />
@@ -243,6 +245,7 @@
     <Compile Include="Models\Salary.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SalarySearch.cs" />
     <Compile Include="Models\ThoSearch.cs" />
     <Compile Include="Models\Invoice.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
@@ -326,6 +329,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Base\GenericRepository.cs" />
     <Compile Include="Services\Base\IGenericRepository.cs" />
+    <Compile Include="Services\Implementation\SalaryRepository.cs" />
     <Compile Include="Services\Implementation\ThoRepository.cs" />
     <Compile Include="Services\Implementation\PhieuSanXuatRepository.cs" />
     <Compile Include="Services\Implementation\ProductTypeRepository.cs" />
@@ -979,6 +983,9 @@
     <Content Include="Views\Statistic\CustomerChanelAvertising.cshtml" />
     <Content Include="Views\Customer\_FormPartial.cshtml" />
     <Content Include="Views\Customer\_NewOrEditPartial.cshtml" />
+    <Content Include="Views\GiaoNhan\Index.cshtml" />
+    <Content Include="Views\Salary\Index.cshtml" />
+    <Content Include="Views\Salary\NewOrEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

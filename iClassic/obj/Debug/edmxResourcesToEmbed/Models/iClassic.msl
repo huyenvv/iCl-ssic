@@ -107,26 +107,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PhieuSanXuat">
-      <EntityTypeMapping TypeName="iClassicModel.PhieuSanXuat">
-        <MappingFragment StoreEntitySet="PhieuSanXuat">
-          <ScalarProperty Name="ThoDoId" ColumnName="ThoDoId" />
-          <ScalarProperty Name="ThoMayId" ColumnName="ThoMayId" />
-          <ScalarProperty Name="ThoCatId" ColumnName="ThoCatId" />
-          <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
-          <ScalarProperty Name="HasVai" ColumnName="HasVai" />
-          <ScalarProperty Name="StatusGiaoNhan" ColumnName="StatusGiaoNhan" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-          <ScalarProperty Name="MaVaiId" ColumnName="MaVaiId" />
-          <ScalarProperty Name="DangNguoi" ColumnName="DangNguoi" />
-          <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="PhieuSua">
       <EntityTypeMapping TypeName="iClassicModel.PhieuSua">
         <MappingFragment StoreEntitySet="PhieuSua">
@@ -183,19 +163,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Salary">
-      <EntityTypeMapping TypeName="iClassicModel.Salary">
-        <MappingFragment StoreEntitySet="Salary">
-          <ScalarProperty Name="Note" ColumnName="Note" />
-          <ScalarProperty Name="TotalSalary" ColumnName="TotalSalary" />
-          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
-          <ScalarProperty Name="WorkerId" ColumnName="WorkerId" />
-          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
-          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Tho">
       <EntityTypeMapping TypeName="iClassicModel.Tho">
         <MappingFragment StoreEntitySet="Tho">
@@ -217,5 +184,41 @@
         <ScalarProperty Name="Id" ColumnName="RoleId" />
       </EndProperty>
     </AssociationSetMapping>
+    <EntitySetMapping Name="PhieuSanXuat">
+      <EntityTypeMapping TypeName="iClassicModel.PhieuSanXuat">
+        <MappingFragment StoreEntitySet="PhieuSanXuat">
+          <ScalarProperty Name="HasVai" ColumnName="HasVai" />
+          <ScalarProperty Name="ThoDoId" ColumnName="ThoDoId" />
+          <ScalarProperty Name="ThoMayId" ColumnName="ThoMayId" />
+          <ScalarProperty Name="ThoCatId" ColumnName="ThoCatId" />
+          <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+          <ScalarProperty Name="GiaVaiMau" ColumnName="GiaVaiMau" />
+          <ScalarProperty Name="VaiType" ColumnName="VaiType" />
+          <ScalarProperty Name="StatusGiaoNhan" ColumnName="StatusGiaoNhan" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+          <ScalarProperty Name="MaVaiId" ColumnName="MaVaiId" />
+          <ScalarProperty Name="DangNguoi" ColumnName="DangNguoi" />
+          <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Salary">
+      <EntityTypeMapping TypeName="iClassicModel.Salary">
+        <MappingFragment StoreEntitySet="Salary">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="TotalSalary" ColumnName="TotalSalary" />
+          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+          <ScalarProperty Name="WorkerId" ColumnName="WorkerId" />
+          <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

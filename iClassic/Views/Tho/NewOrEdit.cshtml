@@ -36,7 +36,7 @@
                             <select name="Type" class="form-control">
                                 @foreach (var item in Helpers.GetDSThoTypeList())
                                 {
-                                    <option value="@item.Key" @(item.Key == Model.Id ? "selected" : "")>@item.Value</option>
+                                    <option value="@item.Key" @(item.Key == Model.Type ? "selected" : "")>@item.Value</option>
                                 }
                             </select>                           
                             @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })

@@ -53,7 +53,7 @@ namespace iClassic.Services.Implementation
 
             #region Build Data
             var data = new ReportGraphResult[column];
-            var tongThu = _invoiceRepository.GetByDateRange(model.BranchId, startDate, now);
+            var tongThu = _invoiceRepository.GetByDateRange(model.BranchId, startDate, now).Where(m => m.Status == (byte)TicketStatus.DaTraChoKhach);
             var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, startDate, now);
 
             for (int i = 1; i <= column; i++)
@@ -76,7 +76,7 @@ namespace iClassic.Services.Implementation
                 }
                 #endregion
 
-                var thu = tongThu.Where(m => startDate <= m.NgayTra && m.NgayTra <= endate).Sum(m => (double?)(m.Total));
+                var thu = tongThu.Where(m => startDate <= m.NgayTra && m.NgayTra <= endate).Sum(m => (double?)(m.Total - (double?)m.ChietKhau));
                 var chi = tongChi.Where(m => startDate <= m.Created && m.Created <= endate).Sum(m => (double?)(m.SoTien));
                 item.Thu = thu ?? 0;
                 item.Chi = chi ?? 0;
@@ -123,11 +123,11 @@ namespace iClassic.Services.Implementation
             var statusDone = (byte)TicketStatus.DaTraChoKhach;
 
             var tongthuThucTe = _invoiceRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate)
-                .Sum(m => m.Status == statusDone ? (double?)(m.Total) :
+                .Sum(m => m.Status == statusDone ? ((double?)(m.Total) - (double?)(m.ChietKhau)) :
                             (double?)(m.DatCoc));
             var tongThu = _invoiceRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate)
                 .Where(m => m.Status == statusDone)
-                .Sum(m => (double?)(m.Total));
+                .Sum(m => (double?)(m.Total) - (double?)(m.ChietKhau));
             var tongChi = _phieuChiRepository.GetByDateRange(model.BranchId, model.StartDate, model.EndDate).Sum(m => (double?)(m.SoTien));
 
             var profit = new ReportProfit();

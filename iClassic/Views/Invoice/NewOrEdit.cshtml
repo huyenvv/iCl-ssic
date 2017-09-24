@@ -45,9 +45,9 @@
                                 <a href="javascript:void(0)" onclick="showNewCustomerModal()">+ Thêm mới khách hàng</a>
                                 @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" style="display: @(Model.PhieuSanXuat.Any(m=>m.ProductType!=null && m.ProductType.IsFitting) ? "block": "none");">
                                 @Html.LabelFor(model => model.NgayThu)
-                                <input type="text" name="NgayThu" value="@(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")" class="form-control datepicker" />
+                                <input type="text" name="NgayThu" value="@(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")" class="form-control datepicker" id="NgayThu" />
                                 @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group">
@@ -80,7 +80,7 @@
                                 <div class="row">
                                     <div class="col-xs-5">
                                         <div class="input-group">
-                                            @Html.EditorFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control price", onchange = "changeChietKhau(1); updateSoTienItem();" } })
+                                            @Html.EditorFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control price", onchange = "changeChietKhau(1);" } })
                                             <span class="input-group-addon">đ</span>
                                         </div>
 
@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="col-xs-5">
                                         <div class="input-group mb15">
-                                            <input type="number" min="0" max="100" class="form-control percentChietKhau" onchange="changeChietKhau(2); updateSoTienItem();">
+                                            <input type="number" min="0" max="100" value="@(Model.ChietKhau.HasValue ? (Model.ChietKhau.Value * 100 /Model.Total): 0)" class="form-control percentChietKhau" onchange="changeChietKhau(2);">
                                             <span class="input-group-addon">%</span>
                                         </div>
                                     </div>
@@ -214,15 +214,19 @@
     <script>
         function changeChietKhau(type) {
             var tongTien = parseInt($("#Total").val()) | 0;
+            var chietKhau = parseInt($("#ChietKhau").val().replace(/,/g, '')) | 0;
             if (type == 1) {
-                var chietKhau = parseInt($("#ChietKhau").val().replace(/,/g, '')) | 0;
                 var percentChietKhau = tongTien == 0 || chietKhau == 0 ? 0 : (chietKhau * 100 / tongTien);
                 $(".percentChietKhau").val(percentChietKhau);
             } else {
                 var percentChietKhau = parseInt($(".percentChietKhau").val()) | 0;
-                var chietKhau = tongTien == 0 || percentChietKhau == 0 ? 0 : (percentChietKhau * tongTien / 100);
+                chietKhau = tongTien == 0 || percentChietKhau == 0 ? 0 : (percentChietKhau * tongTien / 100);
                 $("#ChietKhau").val(chietKhau);
             }
+
+            var datcoc = parseInt($("#DatCoc").val().replace(/,/g, '')) | 0;
+            var conthieu = tongTien - datcoc - chietKhau;
+            $("#TienConThieu").html(formatMoney(conthieu));
             $("#ChietKhau").focus();
         }
         function addCustomerSuccessed(model) {
@@ -249,7 +253,7 @@
         }
 
         var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.DangNguoi,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId,m.HasVai,m.VaiType, m.GiaVaiMau}))".replace(/&quot;/g, '"'));
-        var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price}))".replace(/&quot;/g, '"'));
+        var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price,m.IsFitting}))".replace(/&quot;/g, '"'));
         var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
         var vaiTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetVaiTypeList())".replace(/&quot;/g, '"'));
         var listTho = JSON.parse("@JsonConvert.SerializeObject(listTho.Select(m=> new {m.Id, m.Name, m.Type}))".replace(/&quot;/g, '"'));
@@ -296,6 +300,7 @@
 
         function updateSoTienItem() {
             var tongtien = 0;
+            var isShowNgayThu = false;
             $('#boxPhieuSanXuat .media').each(function (i, element) {
                 var obj = $(element);
 
@@ -339,20 +344,23 @@
 
             var datcoc = parseInt($("#DatCoc").val().replace(/,/g, '')) | 0;
             var chietKhau = parseInt($("#ChietKhau").val().replace(/,/g, '')) | 0;
+
+            if (tongtien > 0) {
+                var percentChietKhau = parseInt($(".percentChietKhau").val()) | 0;
+                if (percentChietKhau > 0) {
+                    chietKhau = percentChietKhau * tongtien / 100;
+                    $("#ChietKhau").val(chietKhau);
+                }
+            }
+
             var conthieu = tongtien - datcoc - chietKhau;
             $("#TienConThieu").html(formatMoney(conthieu));
         }
 
         function getPrice(vaiType, loaivaiId, productTypeId, giaVaiMau) {
             var dongia = 0;
-            var tiencong = 0;
-
-            $.each(listProductType, function (index, item) {
-                if (item.Id != productTypeId) return;
-
-                tiencong = item.Price;
-                return false;
-            });
+            var product = getProduct(productTypeId);
+            var tiencong = product.Price;
 
             if (vaiType == vaiKhachMangDen) {
                 dongia = tiencong;
@@ -380,6 +388,38 @@
                 }
             }
             return dongia;
+        }
+
+        function getProduct(id) {
+            var product = {};
+            $.each(listProductType, function (index, item) {
+                if (item.Id != id) return;
+
+                product = item;
+                return false;
+            });
+            return product;
+        }
+
+        function showHideFittingDate() {
+            var result = false;
+            $('#boxPhieuSanXuat .media').each(function (i, element) {
+                var obj = $(element);
+                var productId = parseInt(obj.find("input[type='radio']:checked").val()) | 0;
+
+                var product = getProduct(productId);
+                if (product.IsFitting) {
+                    result = true;
+                    return false;
+                }
+            });
+
+            var ngayThuObj = $("#NgayThu").parent();
+            if (result) {
+                ngayThuObj.slideDown();
+            } else {
+                ngayThuObj.slideUp();
+            }
         }
 
         function removePhieuSx(e) {
@@ -428,7 +468,7 @@
                     var id = "rdoProductType" + index + "-" + typecount;
                     var hasValue = product.Id == item.ProductTypeId;
                     html += "   <div class='rdio rdio-default pull-left mr20'>";
-                    html += "       <input type='radio' name='PhieuSanXuat[" + index + "].ProductTypeId' id='" + id + "' value='" + product.Id + "' " + (hasValue ? "checked" : "") + " onclick='updateSoTienItem();'>";
+                    html += "       <input type='radio' name='PhieuSanXuat[" + index + "].ProductTypeId' id='" + id + "' value='" + product.Id + "' " + (hasValue ? "checked" : "") + " onclick='showHideFittingDate(" + product.Id + "); updateSoTienItem();'>";
                     html += "       <label for='" + id + "'>" + product.Name + "</label>";
                     html += "   </div>";
                     typecount++;

@@ -118,6 +118,8 @@
     <Property Name="SoLuong" Type="int" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="StatusGiaoNhan" Type="int" Nullable="false" />
+    <Property Name="VaiType" Type="int" Nullable="false" />
+    <Property Name="GiaVaiMau" Type="float" />
     <Property Name="HasVai" Type="bit" Nullable="false" />
     <Property Name="InvoiceId" Type="int" Nullable="false" />
     <Property Name="ProductTypeId" Type="int" Nullable="false" />
@@ -181,9 +183,10 @@
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="FromDate" Type="date" Nullable="false" />
     <Property Name="ToDate" Type="date" Nullable="false" />
+    <Property Name="IsPaid" Type="bit" Nullable="false" />
     <Property Name="WorkerId" Type="int" />
     <Property Name="EmployeeId" Type="nvarchar" MaxLength="128" />
     <Property Name="TotalSalary" Type="float" Nullable="false" />

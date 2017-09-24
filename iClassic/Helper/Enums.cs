@@ -120,4 +120,13 @@ namespace iClassic.Helper
         [Description("Vải mẫu tại cửa hàng")]
         VaiMauCuaHang
     }
+
+    public enum SalaryType
+    {
+        [Description("Nhân viên")]
+        Employee = 1,
+
+        [Description("Thợ")]
+        Worker = 2,
+    }
 }

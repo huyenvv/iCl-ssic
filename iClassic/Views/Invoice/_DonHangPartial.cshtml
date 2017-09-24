@@ -42,12 +42,19 @@
                 </td>
                 <td>
                     <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
+
+                    @if (Model.NgayThu.HasValue)
+                    {
+                        <div>
+                            Ngày thử: @Model.NgayThu.Value.ToString("dd/MM/yyyy")
+                        </div>
+                    }
+                    <div>
+                        Ngày lấy: @Model.NgayTra.ToString("dd/MM/yyyy")
+                    </div>
                     <div class="noforinvoice">
                         Tình trạng:
                         @Html.Raw(Helpers.DrawStatusTicket(Model.Status))
-                    </div>
-                    <div class="showforinvoice hide">
-                        Ngày @DateTime.Now.ToString("dd") tháng @DateTime.Now.ToString("MM") năm @DateTime.Now.ToString("yyyy")
                     </div>
                 </td>
             </tr>
@@ -57,7 +64,7 @@
                 <thead>
                     <tr>
                         <th>Sản phẩm</th>
-                        <th>Loại sản phẩm</th>
+                        <th>Thông tin chung</th>
                         <th class="noforinvoice text-left">Loại vải</th>
                         <th class="noforinvoice">Tình trạng vải</th>
                         <th class="noforinvoice">Thợ sản xuất</th>
@@ -72,19 +79,26 @@
                         {
                             <tr>
                                 <td>
-                                    @item.TenSanPham
-                                </td>
-                                <td>
                                     May mới - @item.ProductType.Name
                                 </td>
+                                <td>
+                                    <strong class="noforinvoice">Kiểu cách: </strong>@item.TenSanPham
+                                    <div class="noforinvoice">
+                                        <strong>Dáng người:</strong>@item.DangNguoi
+                                    </div>
+                                </td>
                                 <td class="noforinvoice text-left">
-                                    @if (item.MaVaiId.HasValue)
+                                    @switch ((VaiTypes)item.VaiType)
                                     {
-                                        <span>@item.LoaiVai.Name <br /> (@item.LoaiVai.MaVai)</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Khách mang vải đến</span>
+                                        case VaiTypes.KhachMangVaiDen:
+                                            <span>@VaiTypes.KhachMangVaiDen.GetDescription()</span>
+                                            break;
+                                        case VaiTypes.KhongCoSan:
+                                            <span>@item.LoaiVai.Name <br /> (@item.LoaiVai.MaVai)</span>
+                                            break;
+                                        case VaiTypes.VaiMauCuaHang:
+                                            <span>@VaiTypes.VaiMauCuaHang.GetDescription()</span>
+                                            break;
                                     }
                                 </td>
                                 <td class="noforinvoice">

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Net;
+using System.Linq;
 using System.Web.Mvc;
 using iClassic.Models;
 using iClassic.Services.Implementation;
@@ -29,6 +29,10 @@ namespace iClassic.Controllers
             model.DangXuly = _invoiceRepository.Count(CurrentBranchId, TicketStatus.DangXuLy);
 
             model.ChuaMuaVai = _invoiceRepository.CountChuaMuaVai(CurrentBranchId);
+
+            var tomorrow = DateTime.Now.Date.AddDays(1);
+            model.SapPhaiTra = _invoiceRepository.Where(m=>m.BranchId == CurrentBranchId 
+            && m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m=> m.NgayTra.Date <= tomorrow).Count();
             return View(model);
         }
     }

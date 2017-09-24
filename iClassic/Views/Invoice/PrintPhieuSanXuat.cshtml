@@ -77,7 +77,10 @@
                         <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
                         Mã KH: <strong>@Model.Customer.MaKH</strong> <br>
                         Khách hàng:<strong> @Model.Customer.TenKH</strong> <br>
-                        Ngày thử:<strong> @Model.NgayThu.ToString("dd/MM/yyyy")</strong><br />
+                        @if (item.ProductType.IsFitting)
+                        {
+                            <span>Ngày thử:</span><strong> @(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy") : "")</strong><br />
+                        }
                         Ngày lấy:<strong> @Model.NgayTra.AddDays(-3).ToString("dd/MM/yyyy")</strong><br />
                     </address>
                 </td>

@@ -32,6 +32,18 @@ namespace iClassic.Services.Implementation
         {
             var list = Where(m => m.BranchId == model.BranchId);
 
+            if (model.IsSapPhaiTra.HasValue && model.IsSapPhaiTra.Value)
+            {
+                var tomorrow = DateTime.Now.Date.AddDays(1);
+                return list.Where(m => m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m => m.NgayTra.Date <= tomorrow).AsQueryable();
+            }
+
+            if (model.StatusVai.HasValue)
+            {
+                return list.Where(m => m.PhieuSanXuat.Any(n => n.VaiType == (byte)VaiTypes.KhongCoSan 
+                && n.HasVai == model.StatusVai.Value));
+            }
+
             if (!string.IsNullOrWhiteSpace(model.SearchText))
             {
                 model.SearchText = model.SearchText.ToUpper();
@@ -57,11 +69,6 @@ namespace iClassic.Services.Implementation
                 list = list.Where(m => m.NgayThu <= model.ToDate ||
                                        m.NgayTra <= model.ToDate
                 );
-            }
-
-            if (model.StatusVai.HasValue)
-            {
-                list = list.Where(m => m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && n.VaiType == model.StatusVai.Value));
             }
 
             var sortNameUpper = !string.IsNullOrEmpty(model.SortName) ? model.SortName.ToUpper() : "";
@@ -143,6 +150,7 @@ namespace iClassic.Services.Implementation
             model.Created = DateTime.Now;
             model.ModifiedDate = DateTime.Now;
             model.ModifiedBy = model.CreateBy;
+            model.NgayThu = model.PhieuSanXuat.Any(m => context.ProductType.Any(n => n.IsFitting && n.Id == m.ProductTypeId)) ? model.NgayThu : null;
 
             model.PhieuSanXuat.ToList().ForEach(t =>
             {
@@ -163,7 +171,8 @@ namespace iClassic.Services.Implementation
                         objForUpdate.HasVai = t.HasVai;
                         break;
                     case VaiTypes.VaiMauCuaHang:
-                        objForUpdate.DonGia = tienCong + t.GiaVaiMau ?? 0;
+                        objForUpdate.DonGia = tienCong + (t.GiaVaiMau ?? 0);
+                        objForUpdate.GiaVaiMau = t.GiaVaiMau;
                         break;
                 }
             });
@@ -214,13 +223,13 @@ namespace iClassic.Services.Implementation
             obj.Total = model.Total;
             obj.DatCoc = model.DatCoc;
             obj.CustomerId = model.CustomerId;
-            obj.NgayThu = model.NgayThu;
             obj.ChietKhau = model.ChietKhau;
             model.ModifiedBy = model.ModifiedBy;
             model.ModifiedDate = DateTime.Now;
             obj.Status = model.Status;
             obj.NgayTra = model.NgayTra;
             obj.BranchId = model.BranchId;
+            obj.NgayThu = model.PhieuSanXuat.Any(m => context.ProductType.Any(n => n.IsFitting && n.Id == m.ProductTypeId)) ? model.NgayThu : null;
 
             #region Phiếu sản xuất
             var listNew = model.PhieuSanXuat.Where(m => !obj.PhieuSanXuat.Any(n => n.Id == m.Id));
@@ -229,9 +238,20 @@ namespace iClassic.Services.Implementation
 
             listNew.ToList().ForEach(t =>
             {
-                t.DonGia = t.MaVaiId.HasValue
-                ? context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0
-                : context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
+                var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
+                switch ((VaiTypes)t.VaiType)
+                {
+                    case VaiTypes.KhachMangVaiDen:
+                        t.DonGia = tienCong;
+                        break;
+                    case VaiTypes.KhongCoSan:
+                        var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0;
+                        t.DonGia = tienCong + tienVai;
+                        break;
+                    case VaiTypes.VaiMauCuaHang:
+                        t.DonGia = tienCong + (t.GiaVaiMau ?? 0);
+                        break;
+                }
                 obj.PhieuSanXuat.Add(t);
             }
             );
@@ -248,6 +268,7 @@ namespace iClassic.Services.Implementation
                 objForUpdate.ThoCatId = t.ThoCatId;
                 objForUpdate.ThoMayId = t.ThoMayId;
                 objForUpdate.HasVai = false;
+                objForUpdate.VaiType = t.VaiType;
 
                 var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
                 switch ((VaiTypes)t.VaiType)
@@ -261,9 +282,10 @@ namespace iClassic.Services.Implementation
                         objForUpdate.HasVai = t.HasVai;
                         break;
                     case VaiTypes.VaiMauCuaHang:
-                        objForUpdate.DonGia = tienCong + t.GiaVaiMau ?? 0;
+                        objForUpdate.DonGia = tienCong + (t.GiaVaiMau ?? 0);
+                        objForUpdate.GiaVaiMau = t.GiaVaiMau;
                         break;
-                }                
+                }
             });
             listRemove.ToList().ForEach(t => obj.PhieuSanXuat.Remove(t));
             #endregion

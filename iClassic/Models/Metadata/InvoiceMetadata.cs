@@ -16,7 +16,6 @@ namespace iClassic.Models.Metadata
         [Display(Name = "Đặt cọc")]
         public double DatCoc { get; set; }
 
-        [Required(ErrorMessage = "Bạn phải nhập {0}")]
         [Display(Name = "Ngày thử")]
         public System.DateTime NgayThu { get; set; }
 

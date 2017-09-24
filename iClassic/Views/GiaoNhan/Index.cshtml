@@ -1,0 +1,193 @@
+﻿@using iClassic.Helper;
+@using iClassic.Models;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<Invoice>
+
+@{
+    ViewBag.Title = "Giao nhận";
+    ViewBag.Class = "fa fa-truck";
+    ViewBag.Breadcrumbs = ViewBag.Title;
+    var searchModel = ViewBag.SearchModel as ThoSearch;
+}
+
+<style>
+    .dropdown-menu {
+        left: auto;
+        right: 0;
+    }
+</style>
+
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <a href="@Url.Action("NewOrEdit")" class="btn btn-lightblue btn-sm pull-right">Thêm mới</a>
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Get, new { role = "form", id = "frmSearch" }))
+{
+    @Html.Hidden("SortName", searchModel.SortName)
+    @Html.Hidden("SortOrder", searchModel.SortOrder)
+    <div class="row">
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="SearchText" placeholder="Tìm kiếm" value="@searchModel.SearchText">
+                <span class="input-group-addon" id="btnSearch"><i class="fa fa-search"></i></span>
+            </div>
+        </div>
+    </div>
+}
+<div class="table-responsive mt10">
+    <table class="table table-dark" cellspacing="0">
+        <tr>
+            <th>STT</th>
+            <th>
+                Mã hóa đơn
+            </th>
+            <th>
+                Tên Khách hàng
+            </th>
+            <th>
+                Tên sản phẩm
+            </th>
+            <th>
+                Mô tả
+            </th>
+            <th>
+                Tình trạng
+            </th>
+        </tr>
+        @{
+    var stt = 1;
+    foreach (var invoice in Model)
+    {
+        <tr class="stat even">
+            <td class="ac"></td>
+            <td class="text-primary">
+                @invoice.Code
+            </td>
+            <td class="text-primary">
+                @invoice.Customer.MaKH -
+                @invoice.Customer.TenKH <br />
+                (@invoice.Customer.SDT)
+            </td>
+            <td colspan="4"></td>
+        </tr>
+                foreach (var item in invoice.PhieuSanXuat)
+                {
+                    <tr class="stat even">
+                        <td class="ac">
+                            @(stt++)
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            @item.ProductType.Name
+                        </td>
+                        <td>
+                            <strong>Kiểu cách: </strong>@item.TenSanPham <br />
+                            <strong>Dáng người: </strong>@item.DangNguoi
+                        </td>
+                        <td>
+                            <div class="btn-group mr5">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    @(((PhieuSanXuatStatus)item.StatusGiaoNhan).GetDescription())
+                                    @switch ((PhieuSanXuatStatus)item.StatusGiaoNhan)
+                                    {
+                                        case PhieuSanXuatStatus.DaGiaoChoThoCat:
+                                        case PhieuSanXuatStatus.DaNhanTuThoCat:
+                                            <span>: @item.Tho2.Name</span>
+                                            break;
+                                        case PhieuSanXuatStatus.DaGiaoChoThoMay:
+                                        case PhieuSanXuatStatus.DaNhanTuThoMay:
+                                            <span>: @item.Tho1.Name</span>
+                                            break;
+                                    }
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    @foreach (var status in Helpers.GetPhieuSanXuatStatusList().Where(m => m.Key != item.StatusGiaoNhan))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("ChangeStatusPhieuSanXuat", new { id = item.Id, status = status.Key })">
+                                                @status.Value
+                                                @switch ((PhieuSanXuatStatus)status.Key)
+                                                {
+                                                    case PhieuSanXuatStatus.DaGiaoChoThoCat:
+                                                    case PhieuSanXuatStatus.DaNhanTuThoCat:
+                                                        <span>: @item.Tho2.Name</span>
+                                                        break;
+                                                    case PhieuSanXuatStatus.DaGiaoChoThoMay:
+                                                    case PhieuSanXuatStatus.DaNhanTuThoMay:
+                                                        <span>: @item.Tho1.Name</span>
+                                                        break;
+                                                }
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+
+
+                        </td>
+                    </tr>
+                }
+                foreach (var item in invoice.PhieuSua)
+                {
+                    <tr class="stat even">
+                        <td class="ac">
+                            @(stt++)
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            @item.NoiDung
+                        </td>
+                        <td>
+                            @(((PhieuSuaType)item.Type).GetDescription())
+                        </td>
+                        <td>
+                            <div class="btn-group mr5">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    @(((PhieuSuaStatus)item.StatusGiaoNhan).GetDescription())
+                                    @if (item.StatusGiaoNhan == (byte)PhieuSuaStatus.DaGiaoChoTho || item.StatusGiaoNhan == (byte)PhieuSuaStatus.DaNhanThoSua)
+                                    {
+                                        <span>: @item.Tho.Name</span>
+                                    }
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    @foreach (var status in Helpers.GetPhieuSuaStatusList().Where(m => m.Key != item.StatusGiaoNhan))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("ChangeStatusPhieuSua", new { id = item.Id, status = status.Key })">
+                                                @status.Value
+                                                @if (status.Key == (byte)PhieuSuaStatus.DaGiaoChoTho || status.Key == (byte)PhieuSuaStatus.DaNhanThoSua)
+                                                {
+                                                    <span>: @item.Tho.Name</span>
+                                                }
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new
+        {
+            page,
+            searchModel.SearchText,
+            searchModel.SortOrder,
+            searchModel.PageSize
+        }))
+    </div>
+</div>

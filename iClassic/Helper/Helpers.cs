@@ -110,6 +110,28 @@ namespace iClassic.Helper
             }
             return result;
         }
+        public static HashSet<KeyValuePair<int, string>> GetPhieuSanXuatStatusList()
+        {
+            var result = new HashSet<KeyValuePair<int, string>>();
+            var list = Enum.GetValues(typeof(PhieuSanXuatStatus));
+            foreach (int enumItem in list)
+            {
+                var keyValueItem = new KeyValuePair<int, string>(enumItem, ((PhieuSanXuatStatus)enumItem).GetDescription());
+                result.Add(keyValueItem);
+            }
+            return result;
+        }
+        public static HashSet<KeyValuePair<int, string>> GetPhieuSuaStatusList()
+        {
+            var result = new HashSet<KeyValuePair<int, string>>();
+            var list = Enum.GetValues(typeof(PhieuSuaStatus));
+            foreach (int enumItem in list)
+            {
+                var keyValueItem = new KeyValuePair<int, string>(enumItem, ((PhieuSuaStatus)enumItem).GetDescription());
+                result.Add(keyValueItem);
+            }
+            return result;
+        }
         public static HashSet<KeyValuePair<int, string>> GetPhieuSuaTypeList()
         {
             var result = new HashSet<KeyValuePair<int, string>>();
@@ -155,7 +177,7 @@ namespace iClassic.Helper
                     break;
                 case TicketStatus.DaXuLy:
                     className = "warning";
-                    break;                
+                    break;
                 case TicketStatus.DaTraChoKhach:
                     className = "success";
                     break;
@@ -170,7 +192,7 @@ namespace iClassic.Helper
         {
             if (role == null) return string.Empty;
 
-            if (role.Name== RoleList.Admin)
+            if (role.Name == RoleList.Admin)
             {
                 return "Quản lý";
             }

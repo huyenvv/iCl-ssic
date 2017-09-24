@@ -32,18 +32,17 @@
             </select>
 
         </div>
-    <div class="col-md-3">
-        <div class="input-group">
-            <input type="text" class="form-control" name="SearchText" placeholder="Tìm kiếm" value="@searchModel.SearchText">
-            <span class="input-group-addon" id="btnSearch"><i class="fa fa-search"></i></span>
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="SearchText" placeholder="Tìm kiếm" value="@searchModel.SearchText">
+                <span class="input-group-addon" id="btnSearch"><i class="fa fa-search"></i></span>
+            </div>
         </div>
     </div>
-</div>
 }
 <div class="table-responsive mt10">
     <table class="table table-dark" cellspacing="0">
         <tr>
-            <th>STT</th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="MaKH">Mã KH</a>
             </th>
@@ -51,18 +50,22 @@
                 <a href="javascript:void(0)" class="sortField" data-sortName="TenKH">Tên</a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="SDT">SĐT</a>
-            </th>
-            <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Address">Địa chỉ</a>
             </th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="SoLanMay">Số lần may</a>
             </th>
-            <th><a href="javascript:void(0)" class="sortField" data-sortName="Group">Nhóm KH</a>
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="SoLanMay">Sản phẩm đã may</a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="CreateDate">Ngày tạo</a>
+                <a href="javascript:void(0)" class="sortField" data-sortName="SoLanMay">Sản phẩm đã sửa</a>
+            </th>
+            <th>
+                Tổng tiền
+            </th>
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Group">Nhóm KH</a>
             </th>
             <th></th>
         </tr>
@@ -72,17 +75,12 @@
             foreach (var item in Model)
             {
                 <tr class="stat even">
-                    <td class="ac">
-                        @(stt++)
-                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.MaKH)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TenKH)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SDT)
+                        @Html.DisplayFor(modelItem => item.TenKH) <br />
+                        (@Html.DisplayFor(modelItem => item.SDT))
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Address)
@@ -91,10 +89,16 @@
                         @Html.DisplayFor(modelItem => item.Invoice.Count)
                     </td>
                     <td>
-                        @(((CustomerTypes)item.Group).GetDescription())
+                        @item.Invoice.Sum(n => n.PhieuSanXuat.Count)
                     </td>
                     <td>
-                        @item.Created.ToString("dd/MM/yyyy HH:mm:ss")
+                        @item.Invoice.Sum(n => n.PhieuSua.Count)
+                    </td>
+                    <td>
+                        @((item.Invoice.Sum(m => (double?)m.Total)?? 0).ToString("N0")) ₫
+                    </td>
+                    <td>
+                        @(((CustomerTypes)item.Group).GetDescription())
                     </td>
                     <td>
                         <a href="@Url.Action("NewOrEdit", new { id = item.Id })" class="btn btn-xs btn-primary">Sửa</a>

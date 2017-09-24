@@ -77,7 +77,7 @@
                 </a>
             </th>
             <th>
-                Đã mua vải ?
+                Tình trạng vải
             </th>
         </tr>
 
@@ -96,7 +96,7 @@
                         @item.Total.ToString("N0") ₫
                     </td>
                     <td class="text-danger">
-                        @((item.Total - item.DatCoc ?? 0 - (item.ChietKhau ?? 0)).ToString("N0")) ₫
+                        @((item.Total - (item.DatCoc ?? 0) - (item.ChietKhau ?? 0)).ToString("N0")) ₫
                     </td>
                     <td title="@(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")">
                         @(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy"): "")
@@ -110,9 +110,10 @@
                     <td>                        
                         @if (item.PhieuSanXuat.Count > 0)
                         {
-                            var soluongchuamua = item.PhieuSanXuat.Count(m => m.MaVaiId.HasValue && !m.HasVai);
-                            var soluongdamua = item.PhieuSanXuat.Count(m => m.MaVaiId.HasValue && m.HasVai);
-                            var soluongmangvaiden = item.PhieuSanXuat.Count - soluongchuamua - soluongdamua;
+                            var soluongchuamua = item.PhieuSanXuat.Count(m => m.VaiType == (byte)VaiTypes.KhongCoSan && !m.HasVai);
+                            var soluongdamua = item.PhieuSanXuat.Count(m => m.VaiType == (byte)VaiTypes.KhongCoSan && m.HasVai);
+                            var soluongmangvaiden = item.PhieuSanXuat.Count(m => m.VaiType == (byte)VaiTypes.KhachMangVaiDen);
+                            var soluongvaimautaishop = item.PhieuSanXuat.Count(m => m.VaiType == (byte)VaiTypes.VaiMauCuaHang);
 
                             if (soluongdamua > 0)
                             {
@@ -123,9 +124,14 @@
                             {
                                 <div class="text-danger">Chưa mua: <strong>@soluongchuamua</strong></div>
                             }
+
                             if (soluongmangvaiden > 0)
                             {
                                 <div class="text-info">Khách mang vải đến: <strong>@soluongmangvaiden</strong></div>
+                            }
+                            if (soluongvaimautaishop > 0)
+                            {
+                                <div class="text-info">Vải mẫu tại shop: <strong>@soluongvaimautaishop</strong></div>
                             }
                         }
                         else if (item.PhieuSua.Count > 0)

@@ -17,6 +17,7 @@ namespace iClassic.Models
         public int Id { get; set; }
         public System.DateTime FromDate { get; set; }
         public System.DateTime ToDate { get; set; }
+        public bool IsPaid { get; set; }
         public Nullable<int> WorkerId { get; set; }
         public string EmployeeId { get; set; }
         public double TotalSalary { get; set; }
