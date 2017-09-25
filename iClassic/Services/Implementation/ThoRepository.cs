@@ -83,6 +83,8 @@ namespace iClassic.Services.Implementation
             var obj = GetById(model.Id);
             obj.Type = model.Type;
             obj.Name = model.Name;
+            obj.Salary = model.Salary;
+            obj.SalaryPercent = model.SalaryPercent;
             base.Update(obj);
         }
     }
