@@ -21,5 +21,8 @@ namespace iClassic.Models
         [Display(Name = "Quyền hạn")]
         [Required(ErrorMessage = "Bạn chưa nhập {0}")]
         public string Role { get; set; }
+
+        [Display(Name = "Mức lương")]
+        public double? Salary { get; set; }
     }
 }

@@ -1,0 +1,73 @@
+﻿@using iClassic.Helper;
+@using iClassic.Models;
+@{ 
+    var luong1sp = (double)ViewBag.Luong1Sp;
+    double total = 0;
+}
+@model IQueryable<PhieuSanXuat>
+<div class="table-responsive">
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>
+                    Hóa đơn
+                </th>
+                <th>
+                    Khách hàng
+                </th>
+                <th>
+                    Tên sản phẩm
+                </th>
+                <th>
+                    Mô tả
+                </th>
+                <th>
+                    Số lượng
+                </th>
+                <th>
+                    Lương sản phẩm
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                total += item.SoLuong * luong1sp;
+                <tr>
+                    <td>
+                        @item.Invoice.Code
+                    </td>
+                    <td>
+                        @item.Invoice.Customer.MaKH - @item.Invoice.Customer.TenKH
+                    </td>
+                    <td>
+                        @item.ProductType.Name
+                    </td>
+                    <td>
+                        <div>
+                            <strong>Kiểu cách:</strong> @item.TenSanPham
+                            <strong>Dáng người:</strong> @item.DangNguoi
+                        </div>
+                    </td>
+                    <td>
+                        @item.SoLuong
+                    </td>
+                    <td>
+                        @((item.SoLuong * luong1sp).ToString("N0")) ₫
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-right">
+                    <strong>Tổng tiền</strong>
+                </td>
+                <td>
+                    @total.ToString("N0") ₫
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <span id="TongSoTien">@total</span>
+</div>

@@ -986,6 +986,8 @@
     <Content Include="Views\GiaoNhan\Index.cshtml" />
     <Content Include="Views\Salary\Index.cshtml" />
     <Content Include="Views\Salary\NewOrEdit.cshtml" />
+    <Content Include="Views\Salary\_PhieuSanXuatThoCat.cshtml" />
+    <Content Include="Views\Salary\_PhieuSanXuatThoMay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

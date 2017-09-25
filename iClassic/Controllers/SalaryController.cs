@@ -18,6 +18,7 @@ namespace iClassic.Controllers
         private SalaryRepository _salaryRepository;
         private UsersRepository _usersRepository;
         private ThoRepository _thoRepository;
+        private PhieuSanXuatRepository _phieuSanXuatRepository;
 
         public SalaryController()
         {
@@ -25,6 +26,7 @@ namespace iClassic.Controllers
             _salaryRepository = new SalaryRepository(_entities);
             _usersRepository = new UsersRepository(_entities);
             _thoRepository = new ThoRepository(_entities);
+            _phieuSanXuatRepository = new PhieuSanXuatRepository(_entities);
         }
 
         // GET: Salaryes
@@ -46,7 +48,8 @@ namespace iClassic.Controllers
             {
                 model = new Salary()
                 {
-                    FromDate = DateTime.Now,
+                    Note = "Lương tháng " + DateTime.Now.ToString("MM - yyyy"),
+                    FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
                     ToDate = DateTime.Now
                 };
             }
@@ -75,7 +78,7 @@ namespace iClassic.Controllers
                         model.EmployeeId = null;
                     }
                     if (model.Id == 0)
-                    {                        
+                    {
                         _salaryRepository.Insert(model);
                     }
                     else
@@ -128,11 +131,40 @@ namespace iClassic.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult GetPhieuSanXuat(int thoId, DateTime startDate, DateTime endDate)
+        {
+            var tho = _thoRepository.GetById(thoId);
+            if (tho == null) return null;
+
+            endDate = endDate.AddDays(1).AddMilliseconds(-1);
+            IQueryable<PhieuSanXuat> listPhieuSanXuat;
+            switch ((ThoTypes)tho.Type)
+            {
+                case ThoTypes.Cat:
+                    listPhieuSanXuat = _phieuSanXuatRepository.Where(m =>
+                        m.Invoice.Status == (byte)TicketStatus.DaTraChoKhach &&
+                        m.ThoCatId == thoId &&
+                        m.Invoice.NgayTra >= startDate && m.Invoice.NgayTra <= endDate
+                    );
+                    ViewBag.Luong1Sp = tho.Salary;
+                    return PartialView("_PhieuSanXuatThoCat", listPhieuSanXuat);
+                    
+                case ThoTypes.May:
+                case ThoTypes.CatMay:
+                    listPhieuSanXuat = _phieuSanXuatRepository.Where(m =>
+                        m.Invoice.Status == (byte)TicketStatus.DaTraChoKhach &&
+                        m.ThoMayId == thoId &&
+                        m.Invoice.NgayTra >= startDate && m.Invoice.NgayTra <= endDate
+                    );
+                    ViewBag.LuongPhanTramSp = tho.SalaryPercent;
+                    return PartialView("_PhieuSanXuatThoMay", listPhieuSanXuat);
+            }
+            return null;
+        }
         private void CreateViewBag(string employeeId = "", int? workerId = 0)
         {
-            var users = _usersRepository.Where(m => m.BranchId == CurrentBranchId)
-                .Select(m => new { m.Id, Title = m.Name + " (" + m.UserName + ")" });
-            ViewBag.EmployeeId = new SelectList(users, "Id", "Title", employeeId);
+            var users = _usersRepository.Where(m => m.BranchId == CurrentBranchId);
+            ViewBag.EmployeeId = users;
 
             var workers = _thoRepository.GetAll();
             ViewBag.WorkerId = new SelectList(workers, "Id", "Name", workerId);

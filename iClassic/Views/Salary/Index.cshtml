@@ -65,16 +65,6 @@
                     {
                         @item.Tho.Name
                     }
-                </td>               
-                <td>
-                    @if (item.IsPaid)
-                    {
-                        <label class="label label-success">Đã trả</label>
-                    }
-                    else
-                    {
-                        <label class="label label-danger">Chưa trả</label>
-                    }
                 </td>
                 <td>
                     @if (item.AspNetUsers != null)
@@ -88,7 +78,17 @@
                 </td>
                 <td>
                     @item.TotalSalary.ToString("N0") ₫
-                </td>                
+                </td>  
+                <td>
+                    @if (item.IsPaid)
+                    {
+                        <label class="label label-success">Đã trả</label>
+                    }
+                    else
+                    {
+                        <label class="label label-danger">Chưa trả</label>
+                    }
+                </td>              
                 <td>
                     <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>
                     <a href="@Url.Action("Delete", new { id=item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>

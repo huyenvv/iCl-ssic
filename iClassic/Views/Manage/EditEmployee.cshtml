@@ -50,6 +50,11 @@
                         @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
+                        <label>Mức lương</label>
+                        @Html.TextBoxFor(m => m.Salary, new { @class = "form-control price", placeholder = "Lương cứng" })
+                        @Html.ValidationMessageFor(m => m.Salary, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
                         <label for="Password">Quyền hạn<span class="asterisk">*</span></label>
                         <select class="form-control" name="Role">
                             <option value="@RoleList.Employee">Nhân viên chi nhánh</option>
@@ -73,7 +78,7 @@
     </div><!-- panel -->
     <div class="row">
         <div class="col-md-12">
-            <button type="submit" class="btn btn-lightblue">Save</button>
+            <button type="submit" class="btn btn-lightblue" onclick="beforeSubmit();">Save</button>
             <a href="@Url.Action("Employees")" class="btn btn-default">Quay lại</a>
         </div>
     </div>
@@ -81,4 +86,20 @@
 
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
+    <script>
+        $(function () {
+
+            $('.price').maskMoney({ precision: 0 });
+            $('.price').focus();
+        });
+
+        function beforeSubmit() {
+            $(".price").each(function () {
+                var $this = $(this);
+                var value = $this.val().replace(/,/g, '');
+                $this.val(value);
+            });
+        }
+    </script>
 }

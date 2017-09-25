@@ -19,6 +19,9 @@ namespace iClassic.Models
         [Display(Name = "Số điện thoại")]
         public string PhoneNumber { get; set; }
 
+        [Display(Name = "Mức lương")]
+        public double? Salary { get; set; }
+
         [DataType(DataType.EmailAddress, ErrorMessage = "Sai định dạng {0}")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Bạn chưa nhập {0}")]

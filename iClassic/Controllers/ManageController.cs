@@ -381,7 +381,8 @@ namespace iClassic.Controllers
                         Email = model.Email,
                         Name = model.Name,
                         BranchId = model.BranchId,
-                        IsActive = true
+                        IsActive = true,
+                        Salary = model.Salary
                     };
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
@@ -452,6 +453,7 @@ namespace iClassic.Controllers
                     user.Name = model.Name;
                     user.BranchId = model.BranchId;
                     user.IsActive = model.IsActive;
+                    user.Salary = model.Salary;
 
                     var result = await UserManager.UpdateAsync(user);
                     if (!result.Succeeded)

@@ -1,4 +1,5 @@
 ﻿@using iClassic.Helper;
+@using iClassic.Models;
 @model iClassic.Models.Salary
 
 @{
@@ -6,6 +7,7 @@
     ViewBag.Class = "fa fa-user";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Tiền lương</a>" +
                           "<span>" + ViewBag.Title + "</span>";
+    var listUsers = ViewBag.EmployeeId as IQueryable<AspNetUsers>;
 }
 
 <div class="row mb10 mt10">
@@ -26,54 +28,59 @@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.Id)
                     <div class="form-group">
-                        <label>Đối tượng</label>
-                        <select name="type" id="objectType" class="form-control">
-                            <option value="1" @(Model.WorkerId.HasValue ? "" : "selected")>Nhân viên</option>
-                            <option value="2" @(Model.WorkerId.HasValue ? "selected" : "")>Thợ</option>
-                        </select>
-                    </div>
-                    <div class="form-group EmployeeBox">
-                        @Html.LabelFor(model => model.EmployeeId)
-                        @Html.DropDownList("EmployeeId", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group WorkerBox">
-                        @Html.LabelFor(model => model.WorkerId)
-                        @Html.DropDownList("WorkerId", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.WorkerId, "", new { @class = "text-danger" })
+                        <label>Tiêu đề</label>
+                        @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
                     </div>
                     <div class="row mb10">
+                        <div class="col-md-12">
+                            <label>Đối tượng</label>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">                                
+                                <select name="type" id="objectType" class="form-control">
+                                    <option value="1" @(Model.WorkerId.HasValue ? "" : "selected")>Nhân viên</option>
+                                    <option value="2" @(Model.WorkerId.HasValue ? "selected" : "")>Thợ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">                            
+                            <div class="form-group EmployeeBox">
+                                <select class="form-control" id="EmployeeId" name="EmployeeId">
+                                    @foreach (var item in listUsers)
+                                    {
+                                        <option value="@item.Id" data-salary="@item.Salary">@(item.Name + " (" + item.UserName + ")")</option>
+                                    }                                    
+                                </select>
+                                @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group WorkerBox">
+                                @Html.DropDownList("WorkerId", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.WorkerId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb10 DateBox">
                         <div class="col-xs-6">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.FromDate)
-                                <input type="text" name="FromDate" value="@Model.FromDate.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                                <label>Từ ngày</label>
+                                <input type="text" name="FromDate" value="@Model.FromDate.ToString("dd/MM/yyyy")" class="form-control datepicker" />
                                 @Html.ValidationMessageFor(model => model.FromDate, "", new { @class = "text-danger" })
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-xs-6">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.ToDate)
-                                <input type="text" name="ToDate" value="@Model.ToDate.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                                <label>Đến ngày</label>
+                                <input type="text" name="ToDate" value="@Model.ToDate.ToString("dd/MM/yyyy")" class="form-control datepicker" />
                                 @Html.ValidationMessageFor(model => model.ToDate, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.TotalSalary)
-                        @Html.EditorFor(model => model.TotalSalary, new { htmlAttributes = new { @class = "form-control price" } })
+                        <label>Lương</label>
+                        @Html.EditorFor(model => model.TotalSalary, new { htmlAttributes = new { @class = "form-control price", @readonly="true" } })
                         @Html.ValidationMessageFor(model => model.TotalSalary, "", new { @class = "text-danger" })
-                    </div>
-
-                    @*<div class="form-group">
-                            @Html.LabelFor(model => model.Type)
-                            <select name="Type" class="form-control">
-                                @foreach (var item in Helpers.GetDSSalaryTypeList())
-                                {
-                                    <option value="@item.Key" @(item.Key == Model.Type ? "selected" : "")>@item.Value</option>
-                                }
-                            </select>
-                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-                        </div>*@
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -99,8 +106,12 @@
                 showHideEmployeeAndWoker();
             });
 
+            $('#EmployeeId').change(function () {
+                calcSalaryEmployee();
+            });
+
             $('.datepicker').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm:ss'
+                format: 'DD/MM/YYYY'
             });
 
             $('.price').maskMoney({ precision: 0 });
@@ -109,12 +120,18 @@
         function showHideEmployeeAndWoker() {
             var objectType = parseInt($('#objectType').val());
             if (objectType == 1) {
+                // Nhân viên
                 $('.EmployeeBox').slideDown();
-                $('.WorkerBox').slideUp();
+                $('.WorkerBox,.DateBox').slideUp();
+                calcSalaryEmployee();
             } else {
                 $('.EmployeeBox').slideUp();
-                $('.WorkerBox').slideDown();
+                $('.WorkerBox,.DateBox').slideDown();
             }
+        }
+        function calcSalaryEmployee() {
+            var salary = $("#EmployeeId option:selected").attr('data-salary');
+            $("#TotalSalary").val(salary).focus();
         }
         function beforeSubmit() {
             $(".price").each(function () {
