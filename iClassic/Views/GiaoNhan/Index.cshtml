@@ -17,14 +17,6 @@
     }
 </style>
 
-<div class="row mb10 mt10">
-    <div class="col-md-12">
-        <a href="@Url.Action("NewOrEdit")" class="btn btn-lightblue btn-sm pull-right">Thêm mới</a>
-        <h3 class="panel-title">
-            @ViewBag.Title
-        </h3>
-    </div>
-</div>
 @using (Html.BeginForm(null, null, FormMethod.Get, new { role = "form", id = "frmSearch" }))
 {
     @Html.Hidden("SortName", searchModel.SortName)
