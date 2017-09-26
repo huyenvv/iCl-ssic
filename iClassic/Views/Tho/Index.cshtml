@@ -41,6 +41,9 @@
                 <a href="javascript:void(0)" class="sortField" data-sortName="TYPE">Chuyên môn</a>
             </th>
             <th>
+                Lương
+            </th>
+            <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Sanpham">Số sản phẩm đã làm</a>
             </th>
             <th>
@@ -57,6 +60,18 @@
                 </td>
                 <td>
                     @(((ThoTypes)item.Type).GetDescription())
+                </td>
+                <td>
+                    @switch ((ThoTypes)item.Type)
+                    {
+                        case ThoTypes.Cat:
+                            @((item.Salary ?? 0).ToString("N0")) <span>₫ / 1SP</span>
+                            break;
+                        case ThoTypes.CatMay:
+                        case ThoTypes.May:
+                            @((item.SalaryPercent ?? 0).ToString("N0")) <span>₫ / 1SP</span>
+                            break;
+                    }
                 </td>
                 <td>
                     @if (item.Type == (byte)ThoTypes.Do)

@@ -35,6 +35,9 @@
     <table class="table table-dark" cellspacing="0">
         <tr>
             <th>
+                Tiêu đề
+            </th>
+            <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Name">Họ tên</a>
             </th>
             <th>
@@ -46,15 +49,22 @@
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Error">Trạng thái</a>
             </th>
-            <th>
-                Lương tháng
-            </th>
             <th></th>
         </tr>
 
         @foreach (var item in Model)
             {
             <tr>
+                <td>
+                    @item.Note
+                    @if (item.WorkerId.HasValue)
+                    {
+                        <div>
+                            (@item.FromDate.ToString("dd/MM/yyyy") -
+                            @item.ToDate.ToString("dd/MM/yyyy"))
+                        </div>
+                    }
+                </td>
                 <td>
                     @if (item.AspNetUsers != null)
                     {
@@ -78,19 +88,47 @@
                 </td>
                 <td>
                     @item.TotalSalary.ToString("N0") ₫
-                </td>  
+                </td>
                 <td>
                     @if (item.IsPaid)
                     {
-                        <label class="label label-success">Đã trả</label>
+                        <div class="btn-group mr5">
+                            <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
+                                Đã trả
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="@Url.Action("ChangeStatus", new { id = item.Id, status = false })">
+                                        Chưa trả
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
                     }
                     else
                     {
-                        <label class="label label-danger">Chưa trả</label>
+                        <div class="btn-group mr5">
+                            <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
+                                Chưa trả
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="@Url.Action("ChangeStatus", new { id = item.Id, status = true })">
+                                        Đã trả
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
                     }
-                </td>              
+                </td>
                 <td>
-                    <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>
+                    <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="btn btn-xs btn-primary">
+                        @(item.IsPaid ? "View" : "Sửa")
+                    </a>
                     <a href="@Url.Action("Delete", new { id=item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
                 </td>
             </tr>

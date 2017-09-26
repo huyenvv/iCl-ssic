@@ -58,6 +58,31 @@ namespace iClassic.Controllers
             return View(model);
         }
 
+        public ActionResult ChangeStatus(int id, bool status)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var model = _salaryRepository.GetById(id);
+                    if (model == null)
+                        return RedirectToAction("Index");
+
+                    model.IsPaid = status;
+                    _salaryRepository.Save();
+
+                    ShowMessageSuccess(Message.Update_Successfully);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageError(Message.Update_Fail);
+
+                _log.Info(ex.ToString());
+            }
+            return RedirectToAction("Index");
+        }
+
         // POST: Salaryes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -148,7 +173,7 @@ namespace iClassic.Controllers
                     );
                     ViewBag.Luong1Sp = tho.Salary;
                     return PartialView("_PhieuSanXuatThoCat", listPhieuSanXuat);
-                    
+
                 case ThoTypes.May:
                 case ThoTypes.CatMay:
                     listPhieuSanXuat = _phieuSanXuatRepository.Where(m =>

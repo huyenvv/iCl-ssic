@@ -3,7 +3,7 @@
 @model iClassic.Models.Salary
 
 @{
-    ViewBag.Title = Model.Id > 0 ? "Cập nhật" : "Thêm mới";
+    ViewBag.Title = Model.Id > 0 ? (!Model.IsPaid ? "Cập nhật" : "Chi tiết") : "Thêm mới";
     ViewBag.Class = "fa fa-user";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Tiền lương</a>" +
                           "<span>" + ViewBag.Title + "</span>";
@@ -37,20 +37,20 @@
                             <label>Đối tượng</label>
                         </div>
                         <div class="col-xs-6">
-                            <div class="form-group">                                
+                            <div class="form-group">
                                 <select name="type" id="objectType" class="form-control">
                                     <option value="1" @(Model.WorkerId.HasValue ? "" : "selected")>Nhân viên</option>
                                     <option value="2" @(Model.WorkerId.HasValue ? "selected" : "")>Thợ</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-xs-6">                            
+                        <div class="col-xs-6">
                             <div class="form-group EmployeeBox">
                                 <select class="form-control" id="EmployeeId" name="EmployeeId">
                                     @foreach (var item in listUsers)
                                     {
                                         <option value="@item.Id" data-salary="@item.Salary">@(item.Name + " (" + item.UserName + ")")</option>
-                                    }                                    
+                                    }
                                 </select>
                                 @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
                             </div>
@@ -64,31 +64,36 @@
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label>Từ ngày</label>
-                                <input type="text" name="FromDate" value="@Model.FromDate.ToString("dd/MM/yyyy")" class="form-control datepicker" />
+                                <input type="text" name="FromDate" id="FromDate" value="@Model.FromDate.ToString("dd/MM/yyyy")" class="form-control datepicker" />
                                 @Html.ValidationMessageFor(model => model.FromDate, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label>Đến ngày</label>
-                                <input type="text" name="ToDate" value="@Model.ToDate.ToString("dd/MM/yyyy")" class="form-control datepicker" />
+                                <input type="text" name="ToDate" id="ToDate" value="@Model.ToDate.ToString("dd/MM/yyyy")" class="form-control datepicker" />
                                 @Html.ValidationMessageFor(model => model.ToDate, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Lương</label>
-                        @Html.EditorFor(model => model.TotalSalary, new { htmlAttributes = new { @class = "form-control price", @readonly="true" } })
+                        <label>Tổng tiền lương</label>
+                        @Html.EditorFor(model => model.TotalSalary, new { htmlAttributes = new { @class = "form-control price", @readonly = "true" } })
                         @Html.ValidationMessageFor(model => model.TotalSalary, "", new { @class = "text-danger" })
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
+    <div class="table-responsive" id="ListSanPham">
+
+    </div>
+    if (!Model.IsPaid)
+    {
+        <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
+    }
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 }
-
 
 @section Styles {
     <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" />
@@ -102,13 +107,24 @@
     <script>
         $(function () {
             showHideEmployeeAndWoker();
+
             $('#objectType').change(function () {
                 showHideEmployeeAndWoker();
+                getSanPham();
             });
 
             $('#EmployeeId').change(function () {
                 calcSalaryEmployee();
             });
+
+            $("#WorkerId ").change(function () {
+                calcSalaryEmployee();
+                getSanPham();
+            });
+
+            $('#FromDate, #ToDate').on('dp.change', function (e) {
+                getSanPham();
+            })
 
             $('.datepicker').datetimepicker({
                 format: 'DD/MM/YYYY'
@@ -116,6 +132,12 @@
 
             $('.price').maskMoney({ precision: 0 });
             $('.price').focus();
+
+            getSanPham();
+
+            if ("@Model.IsPaid" == "True") {
+                $("select, input").attr("disabled", "disabled");
+            }
         });
         function showHideEmployeeAndWoker() {
             var objectType = parseInt($('#objectType').val());
@@ -132,6 +154,29 @@
         function calcSalaryEmployee() {
             var salary = $("#EmployeeId option:selected").attr('data-salary');
             $("#TotalSalary").val(salary).focus();
+        }
+        function getSanPham() {
+            var objId = $("#objectType").val();
+            if (objId != "1") {
+                var thoId = parseInt($("#WorkerId").val());
+                var startDate = getDateTime($("#FromDate").val());
+                var toDate = getDateTime($("#ToDate").val());
+
+                $.get("@Url.Action("GetPhieuSanXuat")"
+                    , { thoId: thoId, startDate: startDate, endDate: toDate }
+                    , function (data) {
+                        $("#ListSanPham").html(data);
+                        var tongLuong = $("#TongSoTien").text();
+                        $("#TotalSalary").val(tongLuong).focus();
+                    });
+            }
+        }
+        function getDateTime(date) {
+            if (date) {
+                var arr = date.split("/");
+                return arr[1] + '/' + arr[0] + '/' + arr[2];
+            }
+            return "";
         }
         function beforeSubmit() {
             $(".price").each(function () {

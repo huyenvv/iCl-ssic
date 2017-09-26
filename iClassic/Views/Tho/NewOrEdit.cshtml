@@ -1,64 +1,94 @@
 ﻿@using iClassic.Helper;
 @model iClassic.Models.Tho
 
-    @{
-        ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
-        ViewBag.Class = "fa fa-user";
-        ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Chi nhánh</a>" +
-                              "<span>" + ViewBag.Title + "</span>";
+@{
+    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
+    ViewBag.Class = "fa fa-user";
+    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Chi nhánh</a>" +
+                          "<span>" + ViewBag.Title + "</span>";
 
-    }
+}
 
-    <div class="row mb10 mt10">
-        <div class="col-md-12">
-            <h3 class="panel-title">
-                @ViewBag.Title
-            </h3>
-        </div>
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
     </div>
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        @Html.HiddenFor(model => model.Id)
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Name)
-                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Type)
-                            <select name="Type" class="form-control">
-                                @foreach (var item in Helpers.GetDSThoTypeList())
-                                {
-                                    <option value="@item.Key" @(item.Key == Model.Type ? "selected" : "")>@item.Value</option>
-                                }
-                            </select>                           
-                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Salary)
-                            @Html.EditorFor(model => model.Salary, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Salary, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.SalaryPercent)
-                            @Html.EditorFor(model => model.SalaryPercent, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.SalaryPercent, "", new { @class = "text-danger" })
-                        </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name)
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Type)
+                        <select name="Type" class="form-control" id="Type" onchange="showHideSalaryChange();">
+                            @foreach (var item in Helpers.GetDSThoTypeList())
+                            {
+                                <option value="@item.Key" @(item.Key == Model.Type ? "selected" : "")>@item.Value</option>
+                            }
+                        </select>
+                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group SalaryBox">
+                        @Html.LabelFor(model => model.Salary)
+                        @Html.EditorFor(model => model.Salary, new { htmlAttributes = new { @class = "form-control price" } })
+                        @Html.ValidationMessageFor(model => model.Salary, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group SalaryPercentBox">
+                        @Html.LabelFor(model => model.SalaryPercent)
+                        @Html.EditorFor(model => model.SalaryPercent, new { htmlAttributes = new { @class = "form-control price" } })
+                        @Html.ValidationMessageFor(model => model.SalaryPercent, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-lightblue" type="submit">Lưu</button>
+    </div>
+        <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
         <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
-    }
+}
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
+    <script>
+        function beforeSubmit() {
+            $(".price").each(function () {
+                var $this = $(this);
+                var value = $this.val().replace(/,/g, '');
+                $this.val(value);
+            });
+        }
+        function showHideSalaryChange() {
+            var type = $("#Type").val();
+            if (type == "@((byte)ThoTypes.Do)") {
+                $(".SalaryBox, .SalaryPercentBox").slideUp();
+            }
+            if (type == "@((byte)ThoTypes.Cat)") {
+                $(".SalaryPercentBox").slideUp();
+                $(".SalaryBox").slideDown();
+            }
+            if (type == "@((byte)ThoTypes.May)" || type == "@((byte)ThoTypes.CatMay)") {
+                $(".SalaryPercentBox").slideDown();
+                $(".SalaryBox").slideUp();
+            }
+        }
+        $(function () {
+            $('.price').maskMoney({ precision: 0 });
+            $('.price').focus();
+
+            showHideSalaryChange();
+        })
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+}
