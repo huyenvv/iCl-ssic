@@ -47,4 +47,9 @@ namespace iClassic.Models
     public partial class Tho
     {
     }
+
+    [MetadataType(typeof(MemberCardMetadata))]
+    public partial class MemberCard
+    {
+    }
 }

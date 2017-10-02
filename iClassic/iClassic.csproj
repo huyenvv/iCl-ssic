@@ -208,6 +208,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GiaoNhanController.cs" />
     <Compile Include="Controllers\SalaryController.cs" />
+    <Compile Include="Controllers\MemberCardController.cs" />
     <Compile Include="Controllers\ThoController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\PhieuChiController.cs" />
@@ -240,12 +241,20 @@
     <Compile Include="Models\Branch.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MemberCard.cs">
+      <DependentUpon>iClassic.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Metadata\MemberCardMetadata.cs" />
     <Compile Include="Models\Metadata\ThoMetadata.cs" />
+    <Compile Include="Models\ProductMemberCard.cs">
+      <DependentUpon>iClassic.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ReportCustomChanelAdvertising.cs" />
     <Compile Include="Models\Salary.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SalarySearch.cs" />
+    <Compile Include="Models\MemberCardSearch.cs" />
     <Compile Include="Models\ThoSearch.cs" />
     <Compile Include="Models\Invoice.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
@@ -330,6 +339,7 @@
     <Compile Include="Services\Base\GenericRepository.cs" />
     <Compile Include="Services\Base\IGenericRepository.cs" />
     <Compile Include="Services\Implementation\SalaryRepository.cs" />
+    <Compile Include="Services\Implementation\MemberCardRepository.cs" />
     <Compile Include="Services\Implementation\ThoRepository.cs" />
     <Compile Include="Services\Implementation\PhieuSanXuatRepository.cs" />
     <Compile Include="Services\Implementation\ProductTypeRepository.cs" />
@@ -350,10 +360,53 @@
     <Content Include="Content\fileinput.min.css" />
     <Content Include="Content\morris.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="css\animate.delay.css" />
+    <Content Include="css\animate.min.css" />
+    <Content Include="css\bootstrap-override.css" />
+    <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\font-awesome.min.css" />
+    <Content Include="css\font.helvetica-neue.css" />
+    <Content Include="css\jquery-ui-1.10.3.css" />
+    <Content Include="css\lato.css" />
+    <Content Include="css\roboto.css" />
+    <Content Include="css\select2.css" />
     <Content Include="css\style.default.css" />
+    <Content Include="css\toggles.css" />
+    <Content Include="css\weather-icons.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\index.html" />
+    <Content Include="fonts\lato\index.html" />
+    <Content Include="fonts\lato\Lato-Bla-webfont.svg" />
+    <Content Include="fonts\lato\Lato-BlaIta-webfont.svg" />
+    <Content Include="fonts\lato\Lato-Bol-webfont.svg" />
+    <Content Include="fonts\lato\Lato-BolIta-webfont.svg" />
+    <Content Include="fonts\lato\Lato-Hai-webfont.svg" />
+    <Content Include="fonts\lato\Lato-HaiIta-webfont.svg" />
+    <Content Include="fonts\lato\Lato-Lig-webfont.svg" />
+    <Content Include="fonts\lato\Lato-LigIta-webfont.svg" />
+    <Content Include="fonts\lato\Lato-Reg-webfont.svg" />
+    <Content Include="fonts\lato\Lato-RegIta-webfont.svg" />
+    <Content Include="fonts\lato\SIL Open Font License 1.1.txt" />
+    <Content Include="fonts\roboto\Google Android License.txt" />
+    <Content Include="fonts\roboto\index.html" />
+    <Content Include="fonts\roboto\Roboto-Black-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-BlackItalic-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-Bold-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-BoldCondensed-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-BoldCondensedItalic-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-BoldItalic-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-Condensed-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-CondensedItalic-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-Italic-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-Light-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-LightItalic-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-Medium-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-MediumItalic-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-Regular-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-Thin-webfont.svg" />
+    <Content Include="fonts\roboto\Roboto-ThinItalic-webfont.svg" />
+    <Content Include="fonts\roboto\roboto.css" />
     <Content Include="fonts\weathericons-regular-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -892,7 +945,86 @@
     <Content Include="Models\iClassic.edmx.diagram">
       <DependentUpon>iClassic.edmx</DependentUpon>
     </Content>
+    <Content Include="fonts\lato\Lato-Bla-webfont.eot" />
+    <Content Include="fonts\lato\Lato-Bla-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-Bla-webfont.woff" />
+    <Content Include="fonts\lato\Lato-BlaIta-webfont.eot" />
+    <Content Include="fonts\lato\Lato-BlaIta-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-BlaIta-webfont.woff" />
+    <Content Include="fonts\lato\Lato-Bol-webfont.eot" />
+    <Content Include="fonts\lato\Lato-Bol-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-Bol-webfont.woff" />
+    <Content Include="fonts\lato\Lato-BolIta-webfont.eot" />
+    <Content Include="fonts\lato\Lato-BolIta-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-BolIta-webfont.woff" />
+    <Content Include="fonts\lato\Lato-Hai-webfont.eot" />
+    <Content Include="fonts\lato\Lato-Hai-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-Hai-webfont.woff" />
+    <Content Include="fonts\lato\Lato-HaiIta-webfont.eot" />
+    <Content Include="fonts\lato\Lato-HaiIta-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-HaiIta-webfont.woff" />
+    <Content Include="fonts\lato\Lato-Lig-webfont.eot" />
+    <Content Include="fonts\lato\Lato-Lig-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-Lig-webfont.woff" />
+    <Content Include="fonts\lato\Lato-LigIta-webfont.eot" />
+    <Content Include="fonts\lato\Lato-LigIta-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-LigIta-webfont.woff" />
+    <Content Include="fonts\lato\Lato-Reg-webfont.eot" />
+    <Content Include="fonts\lato\Lato-Reg-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-Reg-webfont.woff" />
+    <Content Include="fonts\lato\Lato-RegIta-webfont.eot" />
+    <Content Include="fonts\lato\Lato-RegIta-webfont.ttf" />
+    <Content Include="fonts\lato\Lato-RegIta-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-Black-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-Black-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-Black-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-BlackItalic-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-BlackItalic-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-BlackItalic-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-Bold-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-Bold-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-Bold-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-BoldCondensed-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-BoldCondensed-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-BoldCondensed-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-BoldCondensedItalic-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-BoldCondensedItalic-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-BoldCondensedItalic-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-BoldItalic-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-BoldItalic-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-BoldItalic-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-Condensed-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-Condensed-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-Condensed-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-CondensedItalic-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-CondensedItalic-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-CondensedItalic-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-Italic-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-Italic-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-Italic-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-Light-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-Light-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-Light-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-LightItalic-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-LightItalic-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-LightItalic-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-Medium-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-Medium-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-Medium-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-MediumItalic-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-MediumItalic-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-MediumItalic-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-Regular-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-Regular-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-Regular-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-Thin-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-Thin-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-Thin-webfont.woff" />
+    <Content Include="fonts\roboto\Roboto-ThinItalic-webfont.eot" />
+    <Content Include="fonts\roboto\Roboto-ThinItalic-webfont.ttf" />
+    <Content Include="fonts\roboto\Roboto-ThinItalic-webfont.woff" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
+    <None Include="Properties\PublishProfiles\server local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\fileinput.min.js" />
     <Content Include="Scripts\iClassic.js" />
@@ -988,11 +1120,11 @@
     <Content Include="Views\Salary\NewOrEdit.cshtml" />
     <Content Include="Views\Salary\_PhieuSanXuatThoCat.cshtml" />
     <Content Include="Views\Salary\_PhieuSanXuatThoMay.cshtml" />
+    <Content Include="Views\MemberCard\Index.cshtml" />
+    <Content Include="Views\MemberCard\NewOrEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="fonts\lato\" />
-    <Folder Include="fonts\roboto\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>

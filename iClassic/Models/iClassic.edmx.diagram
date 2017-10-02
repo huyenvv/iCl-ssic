@@ -14,7 +14,6 @@
         <EntityTypeShape EntityType="iClassicModel.PhieuChi" Width="1.5" PointX="5.25" PointY="12" />
         <EntityTypeShape EntityType="iClassicModel.PhieuSua" Width="1.5" PointX="12.75" PointY="19.875" />
         <EntityTypeShape EntityType="iClassicModel.ProductTyeField" Width="1.5" PointX="5.25" PointY="21.25" />
-        <EntityTypeShape EntityType="iClassicModel.ProductType" Width="1.5" PointX="8.25" PointY="8" />
         <EntityTypeShape EntityType="iClassicModel.ProductTypeLoaiVai" Width="1.5" PointX="10.5" PointY="12.25" />
         <EntityTypeShape EntityType="iClassicModel.ProductTypeValue" Width="1.5" PointX="7.5" PointY="17.25" />
         <EntityTypeShape EntityType="iClassicModel.Tho" Width="1.5" PointX="3" PointY="5.625" />
@@ -34,20 +33,25 @@
         <AssociationConnector Association="iClassicModel.FK_ProductTypeLoaiVai_LoaiVai" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSua_Tho" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSua_Tho1" />
-        <AssociationConnector Association="iClassicModel.FK_ProductTyeField_ProductType" />
         <AssociationConnector Association="iClassicModel.FK_ProductTypeValue_ProductTyeField" />
-        <AssociationConnector Association="iClassicModel.FK_ProductTypeLoaiVai_ProductType" />
         <AssociationConnector Association="iClassicModel.AspNetUserRoles" />
         <EntityTypeShape EntityType="iClassicModel.PhieuSanXuat" Width="1.5" PointX="12.75" PointY="10.75" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Invoice" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_LoaiVai" />
-        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_ProductType" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Tho" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Tho1" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Tho2" />
         <EntityTypeShape EntityType="iClassicModel.Salary" Width="1.5" PointX="5.25" PointY="7.375" />
         <AssociationConnector Association="iClassicModel.FK_Salary_AspNetUsers" />
         <AssociationConnector Association="iClassicModel.FK_Salary_Tho" />
+        <EntityTypeShape EntityType="iClassicModel.MemberCard" Width="1.5" PointX="6" PointY="25" />
+        <EntityTypeShape EntityType="iClassicModel.ProductMemberCard" Width="1.5" PointX="8.25" PointY="21" />
+        <EntityTypeShape EntityType="iClassicModel.ProductType" Width="1.5" PointX="3" PointY="17.75" />
+        <AssociationConnector Association="iClassicModel.FK_ProductMemberCard_MemberCard" />
+        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_ProductType" />
+        <AssociationConnector Association="iClassicModel.FK_ProductMemberCard_ProductType" />
+        <AssociationConnector Association="iClassicModel.FK_ProductTyeField_ProductType" />
+        <AssociationConnector Association="iClassicModel.FK_ProductTypeLoaiVai_ProductType" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

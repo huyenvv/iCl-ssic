@@ -1,0 +1,97 @@
+﻿@using iClassic.Models;
+@using iClassic.Helper;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<MemberCard>
+
+@{
+    ViewBag.Title = "Danh sách hạng thẻ";
+    ViewBag.Class = "fa fa-credit-card";
+    ViewBag.Breadcrumbs = ViewBag.Title;
+    var searchModel = ViewBag.SearchModel as MemberCardSearch;
+}
+
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <a href="@Url.Action("NewOrEdit")" class="btn btn-lightblue btn-sm pull-right">Thêm mới</a>
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Get, new { role = "form", id = "frmSearch" }))
+{
+    @Html.Hidden("SortName", searchModel.SortName)
+    @Html.Hidden("SortOrder", searchModel.SortOrder)
+    <div class="row">
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="SearchText" placeholder="Tìm kiếm" value="@searchModel.SearchText">
+                <span class="input-group-addon" id="btnSearch"><i class="fa fa-search"></i></span>
+            </div>
+        </div>
+    </div>
+}
+<div class="table-responsive mt10">
+    <table class="table table-dark" cellspacing="0">
+        <tr>
+            <th>
+                <a href="javascript:void(0)" class="sortField" data-sortName="Name">Tên hạng thẻ</a>
+            </th>            
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().BirthDayDiscount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().NguoiThanDiscount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().Note)
+            </th>
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().ProductMemberCard)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @item.BirthDayDiscount %
+                </td>
+                <td>
+                    @item.NguoiThanDiscount %
+                </td>                
+                <td>
+                    @item.Note
+                </td> 
+                <td>
+                   @foreach (var discountProd in item.ProductMemberCard)
+                   {
+                       <div>@discountProd.ProductType.Name: <strong>@discountProd.Discount</strong> %</div>
+                   }
+                </td> 
+                <td>
+                    <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>
+                    <a href="@Url.Action("Delete", new { id=item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new
+        {
+            page,
+            searchModel.SearchText,
+            searchModel.SortOrder,
+            searchModel.PageSize
+        }))
+    </div>
+</div>

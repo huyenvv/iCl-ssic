@@ -12,30 +12,21 @@ namespace iClassic.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductType
+    public partial class MemberCard
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ProductType()
+        public MemberCard()
         {
-            this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
             this.ProductMemberCard = new HashSet<ProductMemberCard>();
-            this.ProductTyeField = new HashSet<ProductTyeField>();
-            this.ProductTypeLoaiVai = new HashSet<ProductTypeLoaiVai>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Price { get; set; }
-        public bool IsFitting { get; set; }
         public string Note { get; set; }
+        public int BirthDayDiscount { get; set; }
+        public int NguoiThanDiscount { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductMemberCard> ProductMemberCard { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductTyeField> ProductTyeField { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductTypeLoaiVai> ProductTypeLoaiVai { get; set; }
     }
 }

@@ -1,0 +1,92 @@
+﻿@using iClassic.Models;
+@model iClassic.Models.MemberCard
+
+@{
+    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
+    ViewBag.Class = "fa fa-credit-card";
+    ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Hạng thẻ</a>" +
+                          "<span>" + ViewBag.Title + "</span>";
+    var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
+    var index = 0;
+}
+
+<div class="row mb10 mt10">
+    <div class="col-md-12">
+        <h3 class="panel-title">
+            @ViewBag.Title
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6 mb10">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name)
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BirthDayDiscount)                        
+                        <div class="input-group mb15">
+                            @Html.EditorFor(model => model.BirthDayDiscount, new { htmlAttributes = new { @class = "form-control" } })
+                            <span class="input-group-addon">%</span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.BirthDayDiscount, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NguoiThanDiscount)
+                        <div class="input-group mb15">
+                            @Html.EditorFor(model => model.NguoiThanDiscount, new { htmlAttributes = new { @class = "form-control" } })
+                            <span class="input-group-addon">%</span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.NguoiThanDiscount, "", new { @class = "text-danger" })
+                    </div>                    
+                </div>                
+                <div class="col-md-12 mt10">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">@Html.LabelFor(model => model.ProductMemberCard)</div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tr>
+                                        @foreach (var item in listProductType)
+                                        {
+                                            var productMemberCard = Model.ProductMemberCard.FirstOrDefault(m => m.ProductId == item.Id);
+                                            <td>
+                                                <small>@item.Name</small>
+                                                <input type="hidden" name="ProductMemberCard[@index].ProductId" value="@item.Id" />
+                                                <div class="input-group mb15">
+                                                    <input type="number" name="ProductMemberCard[@index].Discount" value="@(productMemberCard != null ? productMemberCard.Discount : 0)" class="form-control" />
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
+                                            </td>
+                                            index++;
+                                        }
+                                    </tr>
+                                </table>  
+                            </div>                          
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Note)
+                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", rows = "5" })
+                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
+        <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
+}
+
+@section Scripts {   
+    @Scripts.Render("~/bundles/jqueryval")
+}

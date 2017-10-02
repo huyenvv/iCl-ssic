@@ -67,6 +67,7 @@
           <Property Name="Group" Type="int" Nullable="false" />
           <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="BranchId" Type="int" Nullable="false" />
+          <Property Name="Birthday" Type="datetime" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="Invoice">
@@ -99,6 +100,16 @@
           <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="BranchId" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MemberCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Note" Type="nvarchar" MaxLength="500" />
+          <Property Name="BirthDayDiscount" Type="int" Nullable="false" />
+          <Property Name="NguoiThanDiscount" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PhieuChi">
           <Key>
@@ -146,6 +157,15 @@
           <Property Name="InvoiceId" Type="int" Nullable="false" />
           <Property Name="ProblemBy" Type="int" />
           <Property Name="ThoId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductMemberCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberCardId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Discount" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ProductTyeField">
           <Key>
@@ -481,6 +501,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ProductMemberCard_MemberCard">
+          <End Role="MemberCard" Type="Self.MemberCard" Multiplicity="1" />
+          <End Role="ProductMemberCard" Type="Self.ProductMemberCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCard">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductMemberCard">
+              <PropertyRef Name="MemberCardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductMemberCard_ProductType">
+          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+          <End Role="ProductMemberCard" Type="Self.ProductMemberCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductMemberCard">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ProductTyeField_ProductType">
           <End Role="ProductType" Type="Self.ProductType" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -583,9 +627,11 @@
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoaiVai" EntityType="Self.LoaiVai" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberCard" EntityType="Self.MemberCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhieuChi" EntityType="Self.PhieuChi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhieuSanXuat" EntityType="Self.PhieuSanXuat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhieuSua" EntityType="Self.PhieuSua" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductMemberCard" EntityType="Self.ProductMemberCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTyeField" EntityType="Self.ProductTyeField" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductTypeLoaiVai" EntityType="Self.ProductTypeLoaiVai" Schema="dbo" store:Type="Tables" />
@@ -680,6 +726,14 @@
             <End Role="Tho" EntitySet="Tho" />
             <End Role="PhieuSua" EntitySet="PhieuSua" />
           </AssociationSet>
+          <AssociationSet Name="FK_ProductMemberCard_MemberCard" Association="Self.FK_ProductMemberCard_MemberCard">
+            <End Role="MemberCard" EntitySet="MemberCard" />
+            <End Role="ProductMemberCard" EntitySet="ProductMemberCard" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductMemberCard_ProductType" Association="Self.FK_ProductMemberCard_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="ProductMemberCard" EntitySet="ProductMemberCard" />
+          </AssociationSet>
           <AssociationSet Name="FK_ProductTyeField_ProductType" Association="Self.FK_ProductTyeField_ProductType">
             <End Role="ProductType" EntitySet="ProductType" />
             <End Role="ProductTyeField" EntitySet="ProductTyeField" />
@@ -723,7 +777,6 @@
           <EntitySet Name="PhieuChi" EntityType="iClassicModel.PhieuChi" />
           <EntitySet Name="PhieuSua" EntityType="iClassicModel.PhieuSua" />
           <EntitySet Name="ProductTyeField" EntityType="iClassicModel.ProductTyeField" />
-          <EntitySet Name="ProductType" EntityType="iClassicModel.ProductType" />
           <EntitySet Name="ProductTypeLoaiVai" EntityType="iClassicModel.ProductTypeLoaiVai" />
           <EntitySet Name="ProductTypeValue" EntityType="iClassicModel.ProductTypeValue" />
           <EntitySet Name="Tho" EntityType="iClassicModel.Tho" />
@@ -791,17 +844,9 @@
             <End Role="Tho" EntitySet="Tho" />
             <End Role="PhieuSua" EntitySet="PhieuSua" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductTyeField_ProductType" Association="iClassicModel.FK_ProductTyeField_ProductType">
-            <End Role="ProductType" EntitySet="ProductType" />
-            <End Role="ProductTyeField" EntitySet="ProductTyeField" />
-          </AssociationSet>
           <AssociationSet Name="FK_ProductTypeValue_ProductTyeField" Association="iClassicModel.FK_ProductTypeValue_ProductTyeField">
             <End Role="ProductTyeField" EntitySet="ProductTyeField" />
             <End Role="ProductTypeValue" EntitySet="ProductTypeValue" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductTypeLoaiVai_ProductType" Association="iClassicModel.FK_ProductTypeLoaiVai_ProductType">
-            <End Role="ProductType" EntitySet="ProductType" />
-            <End Role="ProductTypeLoaiVai" EntitySet="ProductTypeLoaiVai" />
           </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="iClassicModel.AspNetUserRoles">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -814,10 +859,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_PhieuSanXuat_LoaiVai" Association="iClassicModel.FK_PhieuSanXuat_LoaiVai">
             <End Role="LoaiVai" EntitySet="LoaiVai" />
-            <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PhieuSanXuat_ProductType" Association="iClassicModel.FK_PhieuSanXuat_ProductType">
-            <End Role="ProductType" EntitySet="ProductType" />
             <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
           </AssociationSet>
           <AssociationSet Name="FK_PhieuSanXuat_Tho" Association="iClassicModel.FK_PhieuSanXuat_Tho">
@@ -840,6 +881,29 @@
           <AssociationSet Name="FK_Salary_Tho" Association="iClassicModel.FK_Salary_Tho">
             <End Role="Tho" EntitySet="Tho" />
             <End Role="Salary" EntitySet="Salary" />
+          </AssociationSet>
+          <EntitySet Name="MemberCard" EntityType="iClassicModel.MemberCard" />
+          <EntitySet Name="ProductMemberCard" EntityType="iClassicModel.ProductMemberCard" />
+          <EntitySet Name="ProductType" EntityType="iClassicModel.ProductType" />
+          <AssociationSet Name="FK_ProductMemberCard_MemberCard" Association="iClassicModel.FK_ProductMemberCard_MemberCard">
+            <End Role="MemberCard" EntitySet="MemberCard" />
+            <End Role="ProductMemberCard" EntitySet="ProductMemberCard" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PhieuSanXuat_ProductType" Association="iClassicModel.FK_PhieuSanXuat_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductMemberCard_ProductType" Association="iClassicModel.FK_ProductMemberCard_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="ProductMemberCard" EntitySet="ProductMemberCard" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductTyeField_ProductType" Association="iClassicModel.FK_ProductTyeField_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="ProductTyeField" EntitySet="ProductTyeField" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductTypeLoaiVai_ProductType" Association="iClassicModel.FK_ProductTypeLoaiVai_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="ProductTypeLoaiVai" EntitySet="ProductTypeLoaiVai" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AspNetRoles">
@@ -915,6 +979,7 @@
           <NavigationProperty Name="Branch" Relationship="iClassicModel.FK_Customer_Branch" FromRole="Customer" ToRole="Branch" />
           <NavigationProperty Name="Invoice" Relationship="iClassicModel.FK_Invoice_Customer" FromRole="Customer" ToRole="Invoice" />
           <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_Customer" FromRole="Customer" ToRole="ProductTypeValue" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Invoice">
           <Key>
@@ -996,21 +1061,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductTyeField" ToRole="ProductType" />
           <NavigationProperty Name="ProductTypeValue" Relationship="iClassicModel.FK_ProductTypeValue_ProductTyeField" FromRole="ProductTyeField" ToRole="ProductTypeValue" />
-        </EntityType>
-        <EntityType Name="ProductType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="IsFitting" Type="Boolean" Nullable="false" />
-          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ProductTyeField" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductType" ToRole="ProductTyeField" />
-          <NavigationProperty Name="ProductTypeLoaiVai" Relationship="iClassicModel.FK_ProductTypeLoaiVai_ProductType" FromRole="ProductType" ToRole="ProductTypeLoaiVai" />
-          <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_ProductType" FromRole="ProductType" ToRole="PhieuSanXuat" />
+          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductTyeField" ToRole="ProductType" />
         </EntityType>
         <EntityType Name="ProductTypeLoaiVai">
           <Key>
@@ -1250,20 +1302,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductTyeField_ProductType">
-          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="iClassicModel.ProductTyeField" Role="ProductTyeField" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductTyeField">
-              <PropertyRef Name="ProductTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ProductTypeValue_ProductTyeField">
           <End Type="iClassicModel.ProductTyeField" Role="ProductTyeField" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1275,20 +1313,6 @@
             </Principal>
             <Dependent Role="ProductTypeValue">
               <PropertyRef Name="ProductTypeFieldId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductTypeLoaiVai_ProductType">
-          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="iClassicModel.ProductTypeLoaiVai" Role="ProductTypeLoaiVai" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductTypeLoaiVai">
-              <PropertyRef Name="ProductTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1317,11 +1341,11 @@
           <Property Name="ThoDoId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Invoice" Relationship="iClassicModel.FK_PhieuSanXuat_Invoice" FromRole="PhieuSanXuat" ToRole="Invoice" />
           <NavigationProperty Name="LoaiVai" Relationship="iClassicModel.FK_PhieuSanXuat_LoaiVai" FromRole="PhieuSanXuat" ToRole="LoaiVai" />
-          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_PhieuSanXuat_ProductType" FromRole="PhieuSanXuat" ToRole="ProductType" />
           <NavigationProperty Name="Tho" Relationship="iClassicModel.FK_PhieuSanXuat_Tho" FromRole="PhieuSanXuat" ToRole="Tho" />
           <NavigationProperty Name="Tho1" Relationship="iClassicModel.FK_PhieuSanXuat_Tho1" FromRole="PhieuSanXuat" ToRole="Tho" />
           <NavigationProperty Name="Tho2" Relationship="iClassicModel.FK_PhieuSanXuat_Tho2" FromRole="PhieuSanXuat" ToRole="Tho" />
           <Property Name="HasVai" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_PhieuSanXuat_ProductType" FromRole="PhieuSanXuat" ToRole="ProductType" />
         </EntityType>
         <Association Name="FK_PhieuSanXuat_Invoice">
           <End Type="iClassicModel.Invoice" Role="Invoice" Multiplicity="1">
@@ -1346,18 +1370,6 @@
             </Principal>
             <Dependent Role="PhieuSanXuat">
               <PropertyRef Name="MaVaiId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PhieuSanXuat_ProductType">
-          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1" />
-          <End Type="iClassicModel.PhieuSanXuat" Role="PhieuSanXuat" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PhieuSanXuat">
-              <PropertyRef Name="ProductTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1436,6 +1448,106 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="MemberCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDayDiscount" Type="Int32" Nullable="false" />
+          <Property Name="NguoiThanDiscount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductMemberCard" Relationship="iClassicModel.FK_ProductMemberCard_MemberCard" FromRole="MemberCard" ToRole="ProductMemberCard" />
+        </EntityType>
+        <EntityType Name="ProductMemberCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberCardId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Discount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MemberCard" Relationship="iClassicModel.FK_ProductMemberCard_MemberCard" FromRole="ProductMemberCard" ToRole="MemberCard" />
+          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_ProductMemberCard_ProductType" FromRole="ProductMemberCard" ToRole="ProductType" />
+        </EntityType>
+        <EntityType Name="ProductType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="IsFitting" Type="Boolean" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_ProductType" FromRole="ProductType" ToRole="PhieuSanXuat" />
+          <NavigationProperty Name="ProductMemberCard" Relationship="iClassicModel.FK_ProductMemberCard_ProductType" FromRole="ProductType" ToRole="ProductMemberCard" />
+          <NavigationProperty Name="ProductTyeField" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductType" ToRole="ProductTyeField" />
+          <NavigationProperty Name="ProductTypeLoaiVai" Relationship="iClassicModel.FK_ProductTypeLoaiVai_ProductType" FromRole="ProductType" ToRole="ProductTypeLoaiVai" />
+        </EntityType>
+        <Association Name="FK_ProductMemberCard_MemberCard">
+          <End Type="iClassicModel.MemberCard" Role="MemberCard" Multiplicity="1" />
+          <End Type="iClassicModel.ProductMemberCard" Role="ProductMemberCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCard">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductMemberCard">
+              <PropertyRef Name="MemberCardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PhieuSanXuat_ProductType">
+          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1" />
+          <End Type="iClassicModel.PhieuSanXuat" Role="PhieuSanXuat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PhieuSanXuat">
+              <PropertyRef Name="ProductTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductMemberCard_ProductType">
+          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1" />
+          <End Type="iClassicModel.ProductMemberCard" Role="ProductMemberCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductMemberCard">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductTyeField_ProductType">
+          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="iClassicModel.ProductTyeField" Role="ProductTyeField" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductTyeField">
+              <PropertyRef Name="ProductTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductTypeLoaiVai_ProductType">
+          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="iClassicModel.ProductTypeLoaiVai" Role="ProductTypeLoaiVai" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductTypeLoaiVai">
+              <PropertyRef Name="ProductTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1486,6 +1598,7 @@
           <EntitySetMapping Name="Customer">
             <EntityTypeMapping TypeName="iClassicModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
@@ -1573,17 +1686,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductType">
-            <EntityTypeMapping TypeName="iClassicModel.ProductType">
-              <MappingFragment StoreEntitySet="ProductType">
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="IsFitting" ColumnName="IsFitting" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ProductTypeLoaiVai">
             <EntityTypeMapping TypeName="iClassicModel.ProductTypeLoaiVai">
               <MappingFragment StoreEntitySet="ProductTypeLoaiVai">
@@ -1657,6 +1759,38 @@
                 <ScalarProperty Name="IsPaid" ColumnName="IsPaid" />
                 <ScalarProperty Name="ToDate" ColumnName="ToDate" />
                 <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberCard">
+            <EntityTypeMapping TypeName="iClassicModel.MemberCard">
+              <MappingFragment StoreEntitySet="MemberCard">
+                <ScalarProperty Name="NguoiThanDiscount" ColumnName="NguoiThanDiscount" />
+                <ScalarProperty Name="BirthDayDiscount" ColumnName="BirthDayDiscount" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductMemberCard">
+            <EntityTypeMapping TypeName="iClassicModel.ProductMemberCard">
+              <MappingFragment StoreEntitySet="ProductMemberCard">
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="MemberCardId" ColumnName="MemberCardId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductType">
+            <EntityTypeMapping TypeName="iClassicModel.ProductType">
+              <MappingFragment StoreEntitySet="ProductType">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="IsFitting" ColumnName="IsFitting" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -25,8 +25,8 @@ namespace iClassic.Models
         public string Note { get; set; }
         public int ProductTypeId { get; set; }
     
-        public virtual ProductType ProductType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductTypeValue> ProductTypeValue { get; set; }
+        public virtual ProductType ProductType { get; set; }
     }
 }

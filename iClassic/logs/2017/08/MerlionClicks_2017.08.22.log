@@ -1,0 +1,21 @@
+INFO  92939ms ProductTypeController  MoveNext           - System.ArgumentNullException: Value cannot be null.
+Parameter name: source
+   at System.Linq.Enumerable.Where[TSource](IEnumerable`1 source, Func`2 predicate)
+   at iClassic.Services.Implementation.ProductTypeRepository.Update(ProductType model) in D:\PROJECT\iClassic\iClassic\Services\Implementation\ProductTypeRepository.cs:line 91
+   at iClassic.Controllers.ProductTypeController.<NewOrEdit>d__5.MoveNext() in D:\PROJECT\iClassic\iClassic\Controllers\ProductTypeController.cs:line 65
+INFO  61382ms ProductTypeController  MoveNext           - System.InvalidOperationException: The operation failed: The relationship could not be changed because one or more of the foreign-key properties is non-nullable. When a change is made to a relationship, the related foreign-key property is set to a null value. If the foreign-key does not support null values, a new relationship must be defined, the foreign-key property must be assigned another non-null value, or the unrelated object must be deleted.
+   at System.Data.Entity.Core.Objects.ObjectContext.PrepareToSaveChanges(SaveOptions options)
+   at System.Data.Entity.Core.Objects.ObjectContext.<SaveChangesInternalAsync>d__31.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at iClassic.Services.Base.GenericRepository`1.<SaveAsync>d__11.MoveNext() in D:\PROJECT\iClassic\iClassic\Services\Base\GenericRepository.cs:line 70
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at iClassic.Controllers.ProductTypeController.<NewOrEdit>d__5.MoveNext() in D:\PROJECT\iClassic\iClassic\Controllers\ProductTypeController.cs:line 67
+INFO  222470ms ProductTypeController  MoveNext           - System.NullReferenceException: Object reference not set to an instance of an object.
+   at iClassic.Services.Implementation.ProductTypeRepository.Update(ProductType model) in D:\PROJECT\iClassic\iClassic\Services\Implementation\ProductTypeRepository.cs:line 89
+   at iClassic.Controllers.ProductTypeController.<NewOrEdit>d__5.MoveNext() in D:\PROJECT\iClassic\iClassic\Controllers\ProductTypeController.cs:line 65

@@ -10,23 +10,22 @@ using iClassic.Helper;
 
 namespace iClassic.Controllers
 {
-    [Override.Authorize]
-    public class PhieuSuaController : BaseController
+    [Override.Authorize(RoleList.SupperAdmin, RoleList.Admin)]
+    public class MemberCardController : BaseController
     {
         private readonly ILog _log;
-        private PhieuSuaRepository _PhieuSuaRepository;
+        private MemberCardRepository _memberCardRepository;
 
-        public PhieuSuaController()
+        public MemberCardController()
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            _PhieuSuaRepository = new PhieuSuaRepository(_entities);
+            _memberCardRepository = new MemberCardRepository(_entities);
         }
 
-        // GET: PhieuSuaes
-        public ActionResult Index(PhieuSuaSearch model)
+        // GET: MemberCardes
+        public ActionResult Index(MemberCardSearch model)
         {
-            model.BranchId = CurrentBranchId;
-            var result = _PhieuSuaRepository.Search(model);
+            var result = _memberCardRepository.Search(model);
             int pageSize = model?.PageSize ?? _pageSize;
             int pageNumber = (model?.Page ?? 1);
 
@@ -34,43 +33,38 @@ namespace iClassic.Controllers
             return View(result.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: PhieuSuaes/NewOrEdit/5
-        public async Task<ActionResult> NewOrEdit(int id = 0)
+        // GET: MemberCardes/NewOrEdit/5
+        public ActionResult NewOrEdit(int id = 0)
         {
-            var model = await _PhieuSuaRepository.GetByIdAsync(id);
+            var model = _memberCardRepository.GetById(id);
             if (model == null)
             {
-                model = new PhieuSua
-                {
-                    Created = DateTime.Now,
-                    NgayTra = DateTime.Now.AddDays(SoNgayTraSauKhiSua),
-                    BranchId = CurrentBranchId
-                };
+                model = new MemberCard();
             }
-            CreateCustomerViewBag(model.Id);
+            CreateListProductTypeViewBag();
             return View(model);
         }
 
-        // POST: PhieuSuaes/Edit/5
+        // POST: MemberCardes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,InvoiceId,SoTien,NoiDung,Status")] PhieuSua model)
+        public async Task<ActionResult> NewOrEdit(MemberCard model)
         {
             try
             {
                 if (ModelState.IsValid)
-                {                    
+                {
                     if (model.Id == 0)
-                    {                        
-                        _PhieuSuaRepository.Insert(model);
+                    {
+                        _memberCardRepository.Insert(model);
                     }
                     else
                     {
-                        _PhieuSuaRepository.Update(model);
+                        _memberCardRepository.Update(model);
                     }
-                    await _PhieuSuaRepository.SaveAsync();
+                    await _memberCardRepository.SaveAsync();
 
                     ShowMessageSuccess(Message.Update_Successfully);
 
@@ -83,11 +77,11 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
-            CreateCustomerViewBag(model.Id);
+            CreateListProductTypeViewBag();
             return View(model);
         }
 
-        // GET: PhieuSuaes/Delete/5
+        // GET: MemberCardes/Delete/5
         public async Task<ActionResult> Delete(int id = 0)
         {
             try
@@ -96,14 +90,14 @@ namespace iClassic.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                var obj = await _PhieuSuaRepository.GetByIdAsync(id);
-                if (obj == null || !IsValidBranch(obj.BranchId))
+                var obj = await _memberCardRepository.GetByIdAsync(id);
+                if (obj == null)
                 {
                     return HttpNotFound();
                 }
-                _PhieuSuaRepository.Delete(obj);
+                _memberCardRepository.Delete(obj);
 
-                await _PhieuSuaRepository.SaveAsync();
+                await _memberCardRepository.SaveAsync();
 
                 ShowMessageSuccess(Message.Update_Successfully);
             }
@@ -120,7 +114,7 @@ namespace iClassic.Controllers
         {
             if (disposing)
             {
-                _PhieuSuaRepository.Dispose();
+                _memberCardRepository.Dispose();
             }
             base.Dispose(disposing);
         }

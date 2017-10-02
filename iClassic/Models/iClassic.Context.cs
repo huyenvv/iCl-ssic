@@ -34,11 +34,13 @@ namespace iClassic.Models
         public virtual DbSet<PhieuChi> PhieuChi { get; set; }
         public virtual DbSet<PhieuSua> PhieuSua { get; set; }
         public virtual DbSet<ProductTyeField> ProductTyeField { get; set; }
-        public virtual DbSet<ProductType> ProductType { get; set; }
         public virtual DbSet<ProductTypeLoaiVai> ProductTypeLoaiVai { get; set; }
         public virtual DbSet<ProductTypeValue> ProductTypeValue { get; set; }
         public virtual DbSet<Tho> Tho { get; set; }
         public virtual DbSet<PhieuSanXuat> PhieuSanXuat { get; set; }
         public virtual DbSet<Salary> Salary { get; set; }
+        public virtual DbSet<MemberCard> MemberCard { get; set; }
+        public virtual DbSet<ProductMemberCard> ProductMemberCard { get; set; }
+        public virtual DbSet<ProductType> ProductType { get; set; }
     }
 }
