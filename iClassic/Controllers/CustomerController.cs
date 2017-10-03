@@ -55,8 +55,6 @@ namespace iClassic.Controllers
             return View(model);
         }
 
-
-
         // POST: Customeres/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -142,6 +140,20 @@ namespace iClassic.Controllers
                 _log.Info(ex.ToString());
             }
             return RedirectToAction("Index");
+        }
+
+        public JsonResult GetMemberCard(int id)
+        {
+            try
+            {               
+                var result = _customerRepository.GetMemberCard(id, CurrentBranchId);
+                return Json(new { Data = result }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new {}, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         protected override void Dispose(bool disposing)

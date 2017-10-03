@@ -36,7 +36,10 @@
         <tr>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Name">Tên hạng thẻ</a>
-            </th>            
+            </th>  
+            <th>
+                @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().SoTien)
+            </th>          
             <th>
                 @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().BirthDayDiscount)
             </th>
@@ -57,6 +60,9 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @item.SoTien.ToString("N0")  ₫
                 </td>
                 <td>
                     @item.BirthDayDiscount %

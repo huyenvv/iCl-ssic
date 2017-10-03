@@ -19,7 +19,7 @@ namespace iClassic.Models
         public int ProductId { get; set; }
         public int Discount { get; set; }
     
-        public virtual MemberCard MemberCard { get; set; }
         public virtual ProductType ProductType { get; set; }
+        public virtual MemberCard MemberCard { get; set; }
     }
 }

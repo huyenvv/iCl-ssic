@@ -42,6 +42,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CustomerId)
                                 @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
+                                <div id="boxHangThe">Thành viên: <strong id="lblMemberCard"></strong> </div>
                                 <a href="javascript:void(0)" onclick="showNewCustomerModal()">+ Thêm mới khách hàng</a>
                                 @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                             </div>
@@ -252,6 +253,21 @@
             });
         }
 
+        function GetMemberCard() {
+            var id = $('#CustomerId').val();
+            $.get("@Url.Action("GetMemberCard", "Customer")/" + id
+                    , function (data) {
+                        var name = '';
+                        if (data.Data) {
+                            name = data.Data.Name;
+                            $("#boxHangThe").slideDown();
+                        } else {
+                            $("#boxHangThe").slideUp();
+                        }
+                        $("#lblMemberCard").html(name);
+                    });
+        }
+
         var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.DangNguoi,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId,m.HasVai,m.VaiType, m.GiaVaiMau}))".replace(/&quot;/g, '"'));
         var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price,m.IsFitting}))".replace(/&quot;/g, '"'));
         var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
@@ -295,6 +311,10 @@
                 bindPhieuSanXuat();
 
                 return false;
+            });
+
+            $('#CustomerId').change(function () {
+                GetMemberCard();
             });
         });
 

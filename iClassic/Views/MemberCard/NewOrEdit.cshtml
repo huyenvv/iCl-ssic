@@ -33,7 +33,15 @@
                         @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.BirthDayDiscount)                        
+                        @Html.LabelFor(model => model.SoTien)
+                        <div class="input-group mb15">
+                            @Html.EditorFor(model => model.SoTien, new { htmlAttributes = new { @class = "form-control price" } })
+                            <span class="input-group-addon">đ</span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.SoTien, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BirthDayDiscount)
                         <div class="input-group mb15">
                             @Html.EditorFor(model => model.BirthDayDiscount, new { htmlAttributes = new { @class = "form-control" } })
                             <span class="input-group-addon">%</span>
@@ -47,8 +55,8 @@
                             <span class="input-group-addon">%</span>
                         </div>
                         @Html.ValidationMessageFor(model => model.NguoiThanDiscount, "", new { @class = "text-danger" })
-                    </div>                    
-                </div>                
+                    </div>
+                </div>
                 <div class="col-md-12 mt10">
                     <div class="form-group">
                         <div class="row">
@@ -70,8 +78,8 @@
                                             index++;
                                         }
                                     </tr>
-                                </table>  
-                            </div>                          
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -84,9 +92,23 @@
         </div>
     </div>
     <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
-        <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
+    <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
 }
 
-@section Scripts {   
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            $('.price').maskMoney({ precision: 0 });
+            $('.price').focus();
+        });
+        function beforeSubmit() {
+            $(".price").each(function () {
+                var $this = $(this);
+                var value = $this.val().replace(/,/g, '');
+                $this.val(value);
+            });
+        }
+    </script>
 }

@@ -1,4 +1,5 @@
-﻿using iClassic.Models;
+﻿using iClassic.Helper;
+using iClassic.Models;
 using iClassic.Services.Base;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,13 @@ namespace iClassic.Services.Implementation
     public class CustomerRepository : GenericRepository<Customer>, IDisposable
     {
         private iClassicEntities context;
+        private InvoiceRepository _invoiceRepository;
+        private MemberCardRepository _memberCardRepository;
         public CustomerRepository(iClassicEntities entities) : base(entities)
         {
             context = entities;
+            _invoiceRepository = new InvoiceRepository(context);
+            _memberCardRepository = new MemberCardRepository(context);
         }
 
         public Customer GetById(int Id)
@@ -127,7 +132,7 @@ namespace iClassic.Services.Implementation
             obj.TenKH = model.TenKH;
             obj.SDT = model.SDT;
             obj.Address = model.Address;
-            
+
             if (!string.IsNullOrWhiteSpace(model.Image))
             {
                 obj.Image = model.Image;
@@ -143,12 +148,36 @@ namespace iClassic.Services.Implementation
             var listRemove = obj.ProductTypeValue.Where(m => !model.ProductTypeValue.Any(n => n.ProductTypeFieldId == m.ProductTypeFieldId));
 
             listNew.ToList().ForEach(t => obj.ProductTypeValue.Add(t));
-            lisUpdate.ToList().ForEach(t => {
+            lisUpdate.ToList().ForEach(t =>
+            {
                 var objForUpdate = obj.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == t.ProductTypeFieldId);
                 objForUpdate.Value = t.Value;
             });
             listRemove.ToList().ForEach(t => obj.ProductTypeValue.Remove(t));
             base.Update(obj);
+        }
+
+        public MemberCard GetMemberCard(int id, int branchId)
+        {
+            var result = new MemberCard();
+            var customer = GetById(id);
+            var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddMilliseconds(-1);
+            var startDate = endDate.AddYears(-1);
+            var totalMoney = _invoiceRepository.Where(m => m.BranchId == branchId && m.Status == (byte)TicketStatus.DaTraChoKhach
+                                                        && m.CustomerId== id 
+                                                        && m.ModifiedDate >= startDate && m.ModifiedDate <= endDate).Sum(m => (double?)m.Total) ?? 0;
+            var allCard = _memberCardRepository.GetAll().OrderByDescending(m => m.SoTien);
+            foreach (var card in allCard)
+            {
+                if (totalMoney >= card.SoTien)
+                {
+                    result.Id = card.Id;
+                    result.Name = card.Name;
+                    result.SoTien = card.SoTien;
+                    break;
+                }
+            }
+            return result;
         }
     }
 }

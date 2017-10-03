@@ -19,6 +19,10 @@ namespace iClassic.Models.Metadata
         [Display(Name = "Giảm giá cho người thân đầu tiên")]
         public int NguoiThanDiscount { get; set; }
 
+        [Display(Name = "Số tiền đạt hạng")]
+        [Required(ErrorMessage = "Bạn phải nhập {0}")]
+        public double SoTien { get; set; }
+
         [Display(Name = "Giảm giá trong các sản phẩm may")]
         public virtual ICollection<ProductMemberCard> ProductMemberCard { get; set; }
     }

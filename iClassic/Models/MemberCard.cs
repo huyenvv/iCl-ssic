@@ -17,6 +17,7 @@ namespace iClassic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MemberCard()
         {
+            this.Invoice = new HashSet<Invoice>();
             this.ProductMemberCard = new HashSet<ProductMemberCard>();
         }
     
@@ -25,7 +26,10 @@ namespace iClassic.Models
         public string Note { get; set; }
         public int BirthDayDiscount { get; set; }
         public int NguoiThanDiscount { get; set; }
+        public double SoTien { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Invoice> Invoice { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductMemberCard> ProductMemberCard { get; set; }
     }

@@ -62,6 +62,7 @@
     <Property Name="Group" Type="int" Nullable="false" />
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
     <Property Name="BranchId" Type="int" Nullable="false" />
+    <Property Name="Birthday" Type="datetime" />
     <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>
   <EntityType Name="Invoice">
@@ -77,10 +78,11 @@
     <Property Name="NgayTra" Type="datetime" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="BranchId" Type="int" Nullable="false" />
+    <Property Name="MemberCardId" Type="int" />
+    <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
     <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="ModifiedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="BranchId" Type="int" Nullable="false" />
-    <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
     <Property Name="ModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
   </EntityType>
   <EntityType Name="LoaiVai">
@@ -94,6 +96,17 @@
     <Property Name="Created" Type="datetime2" Precision="7" Nullable="false" />
     <Property Name="BranchId" Type="int" Nullable="false" />
     <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MemberCard">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Note" Type="nvarchar" MaxLength="500" />
+    <Property Name="SoTien" Type="float" Nullable="false" />
+    <Property Name="BirthDayDiscount" Type="int" Nullable="false" />
+    <Property Name="NguoiThanDiscount" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="PhieuChi">
     <Key>
@@ -141,6 +154,15 @@
     <Property Name="InvoiceId" Type="int" Nullable="false" />
     <Property Name="ProblemBy" Type="int" />
     <Property Name="ThoId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductMemberCard">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MemberCardId" Type="int" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="Discount" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="ProductTyeField">
     <Key>
@@ -289,6 +311,18 @@
       </Principal>
       <Dependent Role="Invoice">
         <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Invoice_MemberCard">
+    <End Role="MemberCard" Type="Self.MemberCard" Multiplicity="0..1" />
+    <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MemberCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invoice">
+        <PropertyRef Name="MemberCardId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -476,6 +510,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_ProductMemberCard_MemberCard">
+    <End Role="MemberCard" Type="Self.MemberCard" Multiplicity="1" />
+    <End Role="ProductMemberCard" Type="Self.ProductMemberCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MemberCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductMemberCard">
+        <PropertyRef Name="MemberCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductMemberCard_ProductType">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+    <End Role="ProductMemberCard" Type="Self.ProductMemberCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductMemberCard">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_ProductTyeField_ProductType">
     <End Role="ProductType" Type="Self.ProductType" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -578,9 +636,11 @@
     <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LoaiVai" EntityType="Self.LoaiVai" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MemberCard" EntityType="Self.MemberCard" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PhieuChi" EntityType="Self.PhieuChi" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PhieuSanXuat" EntityType="Self.PhieuSanXuat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PhieuSua" EntityType="Self.PhieuSua" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductMemberCard" EntityType="Self.ProductMemberCard" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductTyeField" EntityType="Self.ProductTyeField" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductTypeLoaiVai" EntityType="Self.ProductTypeLoaiVai" Schema="dbo" store:Type="Tables" />
@@ -613,6 +673,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_Invoice_Customer" Association="Self.FK_Invoice_Customer">
       <End Role="Customer" EntitySet="Customer" />
+      <End Role="Invoice" EntitySet="Invoice" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Invoice_MemberCard" Association="Self.FK_Invoice_MemberCard">
+      <End Role="MemberCard" EntitySet="MemberCard" />
       <End Role="Invoice" EntitySet="Invoice" />
     </AssociationSet>
     <AssociationSet Name="FK_Invoice_UserCreate" Association="Self.FK_Invoice_UserCreate">
@@ -674,6 +738,14 @@
     <AssociationSet Name="FK_PhieuSua_Tho1" Association="Self.FK_PhieuSua_Tho1">
       <End Role="Tho" EntitySet="Tho" />
       <End Role="PhieuSua" EntitySet="PhieuSua" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductMemberCard_MemberCard" Association="Self.FK_ProductMemberCard_MemberCard">
+      <End Role="MemberCard" EntitySet="MemberCard" />
+      <End Role="ProductMemberCard" EntitySet="ProductMemberCard" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductMemberCard_ProductType" Association="Self.FK_ProductMemberCard_ProductType">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="ProductMemberCard" EntitySet="ProductMemberCard" />
     </AssociationSet>
     <AssociationSet Name="FK_ProductTyeField_ProductType" Association="Self.FK_ProductTyeField_ProductType">
       <End Role="ProductType" EntitySet="ProductType" />

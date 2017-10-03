@@ -79,6 +79,7 @@ namespace iClassic.Services.Implementation
             obj.Name = model.Name;
             obj.NguoiThanDiscount = model.NguoiThanDiscount;
             obj.Note = model.Note;
+            obj.SoTien = model.SoTien;
 
             var listNew = model.ProductMemberCard.Where(m => !obj.ProductMemberCard.Any(n => n.ProductId == m.ProductId));
             var lisUpdate = model.ProductMemberCard.Where(m => obj.ProductMemberCard.Any(n => n.ProductId == m.ProductId));
