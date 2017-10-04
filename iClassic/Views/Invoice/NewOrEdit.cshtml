@@ -274,7 +274,8 @@
                             name = 'Register';
                         }
                         $("#lblMemberCard").attr('data-id', data.Data.Id);
-                        $("#lblMemberCard").html(name);
+                        $("#lblMemberCard, .lblHangThe").html(name);
+                        updateSoTienItem();
                     });
         }
         function showInfoCard() {
@@ -336,11 +337,11 @@
                 GetMemberCard();
             } else {
                 if ('@Model.MemberCardId.HasValue' == 'True') {
-                    $("#lblMemberCard").val('@(Model.MemberCardId.HasValue? Model.MemberCard.Name: "Register")');
+                    $("#lblMemberCard, .lblHangThe").html('@(Model.MemberCardId.HasValue? Model.MemberCard.Name: "Register")');
                     $("#lblMemberCard").attr('data-id', '@(Model.MemberCardId ?? 0 )');
                 } else {
                     $("#lblMemberCard").attr('data-id', '0');
-                    $("#lblMemberCard").val('Register');
+                    $("#lblMemberCard").html('Register');
                 }
             }
             $('#CustomerId').change(function () {
@@ -377,6 +378,26 @@
                 }
 
                 var dongia = getPrice(vaiType, loaivaiId, productTypeId, giaVaiMau);
+                var discount = {};
+                var cardId = $('#lblMemberCard').attr('data-id');
+                if (cardId > 0) {
+                    var cardProduct = getProductMemberCard(productTypeId, cardId);
+                    if (cardProduct.Discount) {
+                        var priceDiscount = dongia * cardProduct.Discount / 100;
+                        dongia = dongia - priceDiscount;
+                        discount.Money = priceDiscount;
+                        discount.Percent = cardProduct.Discount;
+                    }
+                }
+
+                if (discount.Percent) {
+                    obj.find(".boxDiscount").slideDown();
+                    obj.find(".discountPercent").text(discount.Percent);
+                    obj.find(".discountMoney").text(formatMoney(discount.Money));
+                } else {
+                    obj.find(".boxDiscount").slideUp();
+                }
+
                 var thanhtien = dongia * soluong;
                 obj.find(".giatien").html(formatMoney(thanhtien));
 
@@ -410,7 +431,7 @@
         function getPrice(vaiType, loaivaiId, productTypeId, giaVaiMau) {
             var dongia = 0;
             var product = getProduct(productTypeId);
-            var tiencong = product.Price;
+            var tiencong = product.Price | 0;
 
             if (vaiType == vaiKhachMangDen) {
                 dongia = tiencong;
@@ -520,13 +541,17 @@
         function bindPhieuSanXuat() {
             var box = $('#boxPhieuSanXuat');
             var html = "";
-            $.each(phieuSanXuatModels, function (index, item) {                
+            $.each(phieuSanXuatModels, function (index, item) {
                 var dongia = getPrice(item.VaiType, item.MaVaiId, item.ProductTypeId, item.GiaVaiMau);
+                var discount = {};
                 var cardId = $('#lblMemberCard').attr('data-id');
                 if (cardId > 0) {
                     var cardProduct = getProductMemberCard(item.ProductTypeId, cardId);
                     if (cardProduct.Discount) {
-
+                        var priceDiscount = dongia * cardProduct.Discount / 100;
+                        dongia = dongia - priceDiscount;
+                        discount.Money = priceDiscount;
+                        discount.Percent = cardProduct.Discount;
                     }
                 }
                 var giatien = formatMoney(dongia * item.SoLuong);
@@ -639,9 +664,7 @@
                 html += "       </div>";
                 html += "   </div>";
                 html += "   <label>Giá tiền: <strong class='text-success giatien'>" + giatien + "</strong></label>";
-                if (cardId > 0) {
-                    html += "   <p><small><i>Đã giảm xxx% (tức 20.000 đ) do hạng thẻ yyyy</i></small></p>";
-                }                
+                html += "   <p class='boxDiscount' style='display: " + (discount.Money ? 'block' : 'none') + "'><small><i>Đã giảm <span class='discountPercent'>" + (discount.Percent | 0) + "</span>% (tức <span class='discountMoney'>" + formatMoney(discount.Money | 0) + "</span>) do khách là hạng thẻ <span class='lblHangThe'>" + $("#lblMemberCard").text() + "</span></i></small></p>";
                 html += "</div>";
             });
             box.html(html);

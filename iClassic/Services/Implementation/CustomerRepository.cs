@@ -13,13 +13,9 @@ namespace iClassic.Services.Implementation
     public class CustomerRepository : GenericRepository<Customer>, IDisposable
     {
         private iClassicEntities context;
-        private InvoiceRepository _invoiceRepository;
-        private MemberCardRepository _memberCardRepository;
         public CustomerRepository(iClassicEntities entities) : base(entities)
         {
             context = entities;
-            _invoiceRepository = new InvoiceRepository(context);
-            _memberCardRepository = new MemberCardRepository(context);
         }
 
         public Customer GetById(int Id)
@@ -163,10 +159,10 @@ namespace iClassic.Services.Implementation
             var customer = GetById(id);
             var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddMilliseconds(-1);
             var startDate = endDate.AddYears(-1);
-            var totalMoney = _invoiceRepository.Where(m => m.BranchId == branchId && m.Status == (byte)TicketStatus.DaTraChoKhach
+            var totalMoney = context.Invoice.Where(m => m.BranchId == branchId && m.Status == (byte)TicketStatus.DaTraChoKhach
                                                         && m.CustomerId== id 
                                                         && m.ModifiedDate >= startDate && m.ModifiedDate <= endDate).Sum(m => (double?)m.Total) ?? 0;
-            var allCard = _memberCardRepository.GetAll().OrderByDescending(m => m.SoTien);
+            var allCard = context.MemberCard.OrderByDescending(m => m.SoTien);
             foreach (var card in allCard)
             {
                 if (totalMoney >= card.SoTien)

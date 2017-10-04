@@ -13,9 +13,11 @@ namespace iClassic.Services.Implementation
     public class InvoiceRepository : GenericRepository<Invoice>, IDisposable
     {
         private iClassicEntities context;
+        private CustomerRepository _customerRepository;
         public InvoiceRepository(iClassicEntities entities) : base(entities)
         {
             context = entities;
+            _customerRepository = new CustomerRepository(entities);
         }
 
         public Invoice GetById(int id)
@@ -40,7 +42,7 @@ namespace iClassic.Services.Implementation
 
             if (model.StatusVai.HasValue)
             {
-                return list.Where(m => m.PhieuSanXuat.Any(n => n.VaiType == (byte)VaiTypes.KhongCoSan 
+                return list.Where(m => m.PhieuSanXuat.Any(n => n.VaiType == (byte)VaiTypes.KhongCoSan
                 && n.HasVai == model.StatusVai.Value));
             }
 
@@ -152,6 +154,8 @@ namespace iClassic.Services.Implementation
             model.ModifiedBy = model.CreateBy;
             model.NgayThu = model.PhieuSanXuat.Any(m => context.ProductType.Any(n => n.IsFitting && n.Id == m.ProductTypeId)) ? model.NgayThu : null;
 
+            var memberCard = _customerRepository.GetMemberCard(model.CustomerId, model.BranchId);
+
             model.PhieuSanXuat.ToList().ForEach(t =>
             {
                 var objForUpdate = model.PhieuSanXuat.FirstOrDefault(m => m.Id == t.Id);
@@ -174,6 +178,15 @@ namespace iClassic.Services.Implementation
                         objForUpdate.DonGia = tienCong + (t.GiaVaiMau ?? 0);
                         objForUpdate.GiaVaiMau = t.GiaVaiMau;
                         break;
+                }
+
+                if (memberCard.Id > 0)
+                {
+                    var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == t.ProductTypeId);
+                    if (productMemberCard != null)
+                    {
+                        objForUpdate.DonGia = objForUpdate.DonGia - (objForUpdate.DonGia * productMemberCard.Discount / 100);
+                    }
                 }
             });
             model.PhieuSua.ToList().ForEach(t =>
@@ -236,6 +249,7 @@ namespace iClassic.Services.Implementation
             var lisUpdate = model.PhieuSanXuat.Where(m => obj.PhieuSanXuat.Any(n => n.Id == m.Id));
             var listRemove = obj.PhieuSanXuat.Where(m => !model.PhieuSanXuat.Any(n => n.Id == m.Id));
 
+            var memberCard = _customerRepository.GetMemberCard(model.CustomerId, model.BranchId);
             listNew.ToList().ForEach(t =>
             {
                 var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
@@ -251,6 +265,14 @@ namespace iClassic.Services.Implementation
                     case VaiTypes.VaiMauCuaHang:
                         t.DonGia = tienCong + (t.GiaVaiMau ?? 0);
                         break;
+                }
+                if (memberCard.Id > 0)
+                {
+                    var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == t.ProductTypeId);
+                    if (productMemberCard != null)
+                    {
+                        t.DonGia = t.DonGia - (t.DonGia * productMemberCard.Discount / 100);
+                    }
                 }
                 obj.PhieuSanXuat.Add(t);
             }
@@ -285,6 +307,14 @@ namespace iClassic.Services.Implementation
                         objForUpdate.DonGia = tienCong + (t.GiaVaiMau ?? 0);
                         objForUpdate.GiaVaiMau = t.GiaVaiMau;
                         break;
+                }
+                if (memberCard.Id > 0)
+                {
+                    var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == t.ProductTypeId);
+                    if (productMemberCard != null)
+                    {
+                        objForUpdate.DonGia = objForUpdate.DonGia - (objForUpdate.DonGia * productMemberCard.Discount / 100);
+                    }
                 }
             });
             listRemove.ToList().ForEach(t => obj.PhieuSanXuat.Remove(t));
