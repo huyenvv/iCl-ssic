@@ -1122,6 +1122,7 @@
     <Content Include="Views\Salary\_PhieuSanXuatThoMay.cshtml" />
     <Content Include="Views\MemberCard\Index.cshtml" />
     <Content Include="Views\MemberCard\NewOrEdit.cshtml" />
+    <Content Include="Views\MemberCard\_InfoCard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -19,6 +19,7 @@ namespace iClassic.Controllers
         private PhieuSanXuatRepository _phieuSanXuatRepository;
         private LoaiVaiRepository _loaiVaiRepository;
         private ThoRepository _thoRepository;
+        private MemberCardRepository _memberCardRepository;
 
         public InvoiceController()
         {
@@ -27,6 +28,7 @@ namespace iClassic.Controllers
             _phieuSanXuatRepository = new PhieuSanXuatRepository(_entities);
             _loaiVaiRepository = new LoaiVaiRepository(_entities);
             _thoRepository = new ThoRepository(_entities);
+            _memberCardRepository = new MemberCardRepository(_entities);
         }
 
         // GET: Invoicees
@@ -64,6 +66,7 @@ namespace iClassic.Controllers
             CreateLoaiVaiViewBag();
             CreateListProductTypeViewBag();
             CreateDanhSachThoViewBag();
+            CreateDanhSachHangTheViewBag();
             return View(model);
         }
 
@@ -107,6 +110,7 @@ namespace iClassic.Controllers
             CreateLoaiVaiViewBag();
             CreateListProductTypeViewBag();
             CreateDanhSachThoViewBag();
+            CreateDanhSachHangTheViewBag();
             return View(model);
         }
 
@@ -240,6 +244,11 @@ namespace iClassic.Controllers
         private void CreateDanhSachThoViewBag()
         {
             ViewBag.ListThoMayDo = _thoRepository.GetAll();
+        }
+
+        private void CreateDanhSachHangTheViewBag()
+        {
+            ViewBag.ListHangThe = _memberCardRepository.GetAll();
         }
 
         protected override void Dispose(bool disposing)

@@ -1,0 +1,52 @@
+﻿@using iClassic.Models;
+@model iClassic.Models.MemberCard
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        @if (Model != null)
+        {
+            <div class="modal-header">
+                <h4 class="panel-title">Hạng thẻ: @Model.Name</h4>
+                <p>Số tiền đạt hạng: <span class="text-danger">@Model.SoTien.ToString("N0") ₫</span></p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul>
+                            <li>Giảm giá vào ngày sinh nhật: @Model.BirthDayDiscount %</li>
+                            <li>Giảm giá cho người thân đầu tiên: @Model.NguoiThanDiscount %</li>
+                            <li>
+                                Giảm thêm khi may các sản phẩm:
+                                <ul>
+                                    @foreach (var item in Model.ProductMemberCard)
+                                    {
+                                        <li>@item.ProductType.Name: @item.Discount %</li>
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="modal-header">
+                <h4 class="panel-title">Hạng thẻ: Register</h4>
+                <p>Số tiền đạt hạng: <span class="text-danger">0 ₫</span></p>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        Hạng thẻ hiện chưa có chính sách giảm giá.
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="modal-footer">
+            <a href="javascript:void(0)" class="btn btn-default" data-dismiss="modal">Đóng</a>
+        </div>
+    </div>
+</div>
+
+

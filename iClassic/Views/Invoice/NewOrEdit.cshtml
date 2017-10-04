@@ -12,6 +12,7 @@
     var loaivai = ViewBag.MaVaiId as IQueryable<LoaiVai>;
     var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
     var listTho = ViewBag.ListThoMayDo as IQueryable<Tho>;
+    var listHangThe = ViewBag.ListHangThe as IQueryable<MemberCard>;
 }
 
 <div class="row mb10 mt10">
@@ -42,8 +43,17 @@
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CustomerId)
                                 @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
-                                <div id="boxHangThe">Thành viên: <strong id="lblMemberCard"></strong> </div>
-                                <a href="javascript:void(0)" onclick="showNewCustomerModal()">+ Thêm mới khách hàng</a>
+                                <div class="row">
+                                    <div id="boxHangThe" class="col-xs-6">
+                                        Hạng thẻ:
+                                        <a href="javascript:void(0)" onclick="showInfoCard();">
+                                            <strong id="lblMemberCard"></strong>
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-6 text-right">
+                                        <a href="javascript:void(0)" onclick="showNewCustomerModal()">+ Thêm mới KH</a>
+                                    </div>
+                                </div>
                                 @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group" style="display: @(Model.PhieuSanXuat.Any(m=>m.ProductType!=null && m.ProductType.IsFitting) ? "block": "none");">
@@ -258,13 +268,21 @@
             $.get("@Url.Action("GetMemberCard", "Customer")/" + id
                     , function (data) {
                         var name = '';
-                        if (data.Data) {
+                        if (data.Data.Id > 0) {
                             name = data.Data.Name;
-                            $("#boxHangThe").slideDown();
                         } else {
-                            $("#boxHangThe").slideUp();
+                            name = 'Register';
                         }
+                        $("#lblMemberCard").attr('data-id', data.Data.Id);
                         $("#lblMemberCard").html(name);
+                    });
+        }
+        function showInfoCard() {
+            var id = $('#lblMemberCard').attr('data-id');
+            $.get("@Url.Action("GetInfoCard", "MemberCard")/" + id
+                    , function (data) {
+                        $("#modalDefault").html(data);
+                        $("#modalDefault").modal("show");
                     });
         }
 
@@ -279,6 +297,7 @@
         var vaiKhachMangDen = parseInt("@((byte)VaiTypes.KhachMangVaiDen)");
         var vaiKhongCoSan = parseInt("@((byte)VaiTypes.KhongCoSan)");
         var vaiMauTaiShop = parseInt("@((byte)VaiTypes.VaiMauCuaHang)");
+        var hangthe = JSON.parse("@JsonConvert.SerializeObject(listHangThe.Select(m=>new {m.Id,m.Name,m.BirthDayDiscount,m.NguoiThanDiscount,m.SoTien, ProductMemberCard = m.ProductMemberCard.Select(n=> new {n.ProductId, ProductName = n.ProductType.Name, n.Discount})}))".replace(/&quot;/g, '"'));
 
         $(function () {
 
@@ -313,6 +332,17 @@
                 return false;
             });
 
+            if ('@Model.Id' == '0' || '@Model.Status' == '@((byte)TicketStatus.ChuaXuLy)') {
+                GetMemberCard();
+            } else {
+                if ('@Model.MemberCardId.HasValue' == 'True') {
+                    $("#lblMemberCard").val('@(Model.MemberCardId.HasValue? Model.MemberCard.Name: "Register")');
+                    $("#lblMemberCard").attr('data-id', '@(Model.MemberCardId ?? 0 )');
+                } else {
+                    $("#lblMemberCard").attr('data-id', '0');
+                    $("#lblMemberCard").val('Register');
+                }
+            }
             $('#CustomerId').change(function () {
                 GetMemberCard();
             });
@@ -421,6 +451,23 @@
             return product;
         }
 
+        function getProductMemberCard(productId, cardId) {
+            var result = {};
+            $.each(hangthe, function (indexCard, card) {
+                if (card.Id != cardId) return;
+
+                //ProductId, ProductName = n.ProductType.Name, n.Discount
+                $.each(card.ProductMemberCard, function (i, product) {
+                    if (product.ProductId != productId) return;
+
+                    result = product;
+                    return false;
+                });
+                return false;
+            });
+            return result;
+        }
+
         function showHideFittingDate() {
             var result = false;
             $('#boxPhieuSanXuat .media').each(function (i, element) {
@@ -473,9 +520,15 @@
         function bindPhieuSanXuat() {
             var box = $('#boxPhieuSanXuat');
             var html = "";
-            $.each(phieuSanXuatModels, function (index, item) {
-
+            $.each(phieuSanXuatModels, function (index, item) {                
                 var dongia = getPrice(item.VaiType, item.MaVaiId, item.ProductTypeId, item.GiaVaiMau);
+                var cardId = $('#lblMemberCard').attr('data-id');
+                if (cardId > 0) {
+                    var cardProduct = getProductMemberCard(item.ProductTypeId, cardId);
+                    if (cardProduct.Discount) {
+
+                    }
+                }
                 var giatien = formatMoney(dongia * item.SoLuong);
 
                 html += "<div class='media'>";
@@ -586,6 +639,9 @@
                 html += "       </div>";
                 html += "   </div>";
                 html += "   <label>Giá tiền: <strong class='text-success giatien'>" + giatien + "</strong></label>";
+                if (cardId > 0) {
+                    html += "   <p><small><i>Đã giảm xxx% (tức 20.000 đ) do hạng thẻ yyyy</i></small></p>";
+                }                
                 html += "</div>";
             });
             box.html(html);

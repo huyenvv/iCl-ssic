@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;    
+    Layout = null;
     var baseController = ViewContext.Controller as iClassic.Controllers.BaseController;
 }
 @model iClassic.Models.Invoice
@@ -20,6 +20,7 @@
     .mb20 {
         margin-bottom: 50px;
     }
+
     .page {
         width: 21cm;
         min-height: 29.7cm;
@@ -92,14 +93,38 @@
                 }
             </td>
         </tr>
-        <tr>
-            <td class="text-center" colspan="2">
-                <small>
-                    <i>
-                        Quý khách được giảm: xx% khi may sơ mi, xx% khi may vest
-                    </i>
-                </small>
-            </td>
-        </tr>
+        @if (Model.MemberCardId.HasValue)
+        {
+            <tr>
+                <td class="" colspan="2">
+                    <p>
+                        <small><i>Ưu đãi hạng thẻ <strong>@Model.MemberCard.Name</strong> của quý khách như sau:</i></small>
+                    </p>
+                    <p>
+                        <small>
+                            <i>
+                                Giảm @Model.MemberCard.BirthDayDiscount% vào dịp sinh nhật,
+                                Giảm @Model.MemberCard.NguoiThanDiscount% cho người thân đầu tiên
+                            </i>
+                        </small>  
+                    </p>                
+                    <p>
+                        <small>
+                            <i>
+                                Giảm khi may các sản phẩm:
+                                @{
+                                    var count = 0;
+                                    foreach (var item in Model.MemberCard.ProductMemberCard)
+                                    {
+                                        <span>@(count != 0 ? ", " : "")@item.ProductType.Name @item.Discount%</span>
+                                        count++;
+                                    }
+                                }
+                            </i>
+                        </small>
+                    </p>
+                </td>
+            </tr>
+                            }
     </table>
 </div>

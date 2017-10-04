@@ -110,6 +110,12 @@ namespace iClassic.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult GetInfoCard(int id)
+        {
+            var card = _memberCardRepository.GetById(id);
+            return PartialView("_InfoCard", card);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

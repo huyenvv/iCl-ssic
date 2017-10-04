@@ -39,7 +39,7 @@
                 <td>
                     <div>Tên khách hàng: <strong>@Model.Customer.TenKH</strong></div>
                     <div>Số điện thoại: <strong>@Model.Customer.SDT</strong></div>
-                    <div>Hạng thành viên: <strong>xxx</strong></div>
+                    <div>Hạng thẻ: <strong>@(Model.MemberCardId.HasValue ? Model.MemberCard.Name : "Register")</strong></div>
                 </td>
                 <td>
                     <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
