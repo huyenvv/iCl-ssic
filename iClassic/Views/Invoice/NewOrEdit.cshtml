@@ -91,7 +91,7 @@
                                 <div class="row">
                                     <div class="col-xs-5">
                                         <div class="input-group">
-                                            @Html.EditorFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control price", onchange = "changeChietKhau(1);" } })
+                                            @Html.EditorFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control price" } })
                                             <span class="input-group-addon">đ</span>
                                         </div>
 
@@ -101,7 +101,7 @@
                                     </div>
                                     <div class="col-xs-5">
                                         <div class="input-group mb15">
-                                            <input type="number" min="0" max="100" value="@(Model.ChietKhau.HasValue ? (Model.ChietKhau.Value * 100 /Model.Total): 0)" class="form-control percentChietKhau" onchange="changeChietKhau(2);">
+                                            <input type="number" min="0" max="100" value="@(Model.ChietKhau.HasValue ? (Model.ChietKhau.Value * 100 /Model.Total): 0)" class="form-control percentChietKhau">
                                             <span class="input-group-addon">%</span>
                                         </div>
                                     </div>
@@ -346,6 +346,14 @@
             }
             $('#CustomerId').change(function () {
                 GetMemberCard();
+            });
+
+            $('#ChietKhau').change(function () {
+                changeChietKhau(1);
+            });
+
+            $('.percentChietKhau').change(function () {
+                changeChietKhau(2);
             });
         });
 

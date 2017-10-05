@@ -155,6 +155,8 @@ namespace iClassic.Services.Implementation
             model.NgayThu = model.PhieuSanXuat.Any(m => context.ProductType.Any(n => n.IsFitting && n.Id == m.ProductTypeId)) ? model.NgayThu : null;
 
             var memberCard = _customerRepository.GetMemberCard(model.CustomerId, model.BranchId);
+            if (memberCard.Id > 0)
+                model.MemberCardId = memberCard.Id;
 
             model.PhieuSanXuat.ToList().ForEach(t =>
             {
@@ -250,6 +252,9 @@ namespace iClassic.Services.Implementation
             var listRemove = obj.PhieuSanXuat.Where(m => !model.PhieuSanXuat.Any(n => n.Id == m.Id));
 
             var memberCard = _customerRepository.GetMemberCard(model.CustomerId, model.BranchId);
+            if (memberCard.Id > 0)
+                obj.MemberCardId = memberCard.Id;
+
             listNew.ToList().ForEach(t =>
             {
                 var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;

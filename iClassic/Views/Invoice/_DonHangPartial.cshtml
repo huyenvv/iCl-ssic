@@ -3,211 +3,219 @@
 @using Newtonsoft.Json;
 @model iClassic.Models.Invoice
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <table class="table table-noborder showforinvoice hide">
-            <tr>
-                <td rowspan="2">
-                    <img src="@Url.Content("~/images/logo.png")" class="img-responsive mb10" alt="" />
-                </td>
-                <td>
-                    <h3 class="mb10" style="margin-top:0;">
-                        ICLASSIC - ĐỊNH DANH CÁ TÍNH CỦA BẠN
-                    </h3>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <address>
-                        Địa chỉ:<strong> Số 65 Nghi Tàm - Quận Tây Hồ - Hà Nội </strong> <br>
-                        Điện thoại:<strong> 01235 811 866 - 0977906989</strong>  <br>
-                        Email:<strong> leanhtuan16989@gmail.com</strong><br />
-                        Fanpage:<strong> https://fb.com/iclassicvn </strong>  <br>
-                    </address>
-                </td>
-            </tr>
-        </table>
-        <hr class="showforinvoice hide" />
-        <table class="table table-noborder">
-            <tr>
-                <td colspan="2">
-                    <h3 class="text-center showforinvoice hide">HÓA ĐƠN MAY MẶC VÀ SỬA CHỮA </h3>
-                    <h3 class="text-center noforinvoice">CHI TIẾT ĐƠN HÀNG </h3>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div>Tên khách hàng: <strong>@Model.Customer.TenKH</strong></div>
-                    <div>Số điện thoại: <strong>@Model.Customer.SDT</strong></div>
-                    <div>Hạng thẻ: <strong>@(Model.MemberCardId.HasValue ? Model.MemberCard.Name : "Register")</strong></div>
-                </td>
-                <td>
-                    <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
+<table class="table table-noborder showforinvoice hide">
+    <tr>
+        <td rowspan="2">
+            <img src="@Url.Content("~/images/logo.png")" class="img-responsive mb10" alt="" />
+        </td>
+        <td>
+            <h3 class="mb10" style="margin-top:0;">
+                ICLASSIC - ĐỊNH DANH CÁ TÍNH CỦA BẠN
+            </h3>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <address>
+                Địa chỉ:<strong> Số 65 Nghi Tàm - Quận Tây Hồ - Hà Nội </strong> <br>
+                Điện thoại:<strong> 01235 811 866 - 0977906989</strong>  <br>
+                Email:<strong> leanhtuan16989@gmail.com</strong><br />
+                Fanpage:<strong> https://fb.com/iclassicvn </strong>  <br>
+            </address>
+        </td>
+    </tr>
+</table>
+<hr class="showforinvoice hide" />
+<table class="table table-noborder">
+    <tr>
+        <td colspan="2">
+            <h3 class="text-center showforinvoice hide">HÓA ĐƠN MAY MẶC VÀ SỬA CHỮA </h3>
+            <h3 class="text-center noforinvoice">CHI TIẾT ĐƠN HÀNG </h3>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div>Tên khách hàng: <strong>@Model.Customer.TenKH</strong></div>
+            <div>Số điện thoại: <strong>@Model.Customer.SDT</strong></div>
+            <div>Hạng thẻ: <strong>@(Model.MemberCardId.HasValue ? Model.MemberCard.Name : "Register")</strong></div>
+        </td>
+        <td>
+            <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
 
-                    @if (Model.NgayThu.HasValue)
+            @if (Model.NgayThu.HasValue)
                     {
-                        <div>
-                            Ngày thử: @Model.NgayThu.Value.ToString("dd/MM/yyyy")
-                        </div>
-                    }
                     <div>
-                        Ngày lấy: @Model.NgayTra.ToString("dd/MM/yyyy")
+                        Ngày thử: @Model.NgayThu.Value.ToString("dd/MM/yyyy")
                     </div>
-                    <div class="noforinvoice">
-                        Tình trạng:
-                        @Html.Raw(Helpers.DrawStatusTicket(Model.Status))
-                    </div>
-                </td>
+                    }
+            <div>
+                Ngày lấy: @Model.NgayTra.ToString("dd/MM/yyyy")
+            </div>
+            <div class="noforinvoice">
+                Tình trạng:
+                @Html.Raw(Helpers.DrawStatusTicket(Model.Status))
+            </div>
+        </td>
+    </tr>
+</table>
+<div class="table-responsive">
+    <table class="table ">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Thông tin chung</th>
+                <th class="noforinvoice text-left">Loại vải</th>
+                <th class="noforinvoice">Tình trạng vải</th>
+                <th class="noforinvoice">Thợ sản xuất</th>
+                <th>Số lượng</th>
+                <th class="text-right">Đơn giá</th>
+                <th class="text-right">Thành tiền</th>
             </tr>
-        </table>
-        <div class="table-responsive">
-            <table class="table ">
-                <thead>
-                    <tr>
-                        <th>Sản phẩm</th>
-                        <th>Thông tin chung</th>
-                        <th class="noforinvoice text-left">Loại vải</th>
-                        <th class="noforinvoice">Tình trạng vải</th>
-                        <th class="noforinvoice">Thợ sản xuất</th>
-                        <th>Số lượng</th>
-                        <th class="text-right">Đơn giá</th>
-                        <th class="text-right">Thành tiền</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
+        </thead>
+        <tbody>
+            @{
                         foreach (var item in Model.PhieuSanXuat)
                         {
-                            <tr>
-                                <td>
-                                    May mới - @item.ProductType.Name
-                                </td>
-                                <td>
-                                    <strong class="noforinvoice">Kiểu cách: </strong>@item.TenSanPham
-                                    <div class="noforinvoice">
-                                        <strong>Dáng người:</strong>@item.DangNguoi
-                                    </div>
-                                </td>
-                                <td class="noforinvoice text-left">
-                                    @switch ((VaiTypes)item.VaiType)
+                            var dongia = item.DonGia;
+                            var percent = 0;
+                            if (Model.MemberCardId.HasValue)
+                            {
+                                var productMemberCard = Model.MemberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == item.ProductTypeId);
+                                if (productMemberCard != null)
+                                {
+                                    dongia = dongia - (dongia * productMemberCard.Discount / 100);
+                                    percent = productMemberCard.Discount;
+                                }
+                            }
+                    <tr>
+                        <td>
+                            May mới - @item.ProductType.Name
+                        </td>
+                        <td>
+                            <strong class="noforinvoice">Kiểu cách: </strong>@item.TenSanPham
+                            <div class="noforinvoice">
+                                <strong>Dáng người:</strong>@item.DangNguoi
+                            </div>
+                        </td>
+                        <td class="noforinvoice text-left">
+                            @switch ((VaiTypes)item.VaiType)
                                     {
                                         case VaiTypes.KhachMangVaiDen:
-                                            <span>@VaiTypes.KhachMangVaiDen.GetDescription()</span>
+                                    <span>@VaiTypes.KhachMangVaiDen.GetDescription()</span>
                                             break;
                                         case VaiTypes.KhongCoSan:
-                                            <span>@item.LoaiVai.Name <br /> (@item.LoaiVai.MaVai)</span>
+                                    <span>@item.LoaiVai.Name <br /> (@item.LoaiVai.MaVai)</span>
                                             break;
                                         case VaiTypes.VaiMauCuaHang:
-                                            <span>@VaiTypes.VaiMauCuaHang.GetDescription()</span>
+                                    <span>@VaiTypes.VaiMauCuaHang.GetDescription()</span>
                                             break;
                                     }
-                                </td>
-                                <td class="noforinvoice">
+                        </td>
+                        <td class="noforinvoice">
 
-                                    @if (item.MaVaiId.HasValue && item.HasVai)
+                            @if (item.MaVaiId.HasValue && item.HasVai)
                                     {
                                         if (Model.Status == (byte)TicketStatus.DangXuLy)
                                         {
-                                            <div class="btn-group mr5">
-                                                <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                    <i class="fa fa-check-square"></i>  Đã mua <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("ChangeStatusMuaVai", new {id = Model.Id,idPhieusx=item.Id ,status = false})"><i class="fa  fa-times-circle"></i> Chưa mua</a></li>
-                                                </ul>
-                                            </div>
+                                    <div class="btn-group mr5">
+                                        <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fa fa-check-square"></i>  Đã mua <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="@Url.Action("ChangeStatusMuaVai", new {id = Model.Id,idPhieusx=item.Id ,status = false})"><i class="fa  fa-times-circle"></i> Chưa mua</a></li>
+                                        </ul>
+                                    </div>
                                         }
                                         else
                                         {
-                                            <span class="text-success">Đã mua</span>
+                                    <span class="text-success">Đã mua</span>
                                         }
 
                                     }
 
-                                    @if (item.MaVaiId.HasValue && !item.HasVai)
+                            @if (item.MaVaiId.HasValue && !item.HasVai)
                                     {
                                         if (Model.Status == (byte)TicketStatus.DangXuLy)
                                         {
-                                            <div class="btn-group mr5">
-                                                <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                    <i class="fa fa-times-circle"></i>  Chưa mua <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li><a href="@Url.Action("ChangeStatusMuaVai", new {id = Model.Id,idPhieusx=item.Id ,status = true})"><i class="fa fa-check-square"></i> Đã mua</a></li>
-                                                </ul>
-                                            </div>
+                                    <div class="btn-group mr5">
+                                        <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fa fa-times-circle"></i>  Chưa mua <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="@Url.Action("ChangeStatusMuaVai", new {id = Model.Id,idPhieusx=item.Id ,status = true})"><i class="fa fa-check-square"></i> Đã mua</a></li>
+                                        </ul>
+                                    </div>
                                         }
                                         else
                                         {
-                                            <span class="text-danger">Chưa mua</span>
+                                    <span class="text-danger">Chưa mua</span>
                                         }
                                     }
-                                </td>
-                                <td class="noforinvoice text-left">
-                                    <div>@(((ThoTypes)item.ThoDoId).GetDescription()): <strong>@item.Tho.Name</strong></div>
-                                    <div>@(((ThoTypes)item.ThoCatId).GetDescription()): <strong>@item.Tho2.Name</strong></div>
-                                    <div>@(((ThoTypes)item.ThoMayId).GetDescription()): <strong>@item.Tho1.Name</strong></div>
-                                </td>
-                                <td>@item.SoLuong</td>
-                                <td class="text-right">@item.DonGia.ToString("N0") ₫</td>
-                                <td class="text-right">@((item.DonGia * item.SoLuong).ToString("N0")) ₫</td>
-                            </tr>
+                        </td>
+                        <td class="noforinvoice text-left">
+                            <div>@(((ThoTypes)item.ThoDoId).GetDescription()): <strong>@item.Tho.Name</strong></div>
+                            <div>@(((ThoTypes)item.ThoCatId).GetDescription()): <strong>@item.Tho2.Name</strong></div>
+                            <div>@(((ThoTypes)item.ThoMayId).GetDescription()): <strong>@item.Tho1.Name</strong></div>
+                        </td>
+                        <td>@item.SoLuong</td>
+                        <td class="text-right">@dongia.ToString("N0") ₫</td>
+                        <td class="text-right">@((dongia * item.SoLuong).ToString("N0")) ₫</td>
+
+                    </tr>
                         }
                         foreach (var item in Model.PhieuSua)
                         {
-                            <tr>
-                                <td>
-                                    @item.NoiDung
-                                </td>
-                                <td>
-                                    @(((PhieuSuaType)item.Type).GetDescription())
-                                </td>
-                                <td class="noforinvoice"></td>
-                                <td class="noforinvoice"></td>
-                                <td class="noforinvoice"></td>
-                                <td>1</td>
-                                <td class="text-right">@(item.SoTien.HasValue ? item.SoTien.Value.ToString("N0") : "0") ₫</td>
-                                <td class="text-right">@(item.SoTien.HasValue ? item.SoTien.Value.ToString("N0") : "0") ₫</td>
-                            </tr>
+                    <tr>
+                        <td>
+                            @item.NoiDung
+                        </td>
+                        <td>
+                            @(((PhieuSuaType)item.Type).GetDescription())
+                        </td>
+                        <td class="noforinvoice"></td>
+                        <td class="noforinvoice"></td>
+                        <td class="noforinvoice"></td>
+                        <td>1</td>
+                        <td class="text-right">@(item.SoTien.HasValue ? item.SoTien.Value.ToString("N0") : "0") ₫</td>
+                        <td class="text-right">@(item.SoTien.HasValue ? item.SoTien.Value.ToString("N0") : "0") ₫</td>
+                    </tr>
                         }
-                    }
-                </tbody>
-                <tfoot>
-                    @{ var colspan = 7;}
-                    <tr>
-                        <td colspan="@colspan" class="text-right">
-                            <strong>Tổng</strong>
-                        </td>
-                        <td class="text-right text-success">
-                            @Model.Total.ToString("N0") ₫
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="@colspan" class="text-right">
-                            <strong>Đặt cọc</strong>
-                        </td>
-                        <td class="text-right">
-                            @((Model.DatCoc ?? 0).ToString("N0")) ₫
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="@colspan" class="text-right">
-                            <strong>Chiết khấu</strong>
-                        </td>
-                        <td class="text-right">
-                            @((Model.ChietKhau ?? 0).ToString("N0")) ₫
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="@colspan" class="text-right">
-                            <strong>Còn thiếu</strong>
-                        </td>
-                        <td class="text-right text-danger">
-                            @((Model.Total - (Model.DatCoc ?? 0) - (Model.ChietKhau ?? 0)).ToString("N0")) ₫
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div><!-- table-responsive -->
-    </div><!-- panel-body -->
-</div><!-- panel -->
+            }
+        </tbody>
+        <tfoot>
+            @{ var colspan = 7;}
+            <tr>
+                <td colspan="@colspan" class="text-right">
+                    <strong>Tổng</strong>
+                </td>
+                <td class="text-right text-success">
+                    @Model.Total.ToString("N0") ₫
+                </td>
+            </tr>
+            <tr>
+                <td colspan="@colspan" class="text-right">
+                    <strong>Đặt cọc</strong>
+                </td>
+                <td class="text-right">
+                    @((Model.DatCoc ?? 0).ToString("N0")) ₫
+                </td>
+            </tr>
+            <tr>
+                <td colspan="@colspan" class="text-right">
+                    <strong>Chiết khấu</strong>
+                </td>
+                <td class="text-right">
+                    @((Model.ChietKhau ?? 0).ToString("N0")) ₫
+                </td>
+            </tr>
+            <tr>
+                <td colspan="@colspan" class="text-right">
+                    <strong>Còn thiếu</strong>
+                </td>
+                <td class="text-right text-danger">
+                    @((Model.Total - (Model.DatCoc ?? 0) - (Model.ChietKhau ?? 0)).ToString("N0")) ₫
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div><!-- table-responsive -->

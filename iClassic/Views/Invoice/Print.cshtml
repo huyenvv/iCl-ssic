@@ -98,20 +98,23 @@
             <tr>
                 <td class="" colspan="2">
                     <p>
+                        <u><strong><i>Lưu ý</i></strong></u>: <small><i>Hóa đơn đã được giảm theo hạng thẻ <strong>@Model.MemberCard.Name</strong> của quý khách</i></small>
+                    </p>
+                    <p>
                         <small><i>Ưu đãi hạng thẻ <strong>@Model.MemberCard.Name</strong> của quý khách như sau:</i></small>
                     </p>
                     <p>
                         <small>
                             <i>
-                                Giảm @Model.MemberCard.BirthDayDiscount% vào dịp sinh nhật,
-                                Giảm @Model.MemberCard.NguoiThanDiscount% cho người thân đầu tiên
+                                - Giảm @Model.MemberCard.BirthDayDiscount% vào dịp sinh nhật,
+                                @Model.MemberCard.NguoiThanDiscount% cho người thân đầu tiên
                             </i>
                         </small>  
                     </p>                
                     <p>
                         <small>
                             <i>
-                                Giảm khi may các sản phẩm:
+                                - Giảm khi may các sản phẩm:
                                 @{
                                     var count = 0;
                                     foreach (var item in Model.MemberCard.ProductMemberCard)
