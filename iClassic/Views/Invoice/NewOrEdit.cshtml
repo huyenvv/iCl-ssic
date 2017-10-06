@@ -232,13 +232,12 @@
             } else {
                 var percentChietKhau = parseInt($(".percentChietKhau").val()) | 0;
                 chietKhau = tongTien == 0 || percentChietKhau == 0 ? 0 : (percentChietKhau * tongTien / 100);
-                $("#ChietKhau").val(chietKhau);
+                $("#ChietKhau").val(formatMoney(chietKhau, ''));
             }
 
             var datcoc = parseInt($("#DatCoc").val().replace(/,/g, '')) | 0;
             var conthieu = tongTien - datcoc - chietKhau;
             $("#TienConThieu").html(formatMoney(conthieu));
-            $("#ChietKhau").focus();
         }
         function addCustomerSuccessed(model) {
             $('#modalDefault').modal('hide');
@@ -303,7 +302,7 @@
         $(function () {
 
             $('.price').maskMoney({ precision: 0 });
-            $('.price').focus();
+            formatPrices();
 
             $('.datepicker').datetimepicker({
                 format: 'DD/MM/YYYY HH:mm:ss'
@@ -428,7 +427,7 @@
                 var percentChietKhau = parseInt($(".percentChietKhau").val()) | 0;
                 if (percentChietKhau > 0) {
                     chietKhau = percentChietKhau * tongtien / 100;
-                    $("#ChietKhau").val(chietKhau);
+                    $("#ChietKhau").val(formatMoney(chietKhau,''));
                 }
             }
 
@@ -685,7 +684,7 @@
 
             var currentPosition = $(document).scrollTop();
             $('.price').maskMoney({ precision: 0 });
-            $('.price').focus();
+            formatPrices();
             $(document).scrollTop(currentPosition);
         }
 
@@ -835,7 +834,7 @@
 
             var currentPosition = $(document).scrollTop();
             $('.price').maskMoney({ precision: 0 });
-            $('.price').focus();
+            formatPrices();
             jQuery(".select223").select2({
                 width: '100%'
             });

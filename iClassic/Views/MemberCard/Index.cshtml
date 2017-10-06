@@ -36,10 +36,10 @@
         <tr>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Name">Tên hạng thẻ</a>
-            </th>  
+            </th>
             <th>
                 @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().SoTien)
-            </th>          
+            </th>
             <th>
                 @Html.DisplayNameFor(modelItem => modelItem.FirstOrDefault().BirthDayDiscount)
             </th>
@@ -59,7 +59,9 @@
             {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </a>
                 </td>
                 <td>
                     @item.SoTien.ToString("N0")  ₫
@@ -69,18 +71,22 @@
                 </td>
                 <td>
                     @item.NguoiThanDiscount %
-                </td>                
+                </td>
                 <td>
                     @item.Note
-                </td> 
+                </td>
                 <td>
-                   @foreach (var discountProd in item.ProductMemberCard)
-                   {
-                       <div>@discountProd.ProductType.Name: <strong>@discountProd.Discount</strong> %</div>
-                   }
-                </td> 
+                    <table class="table-noboder">
+                        @foreach (var discountProd in item.ProductMemberCard)
+                        {
+                            <tr>
+                                <td>@discountProd.ProductType.Name</td>
+                                <td><strong>@discountProd.Discount</strong> %</td>
+                            </tr>
+                        }
+                    </table>
+                </td>
                 <td>
-                    <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>
                     <a href="@Url.Action("Delete", new { id=item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
                 </td>
             </tr>
@@ -101,3 +107,20 @@
         }))
     </div>
 </div>
+
+@section Styles{
+    <style>
+        table.table-noboder tr td {
+            padding: 0 0 0 0px;
+            border-bottom: 1px dotted #d7d7d7;
+        }
+
+            table.table-noboder tr td:first-child {
+                padding-right: 10px;
+            }
+
+        table.table-noboder tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+}

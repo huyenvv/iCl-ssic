@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
-    ViewBag.Class = "fa fa-map-marker";
+    ViewBag.Class = "fa fa-bars";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Loại vải</a>" +
                           "<span>" + ViewBag.Title + "</span>";
     var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;

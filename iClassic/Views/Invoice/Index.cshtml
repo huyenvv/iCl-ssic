@@ -54,12 +54,7 @@
                 </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="Total">
-                    @Html.DisplayNameFor(m => m.FirstOrDefault().Total)
-                </a>
-            </th>
-            <th>
-                Còn thiếu
+                Tiền
             </th>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="NgayThu">
@@ -77,7 +72,7 @@
                 </a>
             </th>
             <th>
-                Tình trạng vải
+                Sản phẩm
             </th>
         </tr>
 
@@ -92,14 +87,31 @@
                         @item.Customer.TenKH <br />
                         (@item.Customer.SDT)
                     </td>
-                    <td class="text-success">
-                        @item.Total.ToString("N0") ₫
-                    </td>
-                    <td class="text-danger">
-                        @((item.Total - (item.DatCoc ?? 0) - (item.ChietKhau ?? 0)).ToString("N0")) ₫
+                    <td>
+                        <table class="table-money">
+                            <tr class='text-success'>
+                                <td>Tổng</td>
+                                <td>@item.Total.ToString("N0") ₫</td>
+                            </tr>
+                            <tr>
+                                <td>Chiết khấu</td>
+                                <td>@((item.ChietKhau ?? 0).ToString("N0")) ₫</td>
+                            </tr>
+                            @if (item.Status != (byte)TicketStatus.DaTraChoKhach)
+                            {
+                                <tr>
+                                    <td>Cọc</td>
+                                    <td>@((item.DatCoc ?? 0).ToString("N0")) ₫</td>
+                                </tr>
+                                <tr class="text-danger">
+                                    <td>Thiếu</td>
+                                    <td>@((item.Total - (item.DatCoc ?? 0) - (item.ChietKhau ?? 0)).ToString("N0")) ₫</td>
+                                </tr>
+                            }
+                        </table>
                     </td>
                     <td title="@(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")">
-                        @(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy"): "")
+                        @(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy") : "")
                     </td>
                     <td title="@item.NgayTra.ToString("dd/MM/yyyy HH:mm")">
                         @item.NgayTra.ToString("dd/MM/yyyy")
@@ -107,37 +119,41 @@
                     <td>
                         @Html.Raw(Helpers.DrawStatusTicket(item.Status))
                     </td>
-                    <td>                        
+                    <td>
                         @if (item.PhieuSanXuat.Count > 0)
                         {
-                            var soluongchuamua = item.PhieuSanXuat.Count(m => m.VaiType == (byte)VaiTypes.KhongCoSan && !m.HasVai);
-                            var soluongdamua = item.PhieuSanXuat.Count(m => m.VaiType == (byte)VaiTypes.KhongCoSan && m.HasVai);
-                            var soluongmangvaiden = item.PhieuSanXuat.Count(m => m.VaiType == (byte)VaiTypes.KhachMangVaiDen);
-                            var soluongvaimautaishop = item.PhieuSanXuat.Count(m => m.VaiType == (byte)VaiTypes.VaiMauCuaHang);
-
-                            if (soluongdamua > 0)
+                            <strong>May: @item.PhieuSanXuat.Count</strong>
+                            foreach (var sp in item.PhieuSanXuat.OrderBy(n => n.VaiType))
                             {
-                                <div class="text-success">Đã mua: <strong>@soluongdamua</strong></div>
-                            }
-
-                            if (soluongchuamua > 0)
-                            {
-                                <div class="text-danger">Chưa mua: <strong>@soluongchuamua</strong></div>
-                            }
-
-                            if (soluongmangvaiden > 0)
-                            {
-                                <div class="text-info">Khách mang vải đến: <strong>@soluongmangvaiden</strong></div>
-                            }
-                            if (soluongvaimautaishop > 0)
-                            {
-                                <div class="text-info">Vải mẫu tại shop: <strong>@soluongvaimautaishop</strong></div>
+                                <div>
+                                    <span class="text-info">+ @sp.SoLuong @sp.ProductType.Name:</span>
+                                    @switch ((VaiTypes)sp.VaiType)
+                                    {
+                                        case VaiTypes.KhachMangVaiDen:
+                                            <span>khách mang vải đến</span>
+                                            break;
+                                        case VaiTypes.KhongCoSan:
+                                            if (sp.HasVai)
+                                            {
+                                                <span class="text-success">đã mua vải</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">chưa mua vải</span>
+                                            }
+                                            break;
+                                        case VaiTypes.VaiMauCuaHang:
+                                            <span class="text-info">vải mẫu tại shop</span>
+                                            break;
+                                    }
+                                </div>
                             }
                         }
-                        else if (item.PhieuSua.Count > 0)
+                        @if (item.PhieuSua.Count > 0)
                         {
-
-                            <span>Khách chỉ sửa đồ</span>
+                            <div class="mt10">
+                                <strong>Sửa: @item.PhieuSua.Count</strong>
+                            </div>
                         }
                     </td>
                     @*<td>
@@ -165,3 +181,15 @@
         }))
     </div>
 </div>
+
+@section Styles{
+    <style>
+        table.table-money tr td {
+            padding: 0 0 0 0px;
+        }
+
+            table.table-money tr td:first-child {
+                padding-right: 10px;
+            }
+    </style>
+}

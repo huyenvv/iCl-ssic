@@ -1,7 +1,15 @@
-﻿function formatMoney(n) {
+﻿function formatMoney(n, unit) {
+    if (unit == undefined) unit = "₫";
     return n.toFixed(0).replace(/./g, function (c, i, a) {
         return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-    }) + " ₫";
+    }) + " " + unit;
+}
+function formatPrices() {
+    $(".price").each(function () {
+        var $this = $(this);
+        var value = parseInt($this.val().replace(/,/g, '')) | 0;
+        $this.val(formatMoney(value, ''));
+    });
 }
 
 jQuery(document).ready(function () {
