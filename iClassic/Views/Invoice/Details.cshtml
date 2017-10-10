@@ -28,18 +28,22 @@
         </ul>
     </div>
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
+    @if (User.IsInRole(RoleList.SupperAdmin))
+    {
+        <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger pull-right btnConfirm">Xóa</a>
+    }
 </div>
 
 @section Styles{
     <style>
         .btn-group {
             margin-bottom: 0;
-        }        
+        }
     </style>
 }
 
 @section Scripts{
     <script>
 
-    </script>    
+    </script>
 }

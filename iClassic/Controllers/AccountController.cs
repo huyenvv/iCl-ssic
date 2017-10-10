@@ -84,7 +84,7 @@ namespace iClassic.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -474,7 +474,7 @@ namespace iClassic.Controllers
                 {
                     var user = await UserManager.FindByIdAsync(model.Id);
 
-                    user.Email = string.IsNullOrWhiteSpace(model.Email) ? user.UserName + "@iclassic.vn" : model.Email;
+                    user.Email = model.Email;
                     user.PhoneNumber = model.PhoneNumber;
                     user.Name = model.Name;                    
 
@@ -482,7 +482,7 @@ namespace iClassic.Controllers
                     if (result.Succeeded)
                     {
                         ShowMessageSuccess(Message.Update_Successfully);
-                        return View(user);
+                        return RedirectToAction("Settings");
                     }
 
                     AddErrors(result);
