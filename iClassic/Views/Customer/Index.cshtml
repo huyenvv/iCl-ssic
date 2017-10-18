@@ -95,14 +95,17 @@
                         @item.Invoice.Sum(n => n.PhieuSua.Count)
                     </td>
                     <td>
-                        @((item.Invoice.Sum(m => (double?)m.Total)?? 0).ToString("N0")) ₫
+                        @((item.Invoice.Sum(m => (double?)m.Total) ?? 0).ToString("N0")) ₫
                     </td>
                     <td>
                         @(((CustomerTypes)item.Group).GetDescription())
                     </td>
                     <td>
                         <a href="@Url.Action("NewOrEdit", new { id = item.Id })" class="btn btn-xs btn-primary">Sửa</a>
-                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
+                        @if (!User.IsInRole(RoleList.Employee))
+                        {
+                            <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
+                        }
                     </td>
                 </tr>
             }
