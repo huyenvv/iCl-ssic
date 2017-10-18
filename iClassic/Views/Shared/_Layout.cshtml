@@ -67,25 +67,29 @@
                     <li><a href="@Url.Action("Index", "Invoice")" data-href="Index/Invoice/NewOrEdit/Invoice/Details"><i class="fa fa-dollar"></i> <span>Đơn hàng</span></a></li>
                     <li><a href="@Url.Action("Index", "PhieuChi")" data-href="Index/PhieuChi/NewOrEdit"><i class="fa fa-shopping-cart"></i> <span>Phiếu chi</span></a></li>
 
-                    @if (isSupperAdmin || User.IsInRole(RoleList.Admin))
-                    {
-                        <li class="nav-parent">
-                            <a href=""><i class="fa fa-cog"></i> <span>Quản lý</span></a>
-                            <ul class="children">
-                                <li><a href="@Url.Action("Index", "Customer")" data-href="Index/Customer/NewOrEdit"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
+
+                    <li class="nav-parent">
+                        <a href=""><i class="fa fa-cog"></i> <span>Quản lý</span></a>
+                        <ul class="children">
+                            <li><a href="@Url.Action("Index", "Customer")" data-href="Index/Customer/NewOrEdit"><i class="fa fa-user"></i> <span>Khách hàng</span></a></li>
+                            @if (isSupperAdmin || User.IsInRole(RoleList.Admin))
+                            {                                
                                 <li><a href="@Url.Action("Index", "LoaiVai")" data-href="Index/LoaiVai/NewOrEdit"><i class="fa fa-bars"></i> <span>Loại vải</span></a></li>
                                 <li><a href="@Url.Action("Index", "Branch")" data-href="Index/Branch/NewOrEdit"><i class="fa fa-map-marker"></i> <span>Chi nhánh</span></a></li>
                                 <li><a href="@Url.Action("Employees", "Manage")" data-href="/Manage/AddEmployee/Manage/EditEmployee/Manage/SetPasswordEmployee"><i class="fa fa-user"></i> <span>Nhân viên</span></a></li>
-                                @if (isSupperAdmin)
+                                if (isSupperAdmin)
                                 {
                                     <li><a href="@Url.Action("Index", "ProductType")" data-href="Index/ProductType/NewOrEdit"><i class="fa fa-list-ol"></i> <span>Sản phẩm</span></a></li>
                                     <li><a href="@Url.Action("Index", "Tho")" data-href="Index/Tho/NewOrEdit"><i class="fa fa-user"></i> <span>Danh sách Thợ</span></a></li>
                                     <li><a href="@Url.Action("Index", "MemberCard")" data-href="Index/MemberCard/NewOrEdit"><i class="fa fa-credit-card"></i> <span>Thẻ thành viên</span></a></li>
                                     <li><a href="@Url.Action("Index", "Salary")" data-href="Index/Salary/NewOrEdit"><i class="fa fa-dollar"></i> <span>Tiền lương</span></a></li>
-                                }                                
+                                }
                                 <li><a href="@Url.Action("Index", "GiaoNhan")" data-href="Index"><i class="fa fa-truck"></i> <span>Giao nhận</span></a></li>
-                            </ul>
-                        </li>
+                            }
+                        </ul>
+                    </li>
+                    @if (isSupperAdmin || User.IsInRole(RoleList.Admin))
+                    {
                         <li class="nav-parent">
                             <a href=""><i class="fa fa-bar-chart-o"></i> <span>Thống kê</span></a>
                             <ul class="children">
@@ -217,7 +221,7 @@
             return isConfirm;
         }
         jQuery(document).ready(function () {
-            "use strict";            
+            "use strict";
 
             //if (location.protocol != 'https:') {
             //    location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
@@ -247,7 +251,7 @@
             // Select2
             jQuery(".select2").select2({
                 width: '100%'
-            });            
+            });
         });
     </script>
     @RenderSection("scripts", required: false)
