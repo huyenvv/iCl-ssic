@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace iClassic.Controllers
 {
-    [Override.Authorize(RoleList.Admin, RoleList.SupperAdmin)]
+    //[Override.Authorize(RoleList.Admin, RoleList.SupperAdmin)]
     public class CustomerController : BaseController
     {
         private readonly ILog _log;
@@ -114,6 +114,7 @@ namespace iClassic.Controllers
         }
 
         // GET: Customeres/Delete/5
+        [Override.Authorize(RoleList.Admin, RoleList.SupperAdmin)]
         public async Task<ActionResult> Delete(int id = 0)
         {
             try
