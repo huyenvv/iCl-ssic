@@ -37,13 +37,13 @@ namespace iClassic.Services.Implementation
             if (model.IsSapPhaiTra.HasValue && model.IsSapPhaiTra.Value)
             {
                 var tomorrow = DateTime.Now.Date.AddDays(1);
-                return list.Where(m => m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m => m.NgayTra.Date <= tomorrow).AsQueryable();
+                return list.Where(m => m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m => m.NgayTra.Date <= tomorrow).OrderByDescending(m => m.Id).AsQueryable();
             }
 
             if (model.StatusVai.HasValue)
             {
                 return list.Where(m => m.PhieuSanXuat.Any(n => n.VaiType == (byte)VaiTypes.KhongCoSan
-                && n.HasVai == model.StatusVai.Value));
+                && n.HasVai == model.StatusVai.Value)).OrderByDescending(m => m.Id);
             }
 
             if (!string.IsNullOrWhiteSpace(model.SearchText))
@@ -173,11 +173,11 @@ namespace iClassic.Services.Implementation
                         break;
                     case VaiTypes.KhongCoSan:
                         var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0;
-                        objForUpdate.DonGia = tienCong + tienVai;
+                        objForUpdate.DonGia = tienVai;
                         objForUpdate.HasVai = t.HasVai;
                         break;
                     case VaiTypes.VaiMauCuaHang:
-                        objForUpdate.DonGia = tienCong + (t.GiaVaiMau ?? 0);
+                        objForUpdate.DonGia = (t.GiaVaiMau ?? 0);
                         objForUpdate.GiaVaiMau = t.GiaVaiMau;
                         break;
                 }
@@ -265,10 +265,10 @@ namespace iClassic.Services.Implementation
                         break;
                     case VaiTypes.KhongCoSan:
                         var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0;
-                        t.DonGia = tienCong + tienVai;
+                        t.DonGia = tienVai;
                         break;
                     case VaiTypes.VaiMauCuaHang:
-                        t.DonGia = tienCong + (t.GiaVaiMau ?? 0);
+                        t.DonGia = (t.GiaVaiMau ?? 0);
                         break;
                 }
                 if (memberCard.Id > 0)
@@ -305,11 +305,11 @@ namespace iClassic.Services.Implementation
                         break;
                     case VaiTypes.KhongCoSan:
                         var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0;
-                        objForUpdate.DonGia = tienCong + tienVai;
+                        objForUpdate.DonGia = tienVai;
                         objForUpdate.HasVai = t.HasVai;
                         break;
                     case VaiTypes.VaiMauCuaHang:
-                        objForUpdate.DonGia = tienCong + (t.GiaVaiMau ?? 0);
+                        objForUpdate.DonGia = (t.GiaVaiMau ?? 0);
                         objForUpdate.GiaVaiMau = t.GiaVaiMau;
                         break;
                 }
