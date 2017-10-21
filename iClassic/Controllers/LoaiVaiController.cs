@@ -7,6 +7,8 @@ using iClassic.Services.Implementation;
 using PagedList;
 using log4net;
 using iClassic.Helper;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace iClassic.Controllers
 {
@@ -44,6 +46,10 @@ namespace iClassic.Controllers
                 model = new LoaiVai { BranchId = CurrentBranchId };
             }
             CreateListProductTypeViewBag();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_NewOrEditPartial", model);
+            }
             return View(model);
         }
 
@@ -72,6 +78,11 @@ namespace iClassic.Controllers
 
                     ShowMessageSuccess(Message.Update_Successfully);
 
+                    if (Request.IsAjaxRequest())
+                    {
+                        var data = JsonConvert.SerializeObject(new { model.Id, model.MaVai, model.Name, ProductTypeLoaiVai = model.ProductTypeLoaiVai.Select(n => new { n.ProductTypeId, n.Price }) });
+                        return Content("<script>addLoaiVaiSuccessed(" + data + ");</script>");
+                    }
                     return RedirectToAction("Index");
                 }
             }
@@ -82,6 +93,10 @@ namespace iClassic.Controllers
                 _log.Info(ex.ToString());
             }
             CreateListProductTypeViewBag();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_NewOrEditPartial", model);
+            }
             return View(model);
         }
 

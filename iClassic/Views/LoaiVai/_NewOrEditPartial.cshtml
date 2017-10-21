@@ -1,16 +1,16 @@
 ﻿@using iClassic.Helper;
 @using iClassic.Models;
-@model Customer
+@model LoaiVai
 
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
-            <h4>Thêm mới khách hàng</h4>
+            <h4>Thêm mới loại vải</h4>
         </div>
         <div class="modal-body">
             <div class="row">
                 <div class="col-sm-12">
-                    @using (Ajax.BeginForm("NewOrEdit", "Customer", null, new AjaxOptions
+                    @using (Ajax.BeginForm("NewOrEdit", "LoaiVai", null, new AjaxOptions
                     {
                         HttpMethod = "Post",
                         AllowCache = false,
@@ -19,10 +19,9 @@
                     }, new { role = "form" }))
                     {
                         @Html.AntiForgeryToken()
-                        @Html.ValidationSummary("", new { @class = "text-danger" })
                         @Html.Partial("_FormPartial", Model)
                         <div class="form-group">
-                            <input type="submit" value="Tạo mới" class="btn btn-primary" />
+                            <input type="submit" value="Tạo mới" onclick="beforeSubmit();" class="btn btn-primary" />
                             <a href="javascript:void(0)" class="btn btn-default" data-dismiss="modal">Đóng</a>
                         </div>
                     }
@@ -31,4 +30,11 @@
         </div>
     </div>
 </div>
+
+<script>
+        $(function () {
+            $('.price').maskMoney({ precision: 0 });
+            $('.price').focus();
+        })
+</script>
 
