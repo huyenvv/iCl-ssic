@@ -29,7 +29,7 @@
         <div class="col-md-3">
             <select name="Status" class="form-control" onchange="beforeSubmit(this);">
                 <option value="">-Tất cả-</option>
-                <option value="StatusVai" @(searchModel.StatusVai.HasValue && searchModel.StatusVai.Value ? "selected" : "")>Chưa mua vải</option>
+                <option value="StatusVai" @(searchModel.StatusVai.HasValue && !searchModel.StatusVai.Value ? "selected" : "")>Chưa mua vải</option>
                 <option value="IsDenHanThu" @(searchModel.IsDenHanThu.HasValue && searchModel.IsDenHanThu.Value ? "selected" : "")>Đến hạn thử</option>
                 <option value="IsSapPhaiTra" @(searchModel.IsSapPhaiTra.HasValue && searchModel.IsSapPhaiTra.Value ? "selected" : "")>Đến hạn trả</option>
                 @foreach (var item in Helpers.GetTicketStatusList())
@@ -207,16 +207,16 @@
     <script>
         function beforeSubmit(e) {
             var value = $(e).val();
+            $("#StatusVai,#IsSapPhaiTra,#IsDenHanThu").val('');
             switch (value) {
-                case "StatusVai":
                 case "IsSapPhaiTra":
-                case "IsDenHanThu":
-                    $("#StatusVai,#IsSapPhaiTra,#IsDenHanThu").val(false);
+                case "IsDenHanThu":                    
                     $("#" + value).val(true);
                     $(e).val("");
                     break;
-                default:
-                    $("#StatusVai,#IsSapPhaiTra,#IsDenHanThu").val('');
+                case "StatusVai":
+                    $("#StatusVai").val(false);
+                    $(e).val("");
                     break;
             }
             e.form.submit();
