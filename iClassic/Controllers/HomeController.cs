@@ -33,6 +33,9 @@ namespace iClassic.Controllers
             var tomorrow = DateTime.Now.Date.AddDays(1);
             model.SapPhaiTra = _invoiceRepository.Where(m=>m.BranchId == CurrentBranchId 
             && m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m=> m.NgayTra.Date <= tomorrow).Count();
+
+            model.SapDenHanThu = _invoiceRepository.Where(m => m.BranchId == CurrentBranchId
+            && m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m => m.NgayThu.HasValue && m.NgayThu.Value.Date <= tomorrow).Count();
             return View(model);
         }
     }

@@ -40,6 +40,12 @@ namespace iClassic.Services.Implementation
                 return list.Where(m => m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m => m.NgayTra.Date <= tomorrow).AsQueryable();
             }
 
+            if (model.IsDenHanThu.HasValue && model.IsDenHanThu.Value)
+            {
+                var tomorrow = DateTime.Now.Date.AddDays(1);
+                return list.Where(m => m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m => m.NgayThu.HasValue && m.NgayThu.Value.Date <= tomorrow).AsQueryable();
+            }
+
             if (model.StatusVai.HasValue)
             {
                 return list.Where(m => m.PhieuSanXuat.Any(n => n.VaiType == (byte)VaiTypes.KhongCoSan

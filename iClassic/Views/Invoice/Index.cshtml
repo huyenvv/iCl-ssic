@@ -22,10 +22,16 @@
 {
     @Html.Hidden("SortName", searchModel.SortName)
     @Html.Hidden("SortOrder", searchModel.SortOrder)
+    @Html.Hidden("StatusVai", searchModel.StatusVai)
+    @Html.Hidden("IsDenHanThu", searchModel.IsDenHanThu)
+    @Html.Hidden("IsSapPhaiTra", searchModel.IsSapPhaiTra)
     <div class="row">
         <div class="col-md-3">
-            <select name="Status" class="form-control" onchange="this.form.submit();">
+            <select name="Status" class="form-control" onchange="beforeSubmit(this);">
                 <option value="">-Tất cả-</option>
+                <option value="StatusVai" @(searchModel.StatusVai.HasValue && searchModel.StatusVai.Value ? "selected" : "")>Chưa mua vải</option>
+                <option value="IsDenHanThu" @(searchModel.IsDenHanThu.HasValue && searchModel.IsDenHanThu.Value ? "selected" : "")>Đến hạn thử</option>
+                <option value="IsSapPhaiTra" @(searchModel.IsSapPhaiTra.HasValue && searchModel.IsSapPhaiTra.Value ? "selected" : "")>Đến hạn trả</option>
                 @foreach (var item in Helpers.GetTicketStatusList())
                 {
                     <option value="@item.Key" @(item.Key == searchModel.Status ? "selected" : "")>@item.Value</option>
@@ -174,6 +180,9 @@
         new
         {
             page,
+            searchModel.StatusVai,
+            searchModel.IsDenHanThu,
+            searchModel.IsSapPhaiTra,
             searchModel.Status,
             searchModel.SearchText,
             searchModel.SortOrder,
@@ -192,4 +201,25 @@
                 padding-right: 10px;
             }
     </style>
+}
+
+@section Scripts {
+    <script>
+        function beforeSubmit(e) {
+            var value = $(e).val();
+            switch (value) {
+                case "StatusVai":
+                case "IsSapPhaiTra":
+                case "IsDenHanThu":
+                    $("#StatusVai,#IsSapPhaiTra,#IsDenHanThu").val(false);
+                    $("#" + value).val(true);
+                    $(e).val("");
+                    break;
+                default:
+                    $("#StatusVai,#IsSapPhaiTra,#IsDenHanThu").val('');
+                    break;
+            }
+            e.form.submit();
+        }
+    </script>
 }

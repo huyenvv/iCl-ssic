@@ -12,5 +12,6 @@ namespace iClassic.Models
         public int DaMayChuaTra { get; set; }
         public int ChuaMuaVai { get; set; }
         public int SapPhaiTra { get; set; }
+        public int SapDenHanThu { get; set; }
     }
 }
