@@ -419,12 +419,6 @@ namespace iClassic.Controllers
             return View();
         }
 
-        //[AllowAnonymous]
-        public ViewResult AccessDenied()
-        {
-            return View();
-        }        
-
         public ActionResult ChangePassword()
         {
             return PartialView("_ChangePasswordPartial",

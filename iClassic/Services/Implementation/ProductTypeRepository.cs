@@ -95,6 +95,7 @@ namespace iClassic.Services.Implementation
             obj.Note = model.Note;
             obj.Name = model.Name;
             obj.IsFitting = model.IsFitting;
+            obj.Price = model.Price;
             var listNew = model.ProductTyeField.Where(m => !obj.ProductTyeField.Any(n => n.Id == m.Id));
             var lisUpdate = model.ProductTyeField.Where(m => obj.ProductTyeField.Any(n => n.Id == m.Id));
             var listRemove = obj.ProductTyeField.Where(m => !model.ProductTyeField.Any(n => n.Id == m.Id));

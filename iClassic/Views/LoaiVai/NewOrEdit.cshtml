@@ -23,45 +23,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.Id)
-                    @Html.HiddenFor(model => model.BranchId)
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.MaVai)
-                        @Html.EditorFor(model => model.MaVai, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.MaVai, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Name)
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                    </div>                    
-                </div>
-                <div class="col-md-12 form-bordered">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-12"><h4>@Html.LabelFor(model => model.ProductTypeLoaiVai)</h4></div>
-                            @foreach (var item in listProductType)
-                            {
-                                var productVai = Model.ProductTypeLoaiVai.FirstOrDefault(m => m.ProductTypeId == item.Id);
-                                <div class="col-sm-4 col-xs-6 col-md-3">
-                                    <small>@item.Name</small>
-                                    <input type="hidden" name="ProductTypeLoaiVai[@index].ProductTypeId" value="@item.Id" />
-                                    <input type="text" name="ProductTypeLoaiVai[@index].Price" value="@(productVai != null ?productVai.Price : 0)" class="form-control price" />
-                                </div>
-                                index++;
-                            }
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Note)
-                        @Html.TextAreaFor(model => model.Note, new { @class = "form-control", rows = "5" })
-                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
+            @Html.Partial("_FormPartial", Model)
         </div>
     </div>
     <button class="btn btn-lightblue" type="submit" onclick="beforeSubmit();">Lưu</button>
@@ -71,7 +33,7 @@
 @section Scripts {
     <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
     <script>
-        function beforeSubmit() {            
+        function beforeSubmit() {
             $(".price").each(function () {
                 var $this = $(this);
                 var value = $this.val().replace(/,/g, '');

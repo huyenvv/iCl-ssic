@@ -1123,6 +1123,8 @@
     <Content Include="Views\MemberCard\Index.cshtml" />
     <Content Include="Views\MemberCard\NewOrEdit.cshtml" />
     <Content Include="Views\MemberCard\_InfoCard.cshtml" />
+    <Content Include="Views\LoaiVai\_NewOrEditPartial.cshtml" />
+    <Content Include="Views\LoaiVai\_FormPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

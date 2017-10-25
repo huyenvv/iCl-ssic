@@ -116,7 +116,7 @@ namespace iClassic.Controllers
 
         public ActionResult AccessDenied()
         {
-            return RedirectToAction("AccessDenied", "Account");
+            return View();
         }
 
         public bool IsValidBranch(int branchId)

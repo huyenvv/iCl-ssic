@@ -261,7 +261,38 @@
                 }
             });
         }
-
+        var loaiVaiSelected;
+        function addLoaiVaiSuccessed(model) {
+            loaiVai.push(model);
+            $('#modalDefault').modal('hide');
+            $('.loaivai').select2('destroy');
+            $('.loaivai').each(function (i, obj) {
+                var selectedValue = $(obj).val();
+                var index = $(".loaivai").index(loaiVaiSelected)
+                $(obj).append('<option value="' + model.Id + '">' + model.Name + '(' + model.MaVai + ')</option>');
+                $(obj).val(selectedValue);
+                loaiVaiSelected.val(model.Id);
+                $('html, body').animate({ scrollTop: loaiVaiSelected.offset().top }, 'slow');
+                $(obj).select2({ width: '100%' });             
+            });
+            updateSoTienItem();
+        }
+        function showNewLoaiVaiModal(e) {
+            loaiVaiSelected = $(e).parents(".boxVaiExtend").find("select.loaivai");
+            $.ajax({
+                url: '@Url.Action("NewOrEdit", "LoaiVai")',
+                dataType: "html",
+                type: "GET",
+                contentType: 'application/html; charset=utf-8',
+                success: function (data) {
+                    $("#modalDefault").html(data);
+                    $("#modalDefault").modal("show");
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                }
+            });
+        }
         function GetMemberCard() {
             var id = $('#CustomerId').val();
             $.get("@Url.Action("GetMemberCard", "Customer")/" + id
@@ -459,10 +490,10 @@
                         return false;
                     });
 
-                    dongia = tiencong + giaVaiBanRa;
+                    dongia = giaVaiBanRa;
                 }
                 if (vaiType == vaiMauTaiShop) {
-                    dongia = tiencong + giaVaiMau;
+                    dongia = giaVaiMau;
                 }
             }
             return dongia;
@@ -622,6 +653,7 @@
                     html += "               </option>";
                 });
                 html += "               </select>";
+                html += "           <p><a href='javascript:void(0)' onclick='showNewLoaiVaiModal(this);return false;'>Thêm loại vải</a></p>";
                 html += "           </div>";
                 html += "           <div class='col-sm-6' style='display: " + (item.VaiType == vaiKhongCoSan ? 'block' : 'none') + "'>";
                 html += "               <label>Đã mua chưa?</label>";
@@ -842,5 +874,5 @@
         }
     </script>
 
-    @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")"></script>
 }

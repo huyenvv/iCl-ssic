@@ -152,9 +152,9 @@
                             }
                         </td>
                         <td class="noforinvoice text-left">
-                            <div>@(((ThoTypes)item.ThoDoId).GetDescription()): <strong>@item.Tho.Name</strong></div>
-                            <div>@(((ThoTypes)item.ThoCatId).GetDescription()): <strong>@item.Tho2.Name</strong></div>
-                            <div>@(((ThoTypes)item.ThoMayId).GetDescription()): <strong>@item.Tho1.Name</strong></div>
+                            <div>@((ThoTypes.Do).GetDescription()): <strong>@item.Tho.Name</strong></div>
+                            <div>@((ThoTypes.Cat).GetDescription()): <strong>@item.Tho2.Name</strong></div>
+                            <div>@((ThoTypes.May).GetDescription()): <strong>@item.Tho1.Name</strong></div>
                         </td>
                         <td>@item.SoLuong</td>
                         <td class="text-right">@dongia.ToString("N0") ₫</td>
