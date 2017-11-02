@@ -49,7 +49,7 @@
                                 <select class="form-control" id="EmployeeId" name="EmployeeId">
                                     @foreach (var item in listUsers)
                                     {
-                                        <option value="@item.Id" data-salary="@item.Salary">@(item.Name + " (" + item.UserName + ")")</option>
+                                        <option value="@item.Id" data-salary="@(item.Salary ?? 0)">@(item.Name + " (" + item.UserName + ")")</option>
                                     }
                                 </select>
                                 @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
@@ -152,7 +152,7 @@
             }
         }
         function calcSalaryEmployee() {
-            var salary = $("#EmployeeId option:selected").attr('data-salary');
+            var salary = parseInt($("#EmployeeId option:selected").attr('data-salary')) | 0;
             $("#TotalSalary").val(formatMoney(salary, ''))
         }
         function getSanPham() {

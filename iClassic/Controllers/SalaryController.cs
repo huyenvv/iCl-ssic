@@ -188,7 +188,7 @@ namespace iClassic.Controllers
         }
         private void CreateViewBag(string employeeId = "", int? workerId = 0)
         {
-            var users = _usersRepository.Where(m => m.BranchId == CurrentBranchId);
+            var users = _usersRepository.Where(m => m.BranchId == CurrentBranchId && m.AspNetRoles.Any(n => n.Name != RoleList.SupperAdmin));
             ViewBag.EmployeeId = users;
 
             var workers = _thoRepository.GetAll();
