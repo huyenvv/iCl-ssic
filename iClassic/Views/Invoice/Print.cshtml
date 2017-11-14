@@ -8,6 +8,7 @@
 <title>
     In hóa đơn - @Model.Code - iClassic
 </title>
+
 <style>
     .table-noborder {
         border-bottom: 0px !important;
@@ -22,18 +23,18 @@
     }
 
     .page {
-        width: 21cm;
-        min-height: 29.7cm;
-        padding: 1cm;
+        width: 148mm;
+        height: 200mm;
+        padding: 10px;
         margin: 1cm auto;
         border: 1px #D3D3D3 solid;
-        border-radius: 5px;
+        border-radius: 10px;
         background: white;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
     @@page {
-        size: A4;
+        size: A5;
         margin: 0;
     }
 
@@ -49,13 +50,40 @@
             page-break-after: always;
         }
     }
+
+    table {
+        font-size: 13px;
+    }
+
+    h3 {
+        font-size: 17px;
+        margin-top: 0px;
+        font-weight: bold;
+    }
+
+    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+        padding: 0px 8px;
+    }
+
+    #tblsanpham thead > tr > th, #tblsanpham tbody > tr > th, #tblsanpham tfoot > tr > th, #tblsanpham thead > tr > td, #tblsanpham tbody > tr > td, #tblsanpham tfoot > tr > td {
+        padding: 3px 8px;
+    }
+
+    table:first-child {
+        margin-bottom: 0px;
+    }
+
+    p {
+        margin: 0 0 2px;
+    }
 </style>
 <script>
     $(function () {
         window.print();
 
         if ($("body").find("#branch").length == 0) {
-            $(".noforinvoice").html('');
+            $(".noforinvoice").hide();
+            $("tfoot td").attr('colspan', 4);
         }
         $(".showforinvoice").removeClass("hide");
     });
@@ -67,6 +95,7 @@
         <tr>
             <td></td>
             <td class="text-center">
+                <br />
                 <i>@DateTime.Now.ToString("'Ngày' dd 'tháng' MM 'năm' yyyy")</i>
             </td>
         </tr>
@@ -97,6 +126,7 @@
         {
             <tr>
                 <td class="" colspan="2">
+                    <br />
                     <p>
                         <u><strong><i>Lưu ý</i></strong></u>: <small><i>Hóa đơn đã được giảm theo hạng thẻ <strong>@Model.MemberCard.Name</strong> của quý khách</i></small>
                     </p>
@@ -109,12 +139,12 @@
                                 - Giảm @Model.MemberCard.BirthDayDiscount% vào dịp sinh nhật,
                                 @Model.MemberCard.NguoiThanDiscount% cho người thân đầu tiên
                             </i>
-                        </small>  
-                    </p>                
+                        </small>
+                    </p>
                     <p>
                         <small>
                             <i>
-                                - Giảm khi may các sản phẩm:
+                                - Giảm khi may các SP:
                                 @{
                                     var count = 0;
                                     foreach (var item in Model.MemberCard.ProductMemberCard)
@@ -128,6 +158,6 @@
                     </p>
                 </td>
             </tr>
-                            }
+                                    }
     </table>
 </div>

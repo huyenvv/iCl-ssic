@@ -110,12 +110,12 @@ namespace iClassic.Helper
     }
 
     public enum VaiTypes
-    {
-        [Description("Khách mang vải đến")]
-        KhachMangVaiDen,
-
+    {        
         [Description("Không có sẵn tại cửa hàng")]
         KhongCoSan,
+
+        [Description("Khách mang vải đến")]
+        KhachMangVaiDen,
 
         [Description("Vải mẫu tại cửa hàng")]
         VaiMauCuaHang

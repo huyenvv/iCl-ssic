@@ -21,22 +21,18 @@
         }
 
     .page {
-        width: 21cm;
-        min-height: 29.7cm;
-        padding: 1cm;
+        width: 148mm;
+        height: 200mm;
+        padding: 10px;
         margin: 1cm auto;
         border: 1px #D3D3D3 solid;
-        border-radius: 5px;
+        border-radius: 10px;
         background: white;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
-    .tableSodo tbody > tr > td {
-        padding: 2px 0;
-    }
-
     @@page {
-        size: A4;
+        size: A5;
         margin: 0;
     }
 
@@ -51,6 +47,18 @@
             background: initial;
             page-break-after: always;
         }
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    h3 {
+        font-size: 18px;
+        margin-top: 0px;
+    }
+    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+        padding: 0px 8px;
     }
 </style>
 <script>

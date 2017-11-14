@@ -25,11 +25,12 @@
         </td>
     </tr>
 </table>
-<hr class="showforinvoice hide" />
+
 <table class="table table-noborder">
     <tr>
         <td colspan="2">
             <h3 class="text-center showforinvoice hide">HÓA ĐƠN MAY MẶC VÀ SỬA CHỮA </h3>
+            <br />
             <h3 class="text-center noforinvoice">CHI TIẾT ĐƠN HÀNG </h3>
         </td>
     </tr>
@@ -59,15 +60,15 @@
     </tr>
 </table>
 <div class="table-responsive">
-    <table class="table ">
+    <table class="table" id="tblsanpham">
         <thead>
             <tr>
                 <th>Sản phẩm</th>
-                <th>Thông tin chung</th>
-                <th class="noforinvoice text-left">Loại vải</th>
+                <th class="noforinvoice">Thông tin chung</th>
+                <th class="text-left">Loại vải</th>
                 <th class="noforinvoice">Tình trạng vải</th>
                 <th class="noforinvoice">Thợ sản xuất</th>
-                <th>Số lượng</th>
+                <th>SL</th>
                 <th class="text-right">Đơn giá</th>
                 <th class="text-right">Thành tiền</th>
             </tr>
@@ -91,7 +92,13 @@
                         <td>
                             May mới - @item.ProductType.Name
                         </td>
-                        <td>
+                        <td class="hide showforinvoice">
+                            @if ((VaiTypes)item.VaiType == VaiTypes.KhongCoSan)
+                            {
+                                @item.LoaiVai.MaVai
+                            }
+                        </td>
+                        <td class="noforinvoice">
                             <strong class="noforinvoice">Kiểu cách: </strong>@item.TenSanPham
                             <div class="noforinvoice">
                                 <strong>Dáng người:</strong>@item.DangNguoi
@@ -166,11 +173,22 @@
                 {
                     <tr>
                         <td>
+                            @switch ((PhieuSuaType)item.Type)
+                            {
+                                case PhieuSuaType.BaoHanh:
+                                    @("Bảo hành")
+                                    break;
+                                case PhieuSuaType.KhachNhoSua:
+                                    @("Yêu cầu sửa")
+                                    break;
+                                case PhieuSuaType.BaoHanhKhachTangGiamCan:
+                                    @("Bảo hành do tăng giảm Kg: ")
+                                    break;
+                            }
+                            :<br />
                             @item.NoiDung
                         </td>
-                        <td>
-                            @(((PhieuSuaType)item.Type).GetDescription())
-                        </td>
+                        <td class=""></td>
                         <td class="noforinvoice"></td>
                         <td class="noforinvoice"></td>
                         <td class="noforinvoice"></td>
