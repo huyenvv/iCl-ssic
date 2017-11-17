@@ -21,3 +21,18 @@
     top: 0;
     right: 0;
 }
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+    .contentpanel {
+        padding: 20px 2px;
+        position: relative;
+    }
+
+    .panel-body {
+        padding: 5px;
+    }
+
+    .panel-heading {
+        padding: 3px 10px;
+    }
+}
