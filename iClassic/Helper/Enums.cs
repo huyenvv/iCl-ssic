@@ -129,4 +129,10 @@ namespace iClassic.Helper
         [Description("Thợ")]
         Worker = 2,
     }
+
+    public enum ChietKhauType
+    {
+        SoTien = 0,
+        PhanTram = 1
+    }
 }

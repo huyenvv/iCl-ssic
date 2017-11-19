@@ -241,6 +241,9 @@
     <Compile Include="Models\Branch.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\KieuCach.cs">
+      <DependentUpon>iClassic.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MemberCard.cs">
       <DependentUpon>iClassic.tt</DependentUpon>
     </Compile>
@@ -1125,6 +1128,8 @@
     <Content Include="Views\MemberCard\_InfoCard.cshtml" />
     <Content Include="Views\LoaiVai\_NewOrEditPartial.cshtml" />
     <Content Include="Views\LoaiVai\_FormPartial.cshtml" />
+    <Content Include="Views\Invoice\_PhieuSanXuatScript.cshtml" />
+    <Content Include="Views\Invoice\_PhieuSuaScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

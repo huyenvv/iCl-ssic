@@ -53,7 +53,8 @@ namespace iClassic.Controllers
                 {
                     NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam),
                     NgayTra = DateTime.Now.AddDays(SoNgayTraSauKhiSua),
-                    BranchId = CurrentBranchId
+                    BranchId = CurrentBranchId,
+                    ChietKhauType = (byte)ChietKhauType.SoTien
                 };
             }
             else
@@ -75,7 +76,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Total,ChietKhau,DatCoc,NgayThu,NgayTra,Status,CustomerId,BranchId,PhieuSanXuat,PhieuSua")] Invoice model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Total,ChietKhau,ChietKhauType,DatCoc,NgayThu,NgayTra,Status,CustomerId,BranchId,PhieuSanXuat,PhieuSua")] Invoice model)
         {
             try
             {

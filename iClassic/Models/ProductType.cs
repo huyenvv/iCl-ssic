@@ -17,6 +17,7 @@ namespace iClassic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ProductType()
         {
+            this.KieuCach = new HashSet<KieuCach>();
             this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
             this.ProductMemberCard = new HashSet<ProductMemberCard>();
             this.ProductTyeField = new HashSet<ProductTyeField>();
@@ -29,6 +30,8 @@ namespace iClassic.Models
         public bool IsFitting { get; set; }
         public string Note { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<KieuCach> KieuCach { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

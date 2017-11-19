@@ -39,8 +39,9 @@ namespace iClassic.Models
         public virtual DbSet<PhieuSanXuat> PhieuSanXuat { get; set; }
         public virtual DbSet<Salary> Salary { get; set; }
         public virtual DbSet<ProductMemberCard> ProductMemberCard { get; set; }
+        public virtual DbSet<MemberCard> MemberCard { get; set; }
+        public virtual DbSet<KieuCach> KieuCach { get; set; }
         public virtual DbSet<ProductType> ProductType { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
-        public virtual DbSet<MemberCard> MemberCard { get; set; }
     }
 }

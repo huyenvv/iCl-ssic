@@ -245,6 +245,7 @@ namespace iClassic.Services.Implementation
             obj.DatCoc = model.DatCoc;
             obj.CustomerId = model.CustomerId;
             obj.ChietKhau = model.ChietKhau;
+            obj.ChietKhauType = model.ChietKhauType;
             model.ModifiedBy = model.ModifiedBy;
             model.ModifiedDate = DateTime.Now;
             obj.Status = model.Status;

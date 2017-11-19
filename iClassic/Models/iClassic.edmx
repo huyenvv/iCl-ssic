@@ -78,6 +78,7 @@
           <Property Name="Code" Type="nvarchar" MaxLength="12" StoreGeneratedPattern="Computed" />
           <Property Name="Total" Type="float" Nullable="false" />
           <Property Name="DatCoc" Type="float" />
+          <Property Name="ChietKhauType" Type="tinyint" Nullable="false" />
           <Property Name="ChietKhau" Type="float" />
           <Property Name="NgayThu" Type="datetime" />
           <Property Name="NgayTra" Type="datetime" Nullable="false" />
@@ -89,6 +90,14 @@
           <Property Name="CreateBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="ModifiedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="ModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KieuCach">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="LoaiVai">
           <Key>
@@ -352,6 +361,18 @@
             </Principal>
             <Dependent Role="Invoice">
               <PropertyRef Name="ModifiedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KieuCach_ProductType">
+          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+          <End Role="KieuCach" Type="Self.KieuCach" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KieuCach">
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -640,6 +661,7 @@
           <EntitySet Name="Branch" EntityType="Self.Branch" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KieuCach" EntityType="Self.KieuCach" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoaiVai" EntityType="Self.LoaiVai" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MemberCard" EntityType="Self.MemberCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhieuChi" EntityType="Self.PhieuChi" Schema="dbo" store:Type="Tables" />
@@ -691,6 +713,10 @@
           <AssociationSet Name="FK_Invoice_UserModified" Association="Self.FK_Invoice_UserModified">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KieuCach_ProductType" Association="Self.FK_KieuCach_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="KieuCach" EntitySet="KieuCach" />
           </AssociationSet>
           <AssociationSet Name="FK_LoaiVai_AspNetUsers" Association="Self.FK_LoaiVai_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -876,7 +902,17 @@
             <End Role="Salary" EntitySet="Salary" />
           </AssociationSet>
           <EntitySet Name="ProductMemberCard" EntityType="iClassicModel.ProductMemberCard" />
+          <EntitySet Name="MemberCard" EntityType="iClassicModel.MemberCard" />
+          <AssociationSet Name="FK_ProductMemberCard_MemberCard" Association="iClassicModel.FK_ProductMemberCard_MemberCard">
+            <End Role="MemberCard" EntitySet="MemberCard" />
+            <End Role="ProductMemberCard" EntitySet="ProductMemberCard" />
+          </AssociationSet>
+          <EntitySet Name="KieuCach" EntityType="iClassicModel.KieuCach" />
           <EntitySet Name="ProductType" EntityType="iClassicModel.ProductType" />
+          <AssociationSet Name="FK_KieuCach_ProductType" Association="iClassicModel.FK_KieuCach_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="KieuCach" EntitySet="KieuCach" />
+          </AssociationSet>
           <AssociationSet Name="FK_PhieuSanXuat_ProductType" Association="iClassicModel.FK_PhieuSanXuat_ProductType">
             <End Role="ProductType" EntitySet="ProductType" />
             <End Role="PhieuSanXuat" EntitySet="PhieuSanXuat" />
@@ -894,7 +930,6 @@
             <End Role="ProductTypeLoaiVai" EntitySet="ProductTypeLoaiVai" />
           </AssociationSet>
           <EntitySet Name="Invoice" EntityType="iClassicModel.Invoice" />
-          <EntitySet Name="MemberCard" EntityType="iClassicModel.MemberCard" />
           <AssociationSet Name="FK_Invoice_UserCreate" Association="iClassicModel.FK_Invoice_UserCreate">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Invoice" EntitySet="Invoice" />
@@ -922,10 +957,6 @@
           <AssociationSet Name="FK_PhieuSua_Invoice" Association="iClassicModel.FK_PhieuSua_Invoice">
             <End Role="Invoice" EntitySet="Invoice" />
             <End Role="PhieuSua" EntitySet="PhieuSua" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductMemberCard_MemberCard" Association="iClassicModel.FK_ProductMemberCard_MemberCard">
-            <End Role="MemberCard" EntitySet="MemberCard" />
-            <End Role="ProductMemberCard" EntitySet="ProductMemberCard" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AspNetRoles">
@@ -1377,8 +1408,42 @@
           <Property Name="MemberCardId" Type="Int32" Nullable="false" />
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="Discount" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_ProductMemberCard_ProductType" FromRole="ProductMemberCard" ToRole="ProductType" />
           <NavigationProperty Name="MemberCard" Relationship="iClassicModel.FK_ProductMemberCard_MemberCard" FromRole="ProductMemberCard" ToRole="MemberCard" />
+          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_ProductMemberCard_ProductType" FromRole="ProductMemberCard" ToRole="ProductType" />
+        </EntityType>
+        <EntityType Name="MemberCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDayDiscount" Type="Int32" Nullable="false" />
+          <Property Name="NguoiThanDiscount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductMemberCard" Relationship="iClassicModel.FK_ProductMemberCard_MemberCard" FromRole="MemberCard" ToRole="ProductMemberCard" />
+          <Property Name="SoTien" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Invoice" Relationship="iClassicModel.FK_Invoice_MemberCard" FromRole="MemberCard" ToRole="Invoice" />
+        </EntityType>
+        <Association Name="FK_ProductMemberCard_MemberCard">
+          <End Type="iClassicModel.MemberCard" Role="MemberCard" Multiplicity="1" />
+          <End Type="iClassicModel.ProductMemberCard" Role="ProductMemberCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberCard">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductMemberCard">
+              <PropertyRef Name="MemberCardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="KieuCach">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_KieuCach_ProductType" FromRole="KieuCach" ToRole="ProductType" />
         </EntityType>
         <EntityType Name="ProductType">
           <Key>
@@ -1389,11 +1454,24 @@
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="IsFitting" Type="Boolean" Nullable="false" />
           <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="KieuCach" Relationship="iClassicModel.FK_KieuCach_ProductType" FromRole="ProductType" ToRole="KieuCach" />
           <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_ProductType" FromRole="ProductType" ToRole="PhieuSanXuat" />
           <NavigationProperty Name="ProductMemberCard" Relationship="iClassicModel.FK_ProductMemberCard_ProductType" FromRole="ProductType" ToRole="ProductMemberCard" />
           <NavigationProperty Name="ProductTyeField" Relationship="iClassicModel.FK_ProductTyeField_ProductType" FromRole="ProductType" ToRole="ProductTyeField" />
           <NavigationProperty Name="ProductTypeLoaiVai" Relationship="iClassicModel.FK_ProductTypeLoaiVai_ProductType" FromRole="ProductType" ToRole="ProductTypeLoaiVai" />
         </EntityType>
+        <Association Name="FK_KieuCach_ProductType">
+          <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1" />
+          <End Type="iClassicModel.KieuCach" Role="KieuCach" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KieuCach">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PhieuSanXuat_ProductType">
           <End Type="iClassicModel.ProductType" Role="ProductType" Multiplicity="1" />
           <End Type="iClassicModel.PhieuSanXuat" Role="PhieuSanXuat" Multiplicity="*" />
@@ -1454,6 +1532,7 @@
           <Property Name="Code" Type="String" MaxLength="12" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Total" Type="Double" Nullable="false" />
           <Property Name="DatCoc" Type="Double" />
+          <Property Name="ChietKhauType" Type="Byte" Nullable="false" />
           <Property Name="ChietKhau" Type="Double" />
           <Property Name="NgayThu" Type="DateTime" Precision="3" />
           <Property Name="NgayTra" Type="DateTime" Nullable="false" Precision="3" />
@@ -1472,19 +1551,6 @@
           <NavigationProperty Name="MemberCard" Relationship="iClassicModel.FK_Invoice_MemberCard" FromRole="Invoice" ToRole="MemberCard" />
           <NavigationProperty Name="PhieuSanXuat" Relationship="iClassicModel.FK_PhieuSanXuat_Invoice" FromRole="Invoice" ToRole="PhieuSanXuat" />
           <NavigationProperty Name="PhieuSua" Relationship="iClassicModel.FK_PhieuSua_Invoice" FromRole="Invoice" ToRole="PhieuSua" />
-        </EntityType>
-        <EntityType Name="MemberCard">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="BirthDayDiscount" Type="Int32" Nullable="false" />
-          <Property Name="NguoiThanDiscount" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Invoice" Relationship="iClassicModel.FK_Invoice_MemberCard" FromRole="MemberCard" ToRole="Invoice" />
-          <NavigationProperty Name="ProductMemberCard" Relationship="iClassicModel.FK_ProductMemberCard_MemberCard" FromRole="MemberCard" ToRole="ProductMemberCard" />
-          <Property Name="SoTien" Type="Double" Nullable="false" />
         </EntityType>
         <Association Name="FK_Invoice_UserCreate">
           <End Type="iClassicModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
@@ -1571,18 +1637,6 @@
             </Principal>
             <Dependent Role="PhieuSua">
               <PropertyRef Name="InvoiceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductMemberCard_MemberCard">
-          <End Type="iClassicModel.MemberCard" Role="MemberCard" Multiplicity="1" />
-          <End Type="iClassicModel.ProductMemberCard" Role="ProductMemberCard" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MemberCard">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductMemberCard">
-              <PropertyRef Name="MemberCardId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1791,6 +1845,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MemberCard">
+            <EntityTypeMapping TypeName="iClassicModel.MemberCard">
+              <MappingFragment StoreEntitySet="MemberCard">
+                <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+                <ScalarProperty Name="NguoiThanDiscount" ColumnName="NguoiThanDiscount" />
+                <ScalarProperty Name="BirthDayDiscount" ColumnName="BirthDayDiscount" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KieuCach">
+            <EntityTypeMapping TypeName="iClassicModel.KieuCach">
+              <MappingFragment StoreEntitySet="KieuCach">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ProductType">
             <EntityTypeMapping TypeName="iClassicModel.ProductType">
               <MappingFragment StoreEntitySet="ProductType">
@@ -1816,21 +1891,10 @@
                 <ScalarProperty Name="NgayTra" ColumnName="NgayTra" />
                 <ScalarProperty Name="NgayThu" ColumnName="NgayThu" />
                 <ScalarProperty Name="ChietKhau" ColumnName="ChietKhau" />
+                <ScalarProperty Name="ChietKhauType" ColumnName="ChietKhauType" />
                 <ScalarProperty Name="DatCoc" ColumnName="DatCoc" />
                 <ScalarProperty Name="Total" ColumnName="Total" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MemberCard">
-            <EntityTypeMapping TypeName="iClassicModel.MemberCard">
-              <MappingFragment StoreEntitySet="MemberCard">
-                <ScalarProperty Name="SoTien" ColumnName="SoTien" />
-                <ScalarProperty Name="NguoiThanDiscount" ColumnName="NguoiThanDiscount" />
-                <ScalarProperty Name="BirthDayDiscount" ColumnName="BirthDayDiscount" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

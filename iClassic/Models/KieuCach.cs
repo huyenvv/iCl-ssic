@@ -12,14 +12,12 @@ namespace iClassic.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductMemberCard
+    public partial class KieuCach
     {
         public int Id { get; set; }
-        public int MemberCardId { get; set; }
+        public string Title { get; set; }
         public int ProductId { get; set; }
-        public int Discount { get; set; }
     
-        public virtual MemberCard MemberCard { get; set; }
         public virtual ProductType ProductType { get; set; }
     }
 }
