@@ -23,9 +23,11 @@ namespace iClassic.Models
         public int InvoiceId { get; set; }
         public Nullable<int> ProblemBy { get; set; }
         public int ThoId { get; set; }
+        public Nullable<int> ProductId { get; set; }
     
+        public virtual Invoice Invoice { get; set; }
+        public virtual ProductType ProductType { get; set; }
         public virtual Tho Tho { get; set; }
         public virtual Tho Tho1 { get; set; }
-        public virtual Invoice Invoice { get; set; }
     }
 }

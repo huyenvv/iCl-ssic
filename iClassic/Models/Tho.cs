@@ -17,12 +17,12 @@ namespace iClassic.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Tho()
         {
-            this.PhieuSua = new HashSet<PhieuSua>();
-            this.PhieuSua1 = new HashSet<PhieuSua>();
             this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
             this.PhieuSanXuat1 = new HashSet<PhieuSanXuat>();
             this.PhieuSanXuat2 = new HashSet<PhieuSanXuat>();
             this.Salary1 = new HashSet<Salary>();
+            this.PhieuSua = new HashSet<PhieuSua>();
+            this.PhieuSua1 = new HashSet<PhieuSua>();
         }
     
         public int Id { get; set; }
@@ -34,10 +34,6 @@ namespace iClassic.Models
         public int Type { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuSua> PhieuSua1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat1 { get; set; }
@@ -45,5 +41,9 @@ namespace iClassic.Models
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Salary> Salary1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSua> PhieuSua1 { get; set; }
     }
 }

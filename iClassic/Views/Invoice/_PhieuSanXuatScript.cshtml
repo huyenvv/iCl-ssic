@@ -140,8 +140,8 @@
                 TenSanPham: '',
                 DangNguoi: '',
                 ProductTypeId: listProductType[0].Id,
-                MaVaiId: 0,
-                VaiType: 0,
+                MaVaiId: loaiVai[0].Id,
+                VaiType: vaiKhongCoSan,
                 SoLuong: 1,
                 GiaVaiMau: 0
             };
@@ -149,6 +149,7 @@
 
             bindPhieuSanXuat();
 
+            updateSoTienItem();
             return false;
         });
 
@@ -342,6 +343,8 @@
             updatePhieuSanXuatData();
 
             bindPhieuSanXuat();
+
+            updateSoTienItem();
         }
     }
 
@@ -426,7 +429,7 @@
             html += "           </div>";
             html += "       </div>";
             html += "   </div>";
-            html += "   <div class='form-group boxVaiExtend'  style='display: " + (item.VaiType == vaiKhachMangDen ? 'block' : 'none') + "'>";
+            html += "   <div class='form-group boxVaiExtend'  style='display: " + (item.VaiType == vaiKhachMangDen ? 'none' : 'block') + "'>";
             html += "       <div class='row'>";
             html += "           <div class='col-sm-6' style='display: " + (item.VaiType == vaiKhongCoSan ? 'block' : 'none') + "'>";
             html += "               <label>Tên vải (Mã vải)</label>";

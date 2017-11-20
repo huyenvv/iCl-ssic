@@ -19,6 +19,7 @@ namespace iClassic.Models
         {
             this.KieuCach = new HashSet<KieuCach>();
             this.PhieuSanXuat = new HashSet<PhieuSanXuat>();
+            this.PhieuSua = new HashSet<PhieuSua>();
             this.ProductMemberCard = new HashSet<ProductMemberCard>();
             this.ProductTyeField = new HashSet<ProductTyeField>();
             this.ProductTypeLoaiVai = new HashSet<ProductTypeLoaiVai>();
@@ -34,6 +35,8 @@ namespace iClassic.Models
         public virtual ICollection<KieuCach> KieuCach { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuSanXuat> PhieuSanXuat { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuSua> PhieuSua { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductMemberCard> ProductMemberCard { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
