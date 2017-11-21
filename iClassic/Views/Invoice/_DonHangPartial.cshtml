@@ -222,7 +222,24 @@
                     <strong>Chiết khấu</strong>
                 </td>
                 <td class="text-right">
-                    @((Model.ChietKhau ?? 0).ToString("N0")) ₫
+                    @{ 
+                        var money = (Model.Total * Model.ChietKhau) ?? 0;
+                        var chietKhau = money != 0 ? money / 100 : 0;
+                    }
+                    @((Model.ChietKhau ?? 0).ToString("N0"))
+                    @if (Model.ChietKhauType == (byte)ChietKhauType.PhanTram)
+                    {
+
+                        <span>
+                            %
+                            (<i class="fa fa-exchange"></i>
+                            @(chietKhau.ToString("N0")) ₫)
+                        </span>
+                    }
+                    else
+                    {
+                        @("₫")
+                    }
                 </td>
             </tr>
             <tr>
