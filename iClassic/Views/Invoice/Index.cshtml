@@ -85,8 +85,7 @@
         @{
             foreach (var item in Model)
             {
-                var money = (item.Total * item.ChietKhau) ?? 0;
-                var chietKhau = money != 0 ? money / 100 : 0;
+                var chietKhau = item.ChietKhau;
                 <tr class="stat even">
                     <td>
                         <a href="@Url.Action("NewOrEdit", new { id = item.Id })">@item.Code</a>
@@ -107,11 +106,12 @@
                                     @((item.ChietKhau ?? 0).ToString("N0"))
                                     @if (item.ChietKhauType == (byte)ChietKhauType.PhanTram)
                                     {
-                                        
+                                        var money = (item.Total * item.ChietKhau) ?? 0;
+                                        chietKhau = money != 0 ? money / 100 : 0;
                                         <span>
                                             %
                                             (<i class="fa fa-exchange"></i>
-                                            @(chietKhau.ToString("N0")) ₫)
+                                            @((chietKhau ?? 0).ToString("N0")) ₫)
                                         </span>
                                     }
                                     else
@@ -128,7 +128,7 @@
                                 </tr>
                                 <tr class="text-danger">
                                     <td>Thiếu</td>
-                                    <td>@((item.Total - (item.DatCoc ?? 0) - chietKhau).ToString("N0")) ₫</td>
+                                    <td>@((item.Total - (item.DatCoc ?? 0) - (chietKhau ?? 0)).ToString("N0")) ₫</td>
                                 </tr>
                             }
                         </table>

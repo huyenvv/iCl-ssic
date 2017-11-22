@@ -94,7 +94,7 @@
                 });
                 html += "               </select>";
                 html += "   </div>";
-                html += "   <div class='form-group boxloidoai'>";
+                html += "   <div class='form-group boxloidoai' style='display: " + (item.Type == baohanhvalue ? "block" : "none") + "'>";
                 html += "               <label>Lỗi do ai?</label>";
                 html += "               <select name='PhieuSua[" + index + "].ProblemBy'  class='select223 loitype' data-placeholder='Nhập tên thợ...'>";
                 $.each(listTho, function (i, tho) {
