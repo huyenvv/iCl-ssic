@@ -5,7 +5,8 @@
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
-            <h4>Thêm mới khách hàng</h4>
+            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">@(Model.Id > 0 ? "Cập nhật số đo: " + Model.TenKH : "Thêm mới khách hàng")</h4>
         </div>
         <div class="modal-body">
             <div class="row">
@@ -22,7 +23,7 @@
                         @Html.ValidationSummary("", new { @class = "text-danger" })
                         @Html.Partial("_FormPartial", Model)
                         <div class="form-group">
-                            <input type="submit" value="Tạo mới" class="btn btn-primary" />
+                            <input type="submit" value="@(Model.Id > 0 ? "Cập nhật" : "Thêm mới")" class="btn btn-primary" />
                             <a href="javascript:void(0)" class="btn btn-default" data-dismiss="modal">Đóng</a>
                         </div>
                     }

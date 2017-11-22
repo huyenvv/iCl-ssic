@@ -3,9 +3,10 @@
 @model Customer
 
 @{
-    var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
+    var listProductType = (ViewBag.ProductTypeList as IQueryable<ProductType>).ToList();
+    var isAjax = (bool)ViewBag.IsAjaxRequest;
 }
-<div class="row">
+<div class="row" style="display: @(!isAjax || Model.Id == 0? "block": "none")">
     <div class="col-md-12">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
@@ -46,59 +47,44 @@
             </select>
             @Html.ValidationMessageFor(model => model.KenhQC, "", new { @class = "text-danger" })
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Note)
-            @Html.TextAreaFor(model => model.Note, new { @class = "form-control", rows = "5" })
-            @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
-        </div>
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.DangNguoi)
-                @Html.TextAreaFor(model => model.DangNguoi, new { @class = "form-control", rows = "5" })
-                @Html.ValidationMessageFor(model => model.DangNguoi, "", new { @class = "text-danger" })
-            </div>*@
     </div>
 </div>
-<div class="row">
-    <div class="table-responsive">
-        <table class="table table-dark">
-            <tr>
-                @{
-                    var index = 0;
-                    foreach (var productType in listProductType)
-                    {
-                        <td>
-                            <div class="table-responsive mt10">
-                                <table class="table table-dark">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="2">
-                                                @productType.Name
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (productType.ProductTyeField.Any())
-                                        {
-                                            foreach (var productTypeField in productType.ProductTyeField.ToArray())
-                                            {
-                                                var productTypeValue = Model.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == productTypeField.Id);
-                                                <tr>
-                                                    <td>@productTypeField.Name</td>
-                                                    <td>
-                                                        <input type="hidden" name="ProductTypeValue[@index].ProductTypeFieldId" value="@productTypeField.Id" />
-                                                        <input type="text" name="ProductTypeValue[@index].Value" value="@(productTypeValue != null ? productTypeValue.Value : "")" class="form-control" />
-                                                    </td>
-                                                </tr>
-                                                index = index + 1;
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                    }
-                }
-            </tr>
-        </table>
-    </div>
+<div class="row" style="display: @(!isAjax || Model.Id > 0? "block": "none")">
+
+    @{
+        var index = 0;
+        <ul class="nav nav-tabs nav-justified">
+            @foreach (var productType in listProductType)
+            {
+                var active = productType.Id == listProductType.ElementAt(0).Id ? "active" : "";
+                <li class="@active"><a href="#Tab@(productType.Id)" data-toggle="tab"><strong>@productType.Name</strong></a></li>
+            }
+        </ul>
+        <div class="tab-content">
+            @foreach (var productType in listProductType)
+            {
+                var active = productType.Id == listProductType.ElementAt(0).Id ? "active" : "";
+                <div class="tab-pane @active" id="Tab@(productType.Id)">
+                    <div class="row">
+                        @if (productType.ProductTyeField.Any())
+                        {
+                            foreach (var productTypeField in productType.ProductTyeField.ToArray())
+                            {
+                                var productTypeValue = Model.ProductTypeValue.FirstOrDefault(m => m.ProductTypeFieldId == productTypeField.Id);
+
+                                <div class="col-xs-6">
+                                    <label>@productTypeField.Name</label>
+                                    <div>
+                                        <input type="hidden" name="ProductTypeValue[@index].ProductTypeFieldId" value="@productTypeField.Id" />
+                                        <input type="text" name="ProductTypeValue[@index].Value" value="@(productTypeValue != null ? productTypeValue.Value : "")" class="form-control" />
+                                    </div>
+                                </div>
+                                index = index + 1;
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
 </div>

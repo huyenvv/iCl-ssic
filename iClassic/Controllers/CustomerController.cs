@@ -48,6 +48,7 @@ namespace iClassic.Controllers
             }
             CreateListProductTypeViewBag();
 
+            ViewBag.IsAjaxRequest = Request.IsAjaxRequest();
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_NewOrEditPartial", model);
@@ -77,24 +78,41 @@ namespace iClassic.Controllers
                         model.Image = fileName;
                     }
 
+                    var isNew = true;
                     if (model.Id == 0)
                     {
+                        var exist = _customerRepository.GetByPhone(model.SDT);
+                        if (exist != null)
+                        {
+                            if (Request.IsAjaxRequest())
+                            {
+                                return Content("<script>addCustomerExist('" + exist.SDT + "');</script>");
+                            }
+                            ModelState.AddModelError("SDT", "Đã có khách hàng được tạo với SĐT: \"" + model.SDT + "\" này!");
+                            CreateListProductTypeViewBag();
+                            return View(model);
+                        }
+
                         model.CreateBy = CurrentUserId;
                         _customerRepository.Insert(model);
                     }
                     else
                     {
+                        isNew = false;
                         _customerRepository.Update(model);
                     }
-                    await _customerRepository.SaveAsync();
-
-                    ShowMessageSuccess(Message.Update_Successfully);
+                    await _customerRepository.SaveAsync();                   
 
                     if (Request.IsAjaxRequest())
                     {
+                        if (!isNew)
+                            return Content("<script>EditCustomerSuccessed('" + model.TenKH + "');</script>");
+
                         var data = JsonConvert.SerializeObject(new { model.Id, model.TenKH, model.SDT });
                         return Content("<script>addCustomerSuccessed(" + data + ");</script>");
+
                     }
+                    ShowMessageSuccess(Message.Update_Successfully);
                     return RedirectToAction("Index");
                 }
             }
@@ -146,15 +164,15 @@ namespace iClassic.Controllers
         public JsonResult GetMemberCard(int id)
         {
             try
-            {               
+            {
                 var result = _customerRepository.GetMemberCard(id, CurrentBranchId);
                 return Json(new { Data = result }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
             {
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new { }, JsonRequestBehavior.AllowGet);
             }
-            
+
         }
 
         protected override void Dispose(bool disposing)

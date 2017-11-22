@@ -71,7 +71,6 @@
                 Sản phẩm
             </th>
         </tr>
-
         @{
             foreach (var item in Model)
             {
@@ -135,7 +134,7 @@
                         @if (item.PhieuSanXuat.Count > 0)
                         {
                             <strong>May: @item.PhieuSanXuat.Count</strong>
-                            foreach (var sp in item.PhieuSanXuat.OrderBy(n => n.VaiType))
+                            foreach (var sp in item.PhieuSanXuat.OrderBy(n => n.VaiType).ThenBy(m=>m.ProductTypeId))
                             {
                                 <div>
                                     <span class="text-info">+ @sp.SoLuong @sp.ProductType.Name:</span>

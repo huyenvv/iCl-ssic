@@ -28,6 +28,26 @@
         var conthieu = tongTien - datcoc - chietKhau;
         $("#TienConThieu").html(formatMoney(conthieu));
     }
+
+    // không được xóa
+    function addCustomerExist(sdt) {
+        $('#modalDefault').html(
+            "<div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-body'>" +
+            "<div class='text-danger text-center'>Đã có khách hàng được tạo với SĐT: \"" + sdt + "\" này!</div>" +
+            "<div class='text-warning text-center'>Vui lòng copy SĐT trên vào ô search để được kết quả đúng nhất!</div>" +
+            "</div></div></div>");
+        //$('#modalDefault').modal('hide');
+        //$('#CustomerId').select2('destroy');
+        //$('#CustomerId').val(id);
+        //$('#CustomerId').select2({ width: '100%' });
+    }
+    function EditCustomerSuccessed(tenKH) {
+        $('#modalDefault').html(
+           "<div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-body'>" +
+           "<h5 class='text-success text-center'>Cập nhật số đo \"" + tenKH + "\" thành công!</h5>" +
+           "<a href=\"javascript:void(0)\" class=\"btn btn-default\" data-dismiss=\"modal\">Trở lại</a>" +
+           "</div></div></div>");
+    }
     function addCustomerSuccessed(model) {
         $('#modalDefault').modal('hide');
         $('#CustomerId').select2('destroy');
@@ -35,9 +55,10 @@
         $('#CustomerId').val(model.Id);
         $('#CustomerId').select2({ width: '100%' });
     }
-    function showNewCustomerModal() {
+    function showNewCustomerModal(isEdit) {
+        var id = isEdit ? $("#CustomerId").val() : '';
         $.ajax({
-            url: '@Url.Action("NewOrEdit", "Customer")',
+            url: '@Url.Action("NewOrEdit", "Customer")' + '/' + id,
             dataType: "html",
             type: "GET",
             contentType: 'application/html; charset=utf-8',

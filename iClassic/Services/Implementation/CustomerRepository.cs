@@ -116,6 +116,11 @@ namespace iClassic.Services.Implementation
             return list;
         }
 
+        public Customer GetByPhone(string sdt)
+        {
+            return FirstOrDefault(m => m.SDT == sdt);
+        }
+
         public override void Insert(Customer model)
         {
             model.Created = DateTime.Now;
@@ -160,7 +165,7 @@ namespace iClassic.Services.Implementation
             var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddMilliseconds(-1);
             var startDate = endDate.AddYears(-1);
             var totalMoney = context.Invoice.Where(m => m.BranchId == branchId && m.Status == (byte)TicketStatus.DaTraChoKhach
-                                                        && m.CustomerId== id 
+                                                        && m.CustomerId == id
                                                         && m.ModifiedDate >= startDate && m.ModifiedDate <= endDate).Sum(m => (double?)m.Total) ?? 0;
             var allCard = context.MemberCard.OrderByDescending(m => m.SoTien);
             foreach (var card in allCard)
