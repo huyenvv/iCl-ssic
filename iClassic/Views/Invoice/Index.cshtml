@@ -47,16 +47,11 @@
     </div>
 }
 <div class="table-responsive mt10">
-    <table class="table table-dark" cellspacing="0">
+    <table class="table table-dark table-striped" cellspacing="0">
         <tr>
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Code">
-                    @Html.DisplayNameFor(m => m.FirstOrDefault().Code)
-                </a>
-            </th>
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="KhachHang">
-                    @Html.DisplayNameFor(m => m.FirstOrDefault().CustomerId)
+                    Đơn hàng
                 </a>
             </th>
             <th>
@@ -73,11 +68,6 @@
                 </a>
             </th>
             <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="Status">
-                    @Html.DisplayNameFor(m => m.FirstOrDefault().Status)
-                </a>
-            </th>
-            <th>
                 Sản phẩm
             </th>
         </tr>
@@ -88,11 +78,13 @@
                 var chietKhau = item.ChietKhau;
                 <tr class="stat even">
                     <td>
-                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })">@item.Code</a>
-                    </td>
-                    <td>
-                        @item.Customer.TenKH <br />
-                        (@item.Customer.SDT)
+                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })">@item.Code - @item.Customer.TenKH</a>    
+                        <div style="padding: 2px 0 5px 0;">
+                            @item.Customer.SDT
+                        </div>
+                        <div>
+                            @Html.Raw(Helpers.DrawStatusTicket(item.Status))
+                        </div>
                     </td>
                     <td>
                         <table class="table-money">
@@ -101,7 +93,7 @@
                                 <td>@item.Total.ToString("N0") ₫</td>
                             </tr>
                             <tr>
-                                <td>Chiết khấu</td>
+                                <td>CK</td>
                                 <td>
                                     @((item.ChietKhau ?? 0).ToString("N0"))
                                     @if (item.ChietKhauType == (byte)ChietKhauType.PhanTram)
@@ -138,9 +130,6 @@
                     </td>
                     <td title="@item.NgayTra.ToString("dd/MM/yyyy HH:mm")">
                         @item.NgayTra.ToString("dd/MM/yyyy")
-                    </td>
-                    <td>
-                        @Html.Raw(Helpers.DrawStatusTicket(item.Status))
                     </td>
                     <td>
                         @if (item.PhieuSanXuat.Count > 0)

@@ -51,17 +51,23 @@
                                 </div>
                                 @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                             </div>
-                            <div class="form-group" style="display: @(Model.PhieuSanXuat.Any(m=>m.ProductType!=null && m.ProductType.IsFitting) ? "block": "none");">
-                                @Html.LabelFor(model => model.NgayThu)
-                                <input type="text" name="NgayThu" value="@(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")" class="form-control datepicker" id="NgayThu" />
-                                @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group" style="display: @(Model.PhieuSanXuat.Any(m=>m.ProductType!=null && m.ProductType.IsFitting) ? "block": "none");">
+                                        @Html.LabelFor(model => model.NgayThu)
+                                        <input type="text" name="NgayThu" value="@(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")" class="form-control datepicker" id="NgayThu" />
+                                        @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.NgayTra)
+                                        <input type="text" name="NgayTra" value="@Model.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
+                                        @Html.ValidationMessageFor(model => model.NgayTra, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.NgayTra)
-                                <input type="text" name="NgayTra" value="@Model.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
-                                @Html.ValidationMessageFor(model => model.NgayTra, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
+                            <div class="form-group mt5">
                                 @Html.LabelFor(model => model.Status):
                                 @Html.Raw(Helpers.DrawStatusTicket((byte)TicketStatus.ChuaXuLy))
                                 @Html.HiddenFor(model => model.Status)
@@ -76,33 +82,34 @@
                                     Tổng tiền: <strong id="lblTotal" class="text-success">0 ₫</strong>
                                 </label>
                             </div>
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.DatCoc)
-                                @Html.EditorFor(model => model.DatCoc, new { htmlAttributes = new { @class = "form-control price", onchange = "updateSoTienItem();" } })
-                                @Html.ValidationMessageFor(model => model.DatCoc, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.ChietKhau)
-                                <div class="row">
-                                    <div class="col-xs-6">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.DatCoc)
+                                        @Html.EditorFor(model => model.DatCoc, new { htmlAttributes = new { @class = "form-control price", onchange = "updateSoTienItem();" } })
+                                        @Html.ValidationMessageFor(model => model.DatCoc, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group" style="position: relative;">
+                                        @Html.LabelFor(model => model.ChietKhau)
                                         <div class="input-group">
                                             @Html.EditorFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control price" } })
                                             <div class="input-group-btn" style="min-width: 55px;">
-                                                <select id="ChietKhauType" name="ChietKhauType" class="form-control" style="height: 37px;">
+                                                <select id="ChietKhauType" name="ChietKhauType" class="form-control">
                                                     <option value="@((byte)ChietKhauType.SoTien)" @(Model.ChietKhauType == (byte)ChietKhauType.SoTien ? "selected" : "")>đ</option>
                                                     <option value="@((byte)ChietKhauType.PhanTram)" @(Model.ChietKhauType == (byte)ChietKhauType.PhanTram ? "selected" : "")>%</option>
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xs-6" id="lblSoTienChietKhau">
-                                        <label style="line-height:38px;"><i class="fa fa-exchange"></i>&nbsp;&nbsp;<span></span></label>
+                                        <div id="lblSoTienChietKhau">
+                                            <label style="line-height:38px;"><i class="fa fa-exchange"></i>&nbsp;&nbsp;<span></span></label>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.ChietKhau, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-
-                                @Html.ValidationMessageFor(model => model.ChietKhau, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="form-group">
+                            </div>                            
+                            <div class="form-group mt5">
                                 <label class="text-danger">Còn thiếu: <strong id="TienConThieu"></strong></label>
                             </div>
                         </div>
