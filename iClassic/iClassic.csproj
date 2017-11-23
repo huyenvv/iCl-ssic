@@ -371,6 +371,7 @@
     <Content Include="css\font.helvetica-neue.css" />
     <Content Include="css\jquery-ui-1.10.3.css" />
     <Content Include="css\jquery.gritter.css" />
+    <Content Include="css\jquery.tagsinput.css" />
     <Content Include="css\lato.css" />
     <Content Include="css\roboto.css" />
     <Content Include="css\select2.css" />
