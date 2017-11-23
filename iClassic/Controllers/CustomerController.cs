@@ -124,6 +124,7 @@ namespace iClassic.Controllers
             }
             CreateListProductTypeViewBag();
 
+            ViewBag.IsAjaxRequest = Request.IsAjaxRequest();
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_NewOrEditPartial", model);

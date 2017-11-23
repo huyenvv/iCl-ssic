@@ -52,14 +52,14 @@
                                 @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
                             </div>
                             <div class="row">
-                                <div class="col-xs-6">
+                                @*<div class="col-xs-6">
                                     <div class="form-group" style="display: @(Model.PhieuSanXuat.Any(m=>m.ProductType!=null && m.ProductType.IsFitting) ? "block": "none");">
                                         @Html.LabelFor(model => model.NgayThu)
                                         <input type="text" name="NgayThu" value="@(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")" class="form-control datepicker" id="NgayThu" />
                                         @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
                                     </div>
-                                </div>
-                                <div class="col-xs-6">
+                                </div>*@
+                                <div class="col-xs-12">
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.NgayTra)
                                         <input type="text" name="NgayTra" value="@Model.NgayTra.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control datepicker" />
