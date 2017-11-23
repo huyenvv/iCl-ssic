@@ -22,6 +22,17 @@
     right: 0;
 }
 
+#lblSoTienChietKhau {
+    position: absolute;
+    display: block;
+    bottom: -38px;
+    left: 0;
+}
+
+#ChietKhauType {
+    height: 37px;
+}
+
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
     .contentpanel {
         padding: 20px 2px;
@@ -34,5 +45,19 @@
 
     .panel-heading {
         padding: 3px 10px;
+    }
+
+    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+        padding: 10px 5px;
+    }
+
+    .label {
+        font-size: 9px;
+    }
+}
+
+@media only screen and (min-device-width : 768px) {
+    #ChietKhauType {
+        height: 38px;
     }
 }
