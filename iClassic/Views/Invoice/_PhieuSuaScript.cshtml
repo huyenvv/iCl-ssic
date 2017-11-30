@@ -3,133 +3,150 @@
 @using Newtonsoft.Json;
 @model Invoice
 <script>
-        var phieuSuaModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSua.Select(m=>new {m.Id,m.NoiDung,m.ProblemBy,m.SoTien,m.Type,m.ThoId}))".replace(/&quot;/g, '"'));
-        var phieuSuaTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetPhieuSuaTypeList())".replace(/&quot;/g, '"'));
-        var baohanhvalue = parseInt("@((byte)PhieuSuaType.BaoHanh)");
+    var phieuSuaModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSua.Select(m=>new {m.Id,m.NoiDung,m.ProblemBy,m.SoTien,m.Type,m.ThoId, m.ProductId }))".replace(/&quot;/g, '"'));
+    var phieuSuaTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetPhieuSuaTypeList())".replace(/&quot;/g, '"'));
+    var baohanhvalue = parseInt("@((byte)PhieuSuaType.BaoHanh)");
 
-        $(function () {
+    $(function () {
+
+        bindPhieuSua();
+        updateSoTienItem();
+
+        $("#btnAddPhieuSua").on("click", function () {
+
+            updatePhieuSuaData();
+
+            var newPhieuSua = {
+                Id: 0,
+                NoiDung: '',
+                Type: baohanhvalue,
+                SoTien: 0
+            };
+            phieuSuaModels.push(newPhieuSua);
 
             bindPhieuSua();
-            updateSoTienItem();
 
-            $("#btnAddPhieuSua").on("click", function () {
-
-                updatePhieuSuaData();
-
-                var newPhieuSua = {
-                    Id: 0,
-                    NoiDung: '',
-                    Type: baohanhvalue,
-                    SoTien: 0
-                };
-                phieuSuaModels.push(newPhieuSua);
-
-                bindPhieuSua();
-
-                return false;
-            });
+            return false;
         });
+    });
 
-        function cboLyDoChange(e) {
-            var obj = $(e);
-            var value = $(e).val();
-            var sotienobj = obj.parents(".media").find(".boxtien");
-            var boxloidoaiObj = obj.parents(".media").find(".boxloidoai");
-            if (value == "@((byte)PhieuSuaType.BaoHanh)") {
-                sotienobj.find('.sotien').val(0);
-                sotienobj.slideUp();
-                boxloidoaiObj.slideDown();
-            } else {
-                sotienobj.slideDown();
-                boxloidoaiObj.slideUp();
-            }
+    function cboLyDoChange(e) {
+        var obj = $(e);
+        var value = $(e).val();
+        var sotienobj = obj.parents(".media").find(".boxtien");
+        var boxloidoaiObj = obj.parents(".media").find(".boxloidoai");
+        if (value == "@((byte)PhieuSuaType.BaoHanh)") {
+            sotienobj.find('.sotien').val(0);
+            sotienobj.slideUp();
+            boxloidoaiObj.slideDown();
+        } else {
+            sotienobj.slideDown();
+            boxloidoaiObj.slideUp();
         }
+    }
 
-        function removePhieuSua(e) {
-            if (confirm("Bạn có chắc chắn muốn xóa phiếu sửa này?")) {
-                $(e).parents(".media").remove();
+    function cboSanPhamChange(e) {
+        var title = $(e).find("option:selected").text();
+        $(e).parents(".media").find(".title-tenspsua").html(title);
+    }
 
-                updatePhieuSuaData();
+    function removePhieuSua(e) {
+        if (confirm("Bạn có chắc chắn muốn xóa phiếu sửa này?")) {
+            $(e).parents(".media").remove();
 
-                bindPhieuSua();
-            }
+            updatePhieuSuaData();
+
+            bindPhieuSua();
         }
+    }
 
-        function updatePhieuSuaData() {
-            phieuSuaModels = [];
-            $('#boxPhieuSua .media').each(function (i, element) {
-                var obj = $(element);
-                var phieusua = {};
-                phieusua.Id = parseInt(obj.find(".idphieusua").val()) | 0;
-                phieusua.NoiDung = obj.find(".noidung").val();
-                phieusua.Type = parseInt(obj.find("select.type").val()) | 0;
-                phieusua.ProblemBy = parseInt(obj.find("select.loitype").val()) | 0;
-                phieusua.ThoId = parseInt(obj.find("select.aisesua").val()) | 0;
-                phieusua.SoTien = parseInt(obj.find(".sotien").val().replace(/,/g, '')) | 0;
+    function updatePhieuSuaData() {
+        phieuSuaModels = [];
+        $('#boxPhieuSua .media').each(function (i, element) {
+            var obj = $(element);
+            var phieusua = {};
+            phieusua.Id = parseInt(obj.find(".idphieusua").val()) | 0;
+            phieusua.NoiDung = obj.find(".noidung").val();
+            phieusua.Type = parseInt(obj.find("select.type").val()) | 0;
+            phieusua.ProblemBy = parseInt(obj.find("select.loitype").val()) | 0;
+            phieusua.ThoId = parseInt(obj.find("select.aisesua").val()) | 0;
+            phieusua.SoTien = parseInt(obj.find(".sotien").val().replace(/,/g, '')) | 0;
 
-                phieuSuaModels.push(phieusua);
+            phieuSuaModels.push(phieusua);
+        });
+    }
+
+    function bindPhieuSua() {
+        var box = $('#boxPhieuSua');
+        var html = "";
+        $.each(phieuSuaModels, function (index, item) {
+            var giatien = formatMoney(item.SoTien);
+
+            html += "<div class='media'>";
+            var product = getProduct(item.ProductId);
+            html += "   <h4 class='text-warning'>" + (index + 1) + ". Sửa <span class='title-tenspsua'>" + (product.Name ? product.Name : "SP Khác...") + "</span><span class='pull-right' onclick='removePhieuSua(this);'>x</span></h4>";
+            html += "   <div class='form-group'>";
+            html += "               <label>Sản phẩm sửa</label>";
+            html += "               <select name='PhieuSua[" + index + "].ProductId' class='form-control type' onchange='cboSanPhamChange(this);'>";
+            $.each(listProductType, function (i, product) {
+                html += "               <option value='" + product.Id + "'" + (product.Id == item.ProductId ? "selected" : "") + ">";
+                html += "                   " + product.Name;
+                html += "               </option>";
             });
-        }
-
-        function bindPhieuSua() {
-            var box = $('#boxPhieuSua');
-            var html = "";
-            $.each(phieuSuaModels, function (index, item) {
-                var giatien = formatMoney(item.SoTien);
-
-                html += "<div class='media'>";
-                html += "   <h4 class='text-warning'>" + (index + 1) + ".<span class='pull-right' onclick='removePhieuSua(this);'>x</span></h4>";
-                html += "   <div class='form-group'>";
-                html += "       <label>Miêu tả lỗi sản phẩm</label>";
-                html += "       <input type='hidden' name='PhieuSua[" + index + "].Id' value='" + item.Id + "'  class='idphieusua'/>";
-                html += "       <input type='text' name='PhieuSua[" + index + "].NoiDung' value='" + item.NoiDung + "' class='form-control noidung' placeholder='Miêu tả lỗi sản phẩm' />";
-                html += "   </div>";
-                html += "   <div class='form-group'>";
-                html += "               <label>Lý do sửa</label>";
-                html += "               <select name='PhieuSua[" + index + "].Type' class='form-control type' onchange='cboLyDoChange(this);'>";
-                $.each(phieuSuaTypes, function (i, type) {
-                    html += "               <option value='" + type.Key + "'" + (type.Key == item.Type ? "selected" : "") + ">";
-                    html += "                   " + type.Value;
-                    html += "               </option>";
-                });
-                html += "               </select>";
-                html += "   </div>";
-                html += "   <div class='form-group boxloidoai' style='display: " + (item.Type == baohanhvalue ? "block" : "none") + "'>";
-                html += "               <label>Lỗi do ai?</label>";
-                html += "               <select name='PhieuSua[" + index + "].ProblemBy'  class='select223 loitype' data-placeholder='Nhập tên thợ...'>";
-                $.each(listTho, function (i, tho) {
-                    html += "               <option value='" + tho.Id + "'" + (tho.Id == item.ProblemBy ? "selected" : "") + ">";
-                    html += "                   " + tho.Name;
-                    html += "               </option>";
-                });
-                html += "               </select>";
-                html += "   </div>";
-                html += "   <div class='form-group'>";
-                html += "       <label>Ai sẽ sửa?</label>";
-                html += "       <select name='PhieuSua[" + index + "].ThoId' class='select223 aisesua' data-placeholder='Nhập tên thợ...'>";
-                $.each(listTho, function (i, tho) {
-                    html += "       <option value='" + tho.Id + "'" + (tho.Id == item.ThoId ? "selected" : "") + ">";
-                    html += "           " + tho.Name;
-                    html += "       </option>";
-                });
-                html += "       </select>";
-                html += "   </div>";
-                html += "   <div class='form-group boxtien' style='display: " + (item.Type == baohanhvalue ? "none" : "block") + "'>";
-                html += "       <label>Giá tiền</label>";
-                html += "       <input type='text' name='PhieuSua[" + index + "].SoTien' value='" + item.SoTien + "' class='form-control price sotien'  onchange='updateSoTienItem();' />";
-                html += "   </div>";
-                html += "</div>";
+            html += "                   <option value='' " + (!item.ProductId ? "selected" : "") + ">SP Khác...</option>";
+            html += "               </select>";
+            html += "   </div>";
+            html += "   <div class='form-group'>";
+            html += "       <label>Miêu tả lỗi sản phẩm</label>";
+            html += "       <input type='hidden' name='PhieuSua[" + index + "].Id' value='" + item.Id + "'  class='idphieusua'/>";
+            html += "       <input type='text' name='PhieuSua[" + index + "].NoiDung' value='" + item.NoiDung + "' class='form-control noidung' placeholder='Miêu tả lỗi sản phẩm' />";
+            html += "   </div>";
+            html += "   <div class='form-group'>";
+            html += "               <label>Lý do sửa</label>";
+            html += "               <select name='PhieuSua[" + index + "].Type' class='form-control type' onchange='cboLyDoChange(this);'>";
+            $.each(phieuSuaTypes, function (i, type) {
+                html += "               <option value='" + type.Key + "'" + (type.Key == item.Type ? "selected" : "") + ">";
+                html += "                   " + type.Value;
+                html += "               </option>";
             });
-            box.html(html);
-
-            $("#soluongspcansua").html(phieuSuaModels.length);
-
-            var currentPosition = $(document).scrollTop();
-            $('.price').maskMoney({ precision: 0 });
-            formatPrices();
-            jQuery(".select223").select2({
-                width: '100%'
+            html += "               </select>";
+            html += "   </div>";
+            html += "   <div class='form-group boxloidoai' style='display: " + (item.Type == baohanhvalue ? "block" : "none") + "'>";
+            html += "               <label>Lỗi do ai?</label>";
+            html += "               <select name='PhieuSua[" + index + "].ProblemBy'  class='select223 loitype' data-placeholder='Nhập tên thợ...'>";
+            $.each(listTho, function (i, tho) {
+                html += "               <option value='" + tho.Id + "'" + (tho.Id == item.ProblemBy ? "selected" : "") + ">";
+                html += "                   " + tho.Name;
+                html += "               </option>";
             });
-            $(document).scrollTop(currentPosition);
-        }
+            html += "               </select>";
+            html += "   </div>";
+            html += "   <div class='form-group'>";
+            html += "       <label>Ai sẽ sửa?</label>";
+            html += "       <select name='PhieuSua[" + index + "].ThoId' class='select223 aisesua' data-placeholder='Nhập tên thợ...'>";
+            $.each(listTho, function (i, tho) {
+                html += "       <option value='" + tho.Id + "'" + (tho.Id == item.ThoId ? "selected" : "") + ">";
+                html += "           " + tho.Name;
+                html += "       </option>";
+            });
+            html += "       </select>";
+            html += "   </div>";
+            html += "   <div class='form-group boxtien' style='display: " + (item.Type == baohanhvalue ? "none" : "block") + "'>";
+            html += "       <label>Giá tiền</label>";
+            html += "       <input type='text' name='PhieuSua[" + index + "].SoTien' value='" + item.SoTien + "' class='form-control price sotien'  onchange='updateSoTienItem();' />";
+            html += "   </div>";
+            html += "</div>";
+        });
+        box.html(html);
+
+        $("#soluongspcansua").html(phieuSuaModels.length);
+
+        var currentPosition = $(document).scrollTop();
+        $('.price').maskMoney({ precision: 0 });
+        formatPrices();
+        jQuery(".select223").select2({
+            width: '100%'
+        });
+        $(document).scrollTop(currentPosition);
+    }
 </script>

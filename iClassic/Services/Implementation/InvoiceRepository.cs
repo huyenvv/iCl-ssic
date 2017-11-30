@@ -361,6 +361,7 @@ namespace iClassic.Services.Implementation
                 objForUpdate.ProblemBy = t.ProblemBy;
                 objForUpdate.Type = t.Type;
                 //objForUpdate.Status = t.Status;
+                objForUpdate.ProductId = t.ProductId;
                 objForUpdate.ThoId = t.ThoId;
                 objForUpdate.SoTien = t.Type == (byte)PhieuSuaType.BaoHanh ? 0 : t.SoTien;
             });

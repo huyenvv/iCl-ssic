@@ -121,23 +121,26 @@
         inputKieuCachCurrent = $(e).parents(".media").find(".tensanpham");
         var productId = parseInt($(e).parents(".media").find("input[type='radio']:checked").val()) | 0;
         var product = getProduct(productId);
-        var html = generateKieuCachHtml(product.KieuCach);
+        var html = generateKieuCachHtml(product);
         $("#modalDefault").html(html);
         $("#modalDefault").modal("show");
     }
 
-    function generateKieuCachHtml(kieucachs) {
+    function generateKieuCachHtml(product) {
         var html = "<div class='modal-dialog modal-lg'>                                                                   " +
                     "    <div class='modal-content'>                                                                       " +
                     "        <div class='modal-header'>                                                                    " +
                     "            <button aria-hidden='true' data-dismiss='modal' class='close' type='button'>×</button>    " +
-                    "            <h4 class='modal-title'>xxxx</h4>                                                         " +
+                    "            <h4 class='modal-title'> Kiểu cách của \"" + product.Name + "\"</h4>                                                         " +
                     "        </div>                                                                                        " +
                     "        <div class='modal-body'>                                                                      " +
                     "            <div class='row'>                                                                         " +
                     "                ";
-                    for (var i = 0; i < kieucachs.length; i++) {
-                        var kc = kieucachs[i];
+        if (product.KieuCach.length == 0) {
+            html += "   <h4>Không có kiểu cách hay dùng nào!</h4>";
+        } else {
+            for (var i = 0; i < product.KieuCach.length; i++) {
+                var kc = product.KieuCach[i];
                         html += "   <div class='col-sm-6'>";
                         html += "       <div class='ckbox ckbox-default'>";
                         html += "           <input type='checkbox' value='"+kc+"' id='checkboxDefault"+i+"'>";
@@ -145,7 +148,9 @@
                         html += "       </div>";
                         html += "   </div>";
                     }                    
-                    html += "   </div>" +
+                    
+        }
+        html += "   </div>" +
                     "       </div>" +
                     "        <div class='modal-footer'>                                                                      " +
                     "               <div class='form-group mt10'>" +
@@ -399,6 +404,12 @@
         }
     }
 
+    function updateTitleItem(e) {
+        var obj = $(e);
+        var title = obj.next().text();
+        obj.parents(".media").find(".title-tenspmay").html(title);
+    }
+
     function removePhieuSx(e) {
         if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
             $(e).parents(".media").remove();
@@ -448,14 +459,14 @@
             var giatien = formatMoney(dongia * item.SoLuong);
 
             html += "<div class='media'>";
-            html += "   <h4 class='text-warning'>" + (index + 1) + ".<span class='pull-right' onclick='removePhieuSx(this);'>x</span></h4>";
+            html += "   <h4 class='text-warning'>" + (index + 1) + ". May <span class='title-tenspmay'>" + getProduct(item.ProductTypeId).Name + "</span> <span class='pull-right' onclick='removePhieuSx(this);'>x</span></h4>";
             html += "   <div class='form-group'>";
             var typecount = 0;
             $.each(listProductType, function (i, product) {
                 var id = "rdoProductType" + index + "-" + typecount;
                 var hasValue = product.Id == item.ProductTypeId;
                 html += "   <div class='rdio rdio-default pull-left mr20'>";
-                html += "       <input type='radio' name='PhieuSanXuat[" + index + "].ProductTypeId' id='" + id + "' value='" + product.Id + "' " + (hasValue ? "checked" : "") + " onclick='showHideFittingDate(" + product.Id + "); updateSoTienItem();'>";
+                html += "       <input type='radio' name='PhieuSanXuat[" + index + "].ProductTypeId' id='" + id + "' value='" + product.Id + "' " + (hasValue ? "checked" : "") + " onclick='updateTitleItem(this);showHideFittingDate(" + product.Id + "); updateSoTienItem();'>";
                 html += "       <label for='" + id + "'>" + product.Name + "</label>";
                 html += "   </div>";
                 typecount++;
@@ -565,7 +576,7 @@
             width: '100%'
         });
 
-        $('.tensanpham').tagsInput({ width: 'auto' });
+        $('.tensanpham').tagsInput({ width: 'auto', defaultText: 'Thêm...' });
 
         var currentPosition = $(document).scrollTop();
         $('.price').maskMoney({ precision: 0 });

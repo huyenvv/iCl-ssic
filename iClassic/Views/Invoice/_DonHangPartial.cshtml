@@ -172,7 +172,7 @@
                 foreach (var item in Model.PhieuSua)
                 {
                     <tr>
-                        <td>
+                        <td colspan="2">
                             @switch ((PhieuSuaType)item.Type)
                             {
                                 case PhieuSuaType.BaoHanh:
@@ -184,11 +184,9 @@
                                 case PhieuSuaType.BaoHanhKhachTangGiamCan:
                                     @("Bảo hành do tăng giảm Kg: ")
                                     break;
-                            }
-                            :<br />
-                            @item.NoiDung
+                            }:
+                            @(item.ProductType != null ? item.ProductType.Name: "SP Khác")
                         </td>
-                        <td class=""></td>
                         <td class="noforinvoice"></td>
                         <td class="noforinvoice"></td>
                         <td class="noforinvoice"></td>
@@ -222,7 +220,7 @@
                     <strong>Chiết khấu</strong>
                 </td>
                 <td class="text-right">
-                    @{ 
+                    @{
                         var money = (Model.Total * Model.ChietKhau) ?? 0;
                         var chietKhau = money != 0 ? money / 100 : 0;
                     }

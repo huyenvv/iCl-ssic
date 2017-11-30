@@ -131,15 +131,15 @@
         <table class="table">
             <tr>
                 <td class="text-center">
-                    @(((ThoTypes)item.ThoDoId).GetDescription())
+                    @((ThoTypes.Do).GetDescription())
                     <br />    <strong>@item.Tho.Name</strong>
                 </td>
                 <td class="text-center">
-                    @(((ThoTypes)item.ThoCatId).GetDescription())
+                    @((ThoTypes.Cat).GetDescription())
                     <br />    <strong>@item.Tho2.Name</strong>
                 </td>
                 <td class="text-center">
-                    @(((ThoTypes)item.ThoMayId).GetDescription())
+                    @((ThoTypes.May).GetDescription())
                     <br />    <strong>@item.Tho1.Name</strong>
                 </td>
             </tr>

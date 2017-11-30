@@ -4,7 +4,7 @@
 @model iClassic.Models.Invoice
 
 @{
-    ViewBag.Title = Model.Id > 0 ? "Sửa lại" : "Thêm mới";
+    ViewBag.Title = Model.Id > 0 ? "Cập nhật đơn: HD" + Model.Id + " - " + Model.Customer.TenKH : "Thêm mới";
     ViewBag.Class = "fa fa-dollar";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Hóa đơn</a>" +
                           "<span>" + ViewBag.Title + "</span>";
@@ -53,12 +53,12 @@
                             </div>
                             <div class="row">
                                 @*<div class="col-xs-6">
-                                    <div class="form-group" style="display: @(Model.PhieuSanXuat.Any(m=>m.ProductType!=null && m.ProductType.IsFitting) ? "block": "none");">
-                                        @Html.LabelFor(model => model.NgayThu)
-                                        <input type="text" name="NgayThu" value="@(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")" class="form-control datepicker" id="NgayThu" />
-                                        @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>*@
+                                        <div class="form-group" style="display: @(Model.PhieuSanXuat.Any(m=>m.ProductType!=null && m.ProductType.IsFitting) ? "block": "none");">
+                                            @Html.LabelFor(model => model.NgayThu)
+                                            <input type="text" name="NgayThu" value="@(Model.NgayThu.HasValue ? Model.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")" class="form-control datepicker" id="NgayThu" />
+                                            @Html.ValidationMessageFor(model => model.NgayThu, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
                                 <div class="col-xs-12">
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.NgayTra)
@@ -108,7 +108,7 @@
                                         @Html.ValidationMessageFor(model => model.ChietKhau, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="form-group mt5">
                                 <label class="text-danger">Còn thiếu: <strong id="TienConThieu"></strong></label>
                             </div>

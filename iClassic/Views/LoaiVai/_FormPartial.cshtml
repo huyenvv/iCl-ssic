@@ -22,25 +22,22 @@
             @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
     </div>
-    <div class="col-md-12 form-bordered">
+    <div class="col-md-12">
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12">
                     <h4>@Html.LabelFor(model => model.ProductTypeLoaiVai)</h4>
-                    <table>
-                        <tr>
-                            @foreach (var item in listProductType)
-                            {
-                                var productVai = Model.ProductTypeLoaiVai.FirstOrDefault(m => m.ProductTypeId == item.Id);
-                                <td>
-                                    <small>@item.Name</small>
-                                    <input type="hidden" name="ProductTypeLoaiVai[@index].ProductTypeId" value="@item.Id" />
-                                    <input type="text" name="ProductTypeLoaiVai[@index].Price" value="@(productVai != null ?productVai.Price : 0)" class="form-control price" />
-                                </td>
-                                index++;
-                            }
-                        </tr>
-                    </table>
+                    <div class="row">
+                        @foreach (var item in listProductType)
+                        {
+                            var productVai = Model.ProductTypeLoaiVai.FirstOrDefault(m => m.ProductTypeId == item.Id);
+                            <div class="col-md-2 col-sm-3 col-xs-6">
+                                <small>@item.Name</small>
+                                <input type="hidden" name="ProductTypeLoaiVai[@index].ProductTypeId" value="@item.Id" />
+                                <input type="text" name="ProductTypeLoaiVai[@index].Price" value="@(productVai != null ?productVai.Price : 0)" class="form-control price" />
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
             <div class="form-group">
