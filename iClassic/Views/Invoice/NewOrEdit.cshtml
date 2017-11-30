@@ -37,7 +37,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.CustomerId) - <a href="javascript:void(0)" onclick="showNewCustomerModal(true)">Chỉnh sửa số đo</a>
-                                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
+                                @Html.DropDownList("CustomerId", null, htmlAttributes: new { @class = "select2 form-control", data_placeholder = "Nhập tên hoặc SĐT khách hàng..." })
                                 <div class="row">
                                     <div id="boxHangThe" class="col-xs-6">
                                         Hạng thẻ:
@@ -181,6 +181,7 @@
 
 @section Styles {
     <link href="@Url.Content("~/Content/bootstrap-datetimepicker.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/jquery.tagsinput.css")" rel="stylesheet" />
     <style>
         @@media (min-width: 768px) {
             .tongtiengroup {
@@ -220,6 +221,7 @@
     <script src="@Url.Content("~/Scripts/jquery.maskMoney.min.js")"></script>
     <script src="@Url.Content("~/Scripts/moment.min.js")"></script>
     <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
+    <script src="@Url.Content("~/js/jquery.tagsinput.min.js")"></script>
 
     @*Sản phẩm may*@
     @Html.Partial("_PhieuSanXuatScript", Model)

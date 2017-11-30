@@ -375,6 +375,7 @@
     <Content Include="css\lato.css" />
     <Content Include="css\roboto.css" />
     <Content Include="css\select2.css" />
+    <Content Include="css\select2.min.css" />
     <Content Include="css\style.default.css" />
     <Content Include="css\toggles.css" />
     <Content Include="css\weather-icons.min.css" />
@@ -904,6 +905,7 @@
     <Content Include="js\respond.min.js" />
     <Content Include="js\retina.min.js" />
     <Content Include="js\select2.min.js" />
+    <Content Include="js\select22.min.js" />
     <Content Include="js\toggles.min.js" />
     <Content Include="js\wysihtml5-0.3.0.min.js" />
     <Content Include="Models\iClassic.Context.tt">

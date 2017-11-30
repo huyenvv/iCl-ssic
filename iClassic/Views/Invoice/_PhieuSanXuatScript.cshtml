@@ -4,7 +4,7 @@
 @model Invoice
 @{
     var loaivai = ViewBag.MaVaiId as IQueryable<LoaiVai>;
-    var listProductType = ViewBag.ProductTypeList as IQueryable<ProductType>;
+    var listProductType = (ViewBag.ProductTypeList as IQueryable<ProductType>).ToList();
     var listTho = ViewBag.ListThoMayDo as IQueryable<Tho>;
     var listHangThe = ViewBag.ListHangThe as IQueryable<MemberCard>;
 }
@@ -116,9 +116,61 @@
                     $("#modalDefault").modal("show");
                 });
     }
+    var inputKieuCachCurrent;
+    function showKieuCachHayDung(e) {
+        inputKieuCachCurrent = $(e).parents(".media").find(".tensanpham");
+        var productId = parseInt($(e).parents(".media").find("input[type='radio']:checked").val()) | 0;
+        var product = getProduct(productId);
+        var html = generateKieuCachHtml(product.KieuCach);
+        $("#modalDefault").html(html);
+        $("#modalDefault").modal("show");
+    }
+
+    function generateKieuCachHtml(kieucachs) {
+        var html = "<div class='modal-dialog modal-lg'>                                                                   " +
+                    "    <div class='modal-content'>                                                                       " +
+                    "        <div class='modal-header'>                                                                    " +
+                    "            <button aria-hidden='true' data-dismiss='modal' class='close' type='button'>×</button>    " +
+                    "            <h4 class='modal-title'>xxxx</h4>                                                         " +
+                    "        </div>                                                                                        " +
+                    "        <div class='modal-body'>                                                                      " +
+                    "            <div class='row'>                                                                         " +
+                    "                ";
+                    for (var i = 0; i < kieucachs.length; i++) {
+                        var kc = kieucachs[i];
+                        html += "   <div class='col-sm-6'>";
+                        html += "       <div class='ckbox ckbox-default'>";
+                        html += "           <input type='checkbox' value='"+kc+"' id='checkboxDefault"+i+"'>";
+                        html += "           <label for='checkboxDefault" + i + "'>" + kc + "</label>";
+                        html += "       </div>";
+                        html += "   </div>";
+                    }                    
+                    html += "   </div>" +
+                    "       </div>" +
+                    "        <div class='modal-footer'>                                                                      " +
+                    "               <div class='form-group mt10'>" +
+                    "	                <a href='javascript:void(0)' class='btn btn-primary' onclick='addKieuCachHayDung();'>Thêm</a>" +
+                    "	                <a href='javascript:void(0)' class='btn btn-default' data-dismiss='modal'>Đóng</a>" +
+                    "               </div>" +
+                    "        </div>                                                                                        " +
+                    "    </div>                                                                                            " +
+                    "</div>";
+                    return html;
+    }
+
+    function addKieuCachHayDung() {
+        var data = "";
+        $("#modalDefault").find("input[type='checkbox']:checked").each(function (i, obj) {
+            var tagVal = $(obj).val();
+            if (inputKieuCachCurrent.val().indexOf(tagVal) == -1) {
+                inputKieuCachCurrent.addTag(tagVal);
+            }
+        });
+        $("#modalDefault").modal("hide");
+    }
 
     var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.DangNguoi,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId,m.HasVai,m.VaiType, m.GiaVaiMau}))".replace(/&quot;/g, '"'));
-    var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price,m.IsFitting}))".replace(/&quot;/g, '"'));
+    var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price,m.IsFitting, KieuCach= !string.IsNullOrEmpty(m.Note)? m.Note.Split(','): new string[0] }))".replace(/&quot;/g, '"'));
     var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
     var vaiTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetVaiTypeList())".replace(/&quot;/g, '"'));
     var listTho = JSON.parse("@JsonConvert.SerializeObject(listTho.Select(m=> new {m.Id, m.Name, m.Type}))".replace(/&quot;/g, '"'));
@@ -411,7 +463,7 @@
             html += "   </div>";
             html += "   <div class='form-group'>";
             html += "       <input type='hidden' name='PhieuSanXuat[" + index + "].Id' value='" + item.Id + "'  class='idsanpham'/>";
-            html += "       <label>Kiểu cách</label>";
+            html += "       <label>Kiểu cách (<a href='javascript:void(0);' onclick='showKieuCachHayDung(this);'>KC hay dùng</a>)</label>";
             html += "       <textarea name='PhieuSanXuat[" + index + "].TenSanPham' class='form-control tensanpham' placeholder='Kiểu cách'>" + (item.TenSanPham ? item.TenSanPham : '') + "</textarea>";
             html += "   </div>";
             html += "   <div class='form-group'>";
@@ -513,6 +565,8 @@
             width: '100%'
         });
 
+        $('.tensanpham').tagsInput({ width: 'auto' });
+
         var currentPosition = $(document).scrollTop();
         $('.price').maskMoney({ precision: 0 });
         formatPrices();
@@ -529,7 +583,7 @@
         var countPhieuSx = parseInt($("#soluongspcanmay").text()) | 0;
         var countSua = parseInt($("#soluongspcansua").text()) | 0;
         if (countPhieuSx == 0 && countSua == 0) {
-            alert("Không có sản phẩm may hoặc sản phẩm sửa nào!");
+            alertError("Không có sản phẩm may hoặc sản phẩm sửa nào!");
             return false;
         }
         return true;
