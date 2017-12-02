@@ -63,6 +63,7 @@ namespace iClassic.Controllers
                     return RedirectToAction("Details", new { id = id });
 
             }
+            ViewBag.NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam);
             CreateCustomerViewBag(model.CustomerId);
             CreateLoaiVaiViewBag();
             CreateListProductTypeViewBag();
@@ -107,6 +108,7 @@ namespace iClassic.Controllers
 
                 _log.Info(ex.ToString());
             }
+            ViewBag.NgayThu = DateTime.Now.AddDays(SoNgayThuSauKhiLam);
             CreateCustomerViewBag(model.CustomerId);
             CreateLoaiVaiViewBag();
             CreateListProductTypeViewBag();

@@ -144,6 +144,7 @@
           <Property Name="MaVaiId" Type="int" />
           <Property Name="SoLuong" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="NgayThu" Type="datetime2" Precision="7" />
           <Property Name="StatusGiaoNhan" Type="int" Nullable="false" />
           <Property Name="VaiType" Type="int" Nullable="false" />
           <Property Name="GiaVaiMau" Type="float" />
@@ -1292,6 +1293,7 @@
           <Property Name="HasVai" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Invoice" Relationship="iClassicModel.FK_PhieuSanXuat_Invoice" FromRole="PhieuSanXuat" ToRole="Invoice" />
           <NavigationProperty Name="ProductType" Relationship="iClassicModel.FK_PhieuSanXuat_ProductType" FromRole="PhieuSanXuat" ToRole="ProductType" />
+          <Property Name="NgayThu" Type="DateTime" Precision="7" />
         </EntityType>
         <Association Name="FK_PhieuSanXuat_LoaiVai">
           <End Type="iClassicModel.LoaiVai" Role="LoaiVai" Multiplicity="0..1" />
@@ -1823,6 +1825,7 @@
           <EntitySetMapping Name="PhieuSanXuat">
             <EntityTypeMapping TypeName="iClassicModel.PhieuSanXuat">
               <MappingFragment StoreEntitySet="PhieuSanXuat">
+                <ScalarProperty Name="NgayThu" ColumnName="NgayThu" />
                 <ScalarProperty Name="HasVai" ColumnName="HasVai" />
                 <ScalarProperty Name="ThoDoId" ColumnName="ThoDoId" />
                 <ScalarProperty Name="ThoMayId" ColumnName="ThoMayId" />

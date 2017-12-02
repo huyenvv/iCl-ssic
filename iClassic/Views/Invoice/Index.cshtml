@@ -57,12 +57,7 @@
             <th>
                 Tiền
             </th>
-            <th>
-                <a href="javascript:void(0)" class="sortField" data-sortName="NgayThu">
-                    @Html.DisplayNameFor(m => m.FirstOrDefault().NgayThu)
-                </a>
-            </th>
-            <th>
+            <th class="hidden-xs">
                 <a href="javascript:void(0)" class="sortField" data-sortName="NgayTra">
                     @Html.DisplayNameFor(m => m.FirstOrDefault().NgayTra)
                 </a>
@@ -77,12 +72,16 @@
                 var chietKhau = item.ChietKhau;
                 <tr class="stat even">
                     <td>
-                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })">@item.Code - @item.Customer.TenKH</a>    
+                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })">@item.Code - @item.Customer.TenKH</a>
                         <div style="padding: 2px 0 5px 0;">
                             @item.Customer.SDT
                         </div>
                         <div>
                             @Html.Raw(Helpers.DrawStatusTicket(item.Status))
+                        </div>
+                        <div class="visible-xs mt5" title="Hạn trả @item.NgayTra.ToString("dd/MM/yyyy HH:mm")">
+                            <i class="fa fa-truck"></i>
+                            @item.NgayTra.ToString("dd/MM/yyyy")
                         </div>
                     </td>
                     <td>
@@ -124,17 +123,14 @@
                             }
                         </table>
                     </td>
-                    <td title="@(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy HH:mm"): "")">
-                        @(item.NgayThu.HasValue ? item.NgayThu.Value.ToString("dd/MM/yyyy") : "")
-                    </td>
-                    <td title="@item.NgayTra.ToString("dd/MM/yyyy HH:mm")">
+                    <td class="hidden-xs" title="@item.NgayTra.ToString("dd/MM/yyyy HH:mm")">
                         @item.NgayTra.ToString("dd/MM/yyyy")
                     </td>
                     <td>
                         @if (item.PhieuSanXuat.Count > 0)
                         {
                             <strong>May: @item.PhieuSanXuat.Count</strong>
-                            foreach (var sp in item.PhieuSanXuat.OrderBy(n => n.VaiType).ThenBy(m=>m.ProductTypeId))
+                            foreach (var sp in item.PhieuSanXuat.OrderBy(n => n.VaiType).ThenBy(m => m.ProductTypeId))
                             {
                                 <div>
                                     <span class="text-info">+ @sp.SoLuong @sp.ProductType.Name:</span>
@@ -157,6 +153,27 @@
                                             <span class="text-info">vải mẫu tại shop</span>
                                             break;
                                     }
+                                    @if (item.Status != (byte)TicketStatus.DaTraChoKhach && sp.ProductType.IsFitting && sp.NgayThu.HasValue)
+                                    {
+                                        var iconCls = "fa-exclamation-triangle";
+                                        var clsBg = "warning";
+                                        if (sp.Status == 1)
+                                        {
+                                            clsBg = "success";
+                                            iconCls = "fa-check-circle";
+                                        }
+                                        else if (sp.NgayThu <= DateTime.Now)
+                                        {
+                                            clsBg = "danger";
+                                            iconCls = "fa-times-circle";
+                                        }
+                                        <br />
+                                        <span>&nbsp; &nbsp; &nbsp;</span>
+                                        <label class="text-@clsBg bg-light">
+                                            <i class="fa @iconCls"></i>
+                                            @(sp.Status == 1 ? "Đã thử" : "Chưa thử"): @sp.NgayThu.Value.ToString("dd/MM/yyyy")
+                                        </label>
+                                    }
                                 </div>
                             }
                         }
@@ -164,6 +181,11 @@
                         {
                             <div class="mt10">
                                 <strong>Sửa: @item.PhieuSua.Count</strong>
+                                @foreach (var sp in item.PhieuSua.OrderBy(n => n.Type).ThenBy(m => m.ProductId))
+                                {
+                                    <div>
+                                        <span class="text-info">+ 1 @(sp.ProductType!=null? sp.ProductType.Name:"SP Khác")</span>
+                                    </div>}
                             </div>
                         }
                     </td>

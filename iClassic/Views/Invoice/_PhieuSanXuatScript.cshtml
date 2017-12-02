@@ -7,6 +7,7 @@
     var listProductType = (ViewBag.ProductTypeList as IQueryable<ProductType>).ToList();
     var listTho = ViewBag.ListThoMayDo as IQueryable<Tho>;
     var listHangThe = ViewBag.ListHangThe as IQueryable<MemberCard>;
+    var ngaythu = (DateTime)ViewBag.NgayThu;
 }
 <script>
     function changeChietKhau() {
@@ -141,14 +142,14 @@
         } else {
             for (var i = 0; i < product.KieuCach.length; i++) {
                 var kc = product.KieuCach[i];
-                        html += "   <div class='col-sm-6'>";
-                        html += "       <div class='ckbox ckbox-default'>";
-                        html += "           <input type='checkbox' value='"+kc+"' id='checkboxDefault"+i+"'>";
-                        html += "           <label for='checkboxDefault" + i + "'>" + kc + "</label>";
-                        html += "       </div>";
-                        html += "   </div>";
-                    }                    
-                    
+                html += "   <div class='col-sm-6'>";
+                html += "       <div class='ckbox ckbox-default'>";
+                html += "           <input type='checkbox' value='" + kc + "' id='checkboxDefault" + i + "'>";
+                html += "           <label for='checkboxDefault" + i + "'>" + kc + "</label>";
+                html += "       </div>";
+                html += "   </div>";
+            }
+
         }
         html += "   </div>" +
                     "       </div>" +
@@ -160,7 +161,7 @@
                     "        </div>                                                                                        " +
                     "    </div>                                                                                            " +
                     "</div>";
-                    return html;
+        return html;
     }
 
     function addKieuCachHayDung() {
@@ -174,7 +175,7 @@
         $("#modalDefault").modal("hide");
     }
 
-    var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.DangNguoi,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId,m.HasVai,m.VaiType, m.GiaVaiMau}))".replace(/&quot;/g, '"'));
+    var phieuSanXuatModels = JSON.parse("@JsonConvert.SerializeObject(Model.PhieuSanXuat.Select(m=>new {m.Id,m.TenSanPham,m.DangNguoi,m.ProductTypeId,m.MaVaiId,m.SoLuong,m.ThoCatId,m.ThoDoId,m.ThoMayId,m.HasVai,m.VaiType, m.GiaVaiMau, NgayThu = (m.NgayThu.HasValue ? m.NgayThu.Value : ngaythu).ToString("dd/MM/yyyy HH:mm"), m.Status}))".replace(/&quot;/g, '"'));
     var listProductType = JSON.parse("@JsonConvert.SerializeObject(listProductType.Select(m=>new {m.Id,m.Name,m.Price,m.IsFitting, KieuCach= !string.IsNullOrEmpty(m.Note)? m.Note.Split(','): new string[0] }))".replace(/&quot;/g, '"'));
     var loaiVai = JSON.parse("@JsonConvert.SerializeObject(loaivai.Select(m=> new {m.Id,m.Name,m.MaVai,ProductTypeLoaiVai=m.ProductTypeLoaiVai.Select(n=>new { n.ProductTypeId, n.Price })}))".replace(/&quot;/g, '"'));
     var vaiTypes = JSON.parse("@JsonConvert.SerializeObject(Helpers.GetVaiTypeList())".replace(/&quot;/g, '"'));
@@ -203,6 +204,7 @@
 
             updatePhieuSanXuatData();
 
+            var defaultProduct = listProductType[0];
             var newPhieusx = {
                 Id: 0,
                 TenSanPham: '',
@@ -211,8 +213,13 @@
                 MaVaiId: loaiVai[0].Id,
                 VaiType: vaiKhongCoSan,
                 SoLuong: 1,
-                GiaVaiMau: 0
+                GiaVaiMau: 0,
             };
+            if (defaultProduct.IsFitting) {
+                newPhieusx.Status = 0;
+                newPhieusx.NgayThu = "@ngaythu.ToString("dd/MM/yyyy HH:mm")";
+            }
+
             phieuSanXuatModels.push(newPhieusx);
 
             bindPhieuSanXuat();
@@ -244,7 +251,6 @@
 
     function updateSoTienItem() {
         var tongtien = 0;
-        var isShowNgayThu = false;
         $('#boxPhieuSanXuat .media').each(function (i, element) {
             var obj = $(element);
 
@@ -383,21 +389,13 @@
         return result;
     }
 
-    function showHideFittingDate() {
-        var result = false;
-        $('#boxPhieuSanXuat .media').each(function (i, element) {
-            var obj = $(element);
-            var productId = parseInt(obj.find("input[type='radio']:checked").val()) | 0;
+    function showHideFittingDate(e) {
+        var productId = $(e).val();
+        var product = getProduct(productId);
 
-            var product = getProduct(productId);
-            if (product.IsFitting) {
-                result = true;
-                return false;
-            }
-        });
+        var ngayThuObj = $(e).parents(".media").find(".boxNgayThu");
 
-        var ngayThuObj = $("#NgayThu").parent();
-        if (result) {
+        if (product.IsFitting) {
             ngayThuObj.slideDown();
         } else {
             ngayThuObj.slideUp();
@@ -408,6 +406,13 @@
         var obj = $(e);
         var title = obj.next().text();
         obj.parents(".media").find(".title-tenspmay").html(title);
+    }
+
+    function productClick(e) {
+        updateTitleItem(e);
+        showHideFittingDate(e);
+        updateSoTienItem();
+
     }
 
     function removePhieuSx(e) {
@@ -436,6 +441,8 @@
             phieusx.HasVai = obj.find(".HasVai").val() == 'true';
             phieusx.VaiType = parseInt(obj.find(".vaiTypes").val()) | 0;
             phieusx.GiaVaiMau = parseInt(obj.find(".GiaVaiMau").val().replace(/,/g, '')) | 0;
+            phieusx.NgayThu = obj.find(".NgayThu").val();
+            phieusx.Status = parseInt(obj.find(".Status").val()) | 0;
             phieuSanXuatModels.push(phieusx);
         });
     }
@@ -458,15 +465,16 @@
             }
             var giatien = formatMoney(dongia * item.SoLuong);
 
+            var productSelected = getProduct(item.ProductTypeId);
             html += "<div class='media'>";
-            html += "   <h4 class='text-warning'>" + (index + 1) + ". May <span class='title-tenspmay'>" + getProduct(item.ProductTypeId).Name + "</span> <span class='pull-right' onclick='removePhieuSx(this);'>x</span></h4>";
+            html += "   <h4 class='text-warning'>" + (index + 1) + ". May <span class='title-tenspmay'>" + productSelected.Name + "</span> <span class='pull-right' onclick='removePhieuSx(this);'>x</span></h4>";
             html += "   <div class='form-group'>";
             var typecount = 0;
             $.each(listProductType, function (i, product) {
                 var id = "rdoProductType" + index + "-" + typecount;
                 var hasValue = product.Id == item.ProductTypeId;
                 html += "   <div class='rdio rdio-default pull-left mr20'>";
-                html += "       <input type='radio' name='PhieuSanXuat[" + index + "].ProductTypeId' id='" + id + "' value='" + product.Id + "' " + (hasValue ? "checked" : "") + " onclick='updateTitleItem(this);showHideFittingDate(" + product.Id + "); updateSoTienItem();'>";
+                html += "       <input type='radio' name='PhieuSanXuat[" + index + "].ProductTypeId' id='" + id + "' value='" + product.Id + "' " + (hasValue ? "checked" : "") + " onclick='productClick(this);'>";
                 html += "       <label for='" + id + "'>" + product.Name + "</label>";
                 html += "   </div>";
                 typecount++;
@@ -564,6 +572,22 @@
             html += "           </div>";
             html += "       </div>";
             html += "   </div>";
+            var isToFittingDate = new Date(moment(item.NgayThu, 'DD/MM/YYYY HH:mm:ss')) <= new Date();
+            html += "   <div class='form-group boxNgayThu' style='display: " + (productSelected.IsFitting ? 'block' : 'none') + "'>";
+            html += "       <div class='row'>";
+            html += "           <div class='" + (isToFittingDate ? "col-xs-6" : "col-xs-12") + "'>";
+            html += "               <label>Ngày thử</label>";
+            html += "               <input type='text' name='PhieuSanXuat[" + index + "].NgayThu' value='" + item.NgayThu + "'  class='NgayThu form-control'/>";
+            html += "           </div>";
+            html += "           <div class='col-xs-6' style='display: " + (isToFittingDate ? "block" : "none") + "'>";
+            html += "               <label>Đã thử chưa?</label>";
+            html += "               <select name='PhieuSanXuat[" + index + "].Status' class='form-control Status'>";
+            html += "                   <option value='0'>Chưa thử</option>";
+            html += "                   <option value='1'" + (item.Status == 1 ? "selected" : "") + ">Đã thử</option>";
+            html += "               </select>";
+            html += "           </div>";
+            html += "       </div>";
+            html += "   </div>";
             html += "   <label>Giá tiền: <strong class='text-success giatien'>" + giatien + "</strong></label>";
             html += "   <p class='boxDiscount' style='display: " + (discount.Money ? 'block' : 'none') + "'><small><i>Đã giảm <span class='discountPercent'>" + (discount.Percent | 0) + "</span>% (tức <span class='discountMoney'>" + formatMoney(discount.Money | 0) + "</span>) do khách là hạng thẻ <span class='lblHangThe'>" + $("#lblMemberCard").text() + "</span></i></small></p>";
             html += "</div>";
@@ -577,6 +601,25 @@
         });
 
         $('.tensanpham').tagsInput({ width: 'auto', defaultText: 'Thêm...' });
+
+        $('.NgayThu').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm:ss'
+        }).on("dp.change", function (e) {
+            var dateChanged = new Date(e.date);
+            var currentDate = new Date();
+
+            var currentBox = $(e.currentTarget);
+            var obj = currentBox.parents(".boxNgayThu").find(".Status").parent();
+            if (dateChanged <= currentDate) {
+                currentBox.parent().removeClass("col-xs-12").addClass("col-xs-6");
+                obj.slideDown();
+            } else {                
+                obj.slideUp();
+                setTimeout(function () {
+                    currentBox.parent().removeClass("col-xs-6").addClass("col-xs-12");
+                }, 600);
+            }
+        });
 
         var currentPosition = $(document).scrollTop();
         $('.price').maskMoney({ precision: 0 });

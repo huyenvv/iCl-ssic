@@ -168,7 +168,6 @@ namespace iClassic.Services.Implementation
             {
                 var objForUpdate = model.PhieuSanXuat.FirstOrDefault(m => m.Id == t.Id);
                 objForUpdate.VaiType = t.VaiType;
-                objForUpdate.Status = (int)TicketStatus.ChuaXuLy;
                 objForUpdate.HasVai = false;
 
                 var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
@@ -251,7 +250,6 @@ namespace iClassic.Services.Implementation
             obj.Status = model.Status;
             obj.NgayTra = model.NgayTra;
             obj.BranchId = model.BranchId;
-            obj.NgayThu = model.PhieuSanXuat.Any(m => context.ProductType.Any(n => n.IsFitting && n.Id == m.ProductTypeId)) ? model.NgayThu : null;
 
             #region Phiếu sản xuất
             var listNew = model.PhieuSanXuat.Where(m => !obj.PhieuSanXuat.Any(n => n.Id == m.Id));
@@ -298,6 +296,7 @@ namespace iClassic.Services.Implementation
                 objForUpdate.TenSanPham = t.TenSanPham;
                 objForUpdate.DangNguoi = t.DangNguoi;
                 objForUpdate.Status = t.Status;
+                objForUpdate.NgayThu = t.NgayThu;
                 objForUpdate.ThoDoId = t.ThoDoId;
                 objForUpdate.ThoCatId = t.ThoCatId;
                 objForUpdate.ThoMayId = t.ThoMayId;

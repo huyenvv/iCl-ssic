@@ -30,7 +30,7 @@
     <tr>
         <td colspan="2">
             <h3 class="text-center showforinvoice hide">HÓA ĐƠN MAY MẶC VÀ SỬA CHỮA </h3>
-            <br />
+            <br class="showforinvoice hide" />
             <h3 class="text-center noforinvoice">CHI TIẾT ĐƠN HÀNG </h3>
         </td>
     </tr>
@@ -42,13 +42,6 @@
         </td>
         <td>
             <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
-
-            @if (Model.NgayThu.HasValue)
-            {
-                <div>
-                    Ngày thử: @Model.NgayThu.Value.ToString("dd/MM/yyyy")
-                </div>
-            }
             <div>
                 Ngày lấy: @Model.NgayTra.ToString("dd/MM/yyyy")
             </div>
@@ -68,7 +61,7 @@
                 <th class="text-left">Loại vải</th>
                 <th class="noforinvoice">Tình trạng vải</th>
                 <th class="noforinvoice">Thợ sản xuất</th>
-                <th>SL</th>
+                <th>Ngày thử</th>
                 <th class="text-right">Đơn giá</th>
                 <th class="text-right">Thành tiền</th>
             </tr>
@@ -90,7 +83,7 @@
                     }
                     <tr>
                         <td>
-                            May mới - @item.ProductType.Name
+                            May - @item.ProductType.Name x@(item.SoLuong)
                         </td>
                         <td class="hide showforinvoice">
                             @if ((VaiTypes)item.VaiType == VaiTypes.KhongCoSan)
@@ -99,7 +92,8 @@
                             }
                         </td>
                         <td class="noforinvoice">
-                            <strong class="noforinvoice">Kiểu cách: </strong>@item.TenSanPham
+                            <strong class="noforinvoice">Kiểu cách: </strong>
+                            @(!string.IsNullOrEmpty(item.TenSanPham) ? item.TenSanPham.Replace(",", ", ") : "")
                             <div class="noforinvoice">
                                 <strong>Dáng người:</strong>@item.DangNguoi
                             </div>
@@ -158,12 +152,49 @@
                                 }
                             }
                         </td>
-                        <td class="noforinvoice text-left">
-                            <div>@((ThoTypes.Do).GetDescription()): <strong>@item.Tho.Name</strong></div>
-                            <div>@((ThoTypes.Cat).GetDescription()): <strong>@item.Tho2.Name</strong></div>
-                            <div>@((ThoTypes.May).GetDescription()): <strong>@item.Tho1.Name</strong></div>
+                        <td class="noforinvoice text-left" style="min-width:108px;">
+                            <div>Đo: <strong>@item.Tho.Name</strong></div>
+                            <div>Cắt: <strong>@item.Tho2.Name</strong></div>
+                            <div>May: <strong>@item.Tho1.Name</strong></div>
                         </td>
-                        <td>@item.SoLuong</td>
+                        <td>
+                            @if (item.ProductType.IsFitting)
+                            {
+                                <span class="hide showforinvoice">@item.NgayThu.Value.ToString("dd/MM/yyyy")</span>
+                                if (Model.Status != (byte)TicketStatus.DaTraChoKhach)
+                                {
+                                    <span class="noforinvoice">@item.NgayThu.Value.ToString("dd/MM/yyyy")</span>
+                                    <div class="noforinvoice">
+                                        @if (item.Status == 1)
+                                        {
+                                            <div class="btn-group mr5">
+                                                <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-check-square"></i>  Đã thử <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="@Url.Action("ChangeStatusThu", new {id = Model.Id, idPhieusx = item.Id ,status = false})"><i class="fa  fa-times-circle"></i> Chưa thử</a></li>
+                                                </ul>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="btn-group mr5">
+                                                <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-times-circle"></i>  Chưa thử <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="@Url.Action("ChangeStatusThu", new {id = Model.Id, idPhieusx = item.Id ,status = true})"><i class="fa fa-check-square"></i> Đã thử</a></li>
+                                                </ul>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        </td>
                         <td class="text-right">@dongia.ToString("N0") ₫</td>
                         <td class="text-right">@((dongia * item.SoLuong).ToString("N0")) ₫</td>
 
@@ -176,21 +207,21 @@
                             @switch ((PhieuSuaType)item.Type)
                             {
                                 case PhieuSuaType.BaoHanh:
-                                    @("Bảo hành")
+                                    @("BH")
                                     break;
                                 case PhieuSuaType.KhachNhoSua:
-                                    @("Yêu cầu sửa")
+                                    @("YC sửa")
                                     break;
                                 case PhieuSuaType.BaoHanhKhachTangGiamCan:
-                                    @("Bảo hành do tăng giảm Kg: ")
+                                    @("BH tăng giảm Kg: ")
                                     break;
                             }:
-                            @(item.ProductType != null ? item.ProductType.Name: "SP Khác")
+                            @(item.ProductType != null ? item.ProductType.Name : "SP Khác") x1
                         </td>
                         <td class="noforinvoice"></td>
                         <td class="noforinvoice"></td>
                         <td class="noforinvoice"></td>
-                        <td>1</td>
+                        <td></td>
                         <td class="text-right">@(item.SoTien.HasValue ? item.SoTien.Value.ToString("N0") : "0") ₫</td>
                         <td class="text-right">@(item.SoTien.HasValue ? item.SoTien.Value.ToString("N0") : "0") ₫</td>
                     </tr>

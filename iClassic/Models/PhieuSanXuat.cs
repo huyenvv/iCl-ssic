@@ -30,6 +30,7 @@ namespace iClassic.Models
         public int ThoMayId { get; set; }
         public int ThoDoId { get; set; }
         public bool HasVai { get; set; }
+        public Nullable<System.DateTime> NgayThu { get; set; }
     
         public virtual LoaiVai LoaiVai { get; set; }
         public virtual Tho Tho { get; set; }
