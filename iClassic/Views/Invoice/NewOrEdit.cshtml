@@ -4,7 +4,7 @@
 @model iClassic.Models.Invoice
 
 @{
-    ViewBag.Title = Model.Id > 0 ? "Cập nhật đơn: HD" + Model.Id + " - " + Model.Customer.TenKH : "Thêm mới";
+    ViewBag.Title = Model.Id > 0 ? "Cập nhật đơn: HD" + Model.Id + " - " + (Model.Customer != null ? Model.Customer.TenKH: "") : "Thêm mới";
     ViewBag.Class = "fa fa-dollar";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Hóa đơn</a>" +
                           "<span>" + ViewBag.Title + "</span>";

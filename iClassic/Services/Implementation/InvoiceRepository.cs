@@ -253,7 +253,7 @@ namespace iClassic.Services.Implementation
             if (memberCard.Id > 0)
                 obj.MemberCardId = memberCard.Id;
 
-            foreach (var item in model.PhieuSanXuat)
+            foreach (var item in listNew)
             {
                 item.HasVai = false;
 
@@ -280,6 +280,7 @@ namespace iClassic.Services.Implementation
                         item.DonGia = item.DonGia - (item.DonGia * productMemberCard.Discount / 100);
                     }
                 }
+                obj.PhieuSanXuat.Add(item);
             }
 
             lisUpdate.ToList().ForEach(t =>
@@ -331,7 +332,7 @@ namespace iClassic.Services.Implementation
             var lisUpdatePhieusua = model.PhieuSua.Where(m => obj.PhieuSua.Any(n => n.Id == m.Id));
             var listRemovePhieusua = obj.PhieuSua.Where(m => !model.PhieuSua.Any(n => n.Id == m.Id));
 
-            foreach (var item in model.PhieuSua)
+            foreach (var item in listNewPhieusua)
             {                
                 item.Status = (int)TicketStatus.ChuaXuLy;
                 if (item.Type == (byte)PhieuSuaType.BaoHanh)
@@ -342,7 +343,7 @@ namespace iClassic.Services.Implementation
                 {
                     item.ProblemBy = null; 
                 }
-                model.PhieuSua.Add(item);
+                obj.PhieuSua.Add(item);
             }           
             lisUpdatePhieusua.ToList().ForEach(t =>
             {
