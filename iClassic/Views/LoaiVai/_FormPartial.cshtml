@@ -36,6 +36,7 @@
                                 <input type="hidden" name="ProductTypeLoaiVai[@index].ProductTypeId" value="@item.Id" />
                                 <input type="text" name="ProductTypeLoaiVai[@index].Price" value="@(productVai != null ?productVai.Price : 0)" class="form-control price" />
                             </div>
+                            index++;
                         }
                     </div>
                 </div>

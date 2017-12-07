@@ -7,7 +7,7 @@
     ViewBag.Breadcrumbs = ViewBag.Title;
 }
 
-@Html.Partial("_DonHangPartial", Model)
+@Html.Partial("_DetailPartial", Model)
 <div class="btn-invoice">
     @if (Model.Status == (byte)iClassic.Helper.TicketStatus.DangXuLy)
     {

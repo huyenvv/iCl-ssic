@@ -276,7 +276,7 @@
                     <strong>Còn thiếu</strong>
                 </td>
                 <td class="text-right text-danger">
-                    @((Model.Total - (Model.DatCoc ?? 0) - (Model.ChietKhau ?? 0)).ToString("N0")) ₫
+                    @((Model.Total - (Model.DatCoc ?? 0) - chietKhau).ToString("N0")) ₫
                 </td>
             </tr>
         </tfoot>

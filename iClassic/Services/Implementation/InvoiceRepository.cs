@@ -164,55 +164,48 @@ namespace iClassic.Services.Implementation
             if (memberCard.Id > 0)
                 model.MemberCardId = memberCard.Id;
 
-            model.PhieuSanXuat.ToList().ForEach(t =>
+            foreach (var item in model.PhieuSanXuat)
             {
-                var objForUpdate = model.PhieuSanXuat.FirstOrDefault(m => m.Id == t.Id);
-                objForUpdate.VaiType = t.VaiType;
-                objForUpdate.HasVai = false;
+                item.HasVai = false;
 
-                var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
-                switch ((VaiTypes)t.VaiType)
+                var tienCong = context.ProductType.FirstOrDefault(m => m.Id == item.ProductTypeId).Price;
+                switch ((VaiTypes)item.VaiType)
                 {
                     case VaiTypes.KhachMangVaiDen:
-                        objForUpdate.DonGia = tienCong;
+                        item.DonGia = tienCong;
                         break;
                     case VaiTypes.KhongCoSan:
-                        var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0;
-                        objForUpdate.DonGia = tienVai;
-                        objForUpdate.HasVai = t.HasVai;
+                        var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == item.MaVaiId && m.ProductTypeId == item.ProductTypeId).Price ?? 0;
+                        item.DonGia = tienVai;
                         break;
                     case VaiTypes.VaiMauCuaHang:
-                        objForUpdate.DonGia = (t.GiaVaiMau ?? 0);
-                        objForUpdate.GiaVaiMau = t.GiaVaiMau;
+                        item.DonGia = (item.GiaVaiMau ?? 0);
                         break;
                 }
 
                 if (memberCard.Id > 0)
                 {
-                    var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == t.ProductTypeId);
+                    var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == item.ProductTypeId);
                     if (productMemberCard != null)
                     {
-                        objForUpdate.DonGia = objForUpdate.DonGia - (objForUpdate.DonGia * productMemberCard.Discount / 100);
+                        item.DonGia = item.DonGia - (item.DonGia * productMemberCard.Discount / 100);
                     }
                 }
-            });
-            model.PhieuSua.ToList().ForEach(t =>
-            {
-                var objForUpdate = model.PhieuSua.FirstOrDefault(m => m.Id == t.Id);
-                objForUpdate.Status = (int)TicketStatus.ChuaXuLy;
-                if (t.Type == (byte)PhieuSuaType.BaoHanh)
+            }
+
+            foreach (var item in model.PhieuSua)
+            {                
+                item.Status = (int)TicketStatus.ChuaXuLy;
+                if (item.Type == (byte)PhieuSuaType.BaoHanh)
                 {
-                    objForUpdate.SoTien = 0;
-                    objForUpdate.ProblemBy = t.ProblemBy;
+                    item.SoTien = 0;                    
                 }
                 else
                 {
-                    objForUpdate.SoTien = t.SoTien;
-                    objForUpdate.ProblemBy = null;
+                    item.ProblemBy = null; 
                 }
-                model.PhieuSua.Add(t);
-            }
-            );
+                model.PhieuSua.Add(item);
+            }           
             base.Insert(model);
         }
 
@@ -260,33 +253,35 @@ namespace iClassic.Services.Implementation
             if (memberCard.Id > 0)
                 obj.MemberCardId = memberCard.Id;
 
-            listNew.ToList().ForEach(t =>
+            foreach (var item in model.PhieuSanXuat)
             {
-                var tienCong = context.ProductType.FirstOrDefault(m => m.Id == t.ProductTypeId).Price;
-                switch ((VaiTypes)t.VaiType)
+                item.HasVai = false;
+
+                var tienCong = context.ProductType.FirstOrDefault(m => m.Id == item.ProductTypeId).Price;
+                switch ((VaiTypes)item.VaiType)
                 {
                     case VaiTypes.KhachMangVaiDen:
-                        t.DonGia = tienCong;
+                        item.DonGia = tienCong;
                         break;
                     case VaiTypes.KhongCoSan:
-                        var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == t.MaVaiId && m.ProductTypeId == t.ProductTypeId).Price ?? 0;
-                        t.DonGia = tienVai;
+                        var tienVai = context.ProductTypeLoaiVai.FirstOrDefault(m => m.MavaiId == item.MaVaiId && m.ProductTypeId == item.ProductTypeId).Price ?? 0;
+                        item.DonGia = tienVai;
                         break;
                     case VaiTypes.VaiMauCuaHang:
-                        t.DonGia = (t.GiaVaiMau ?? 0);
+                        item.DonGia = (item.GiaVaiMau ?? 0);
                         break;
                 }
+
                 if (memberCard.Id > 0)
                 {
-                    var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == t.ProductTypeId);
+                    var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == item.ProductTypeId);
                     if (productMemberCard != null)
                     {
-                        t.DonGia = t.DonGia - (t.DonGia * productMemberCard.Discount / 100);
+                        item.DonGia = item.DonGia - (item.DonGia * productMemberCard.Discount / 100);
                     }
                 }
-                obj.PhieuSanXuat.Add(t);
             }
-            );
+
             lisUpdate.ToList().ForEach(t =>
             {
                 var objForUpdate = obj.PhieuSanXuat.FirstOrDefault(m => m.Id == t.Id);
@@ -328,7 +323,7 @@ namespace iClassic.Services.Implementation
                     }
                 }
             });
-            listRemove.ToList().ForEach(t => obj.PhieuSanXuat.Remove(t));
+            context.PhieuSanXuat.RemoveRange(listRemove);
             #endregion
 
             #region Phiếu Sửa
@@ -336,23 +331,19 @@ namespace iClassic.Services.Implementation
             var lisUpdatePhieusua = model.PhieuSua.Where(m => obj.PhieuSua.Any(n => n.Id == m.Id));
             var listRemovePhieusua = obj.PhieuSua.Where(m => !model.PhieuSua.Any(n => n.Id == m.Id));
 
-            listNewPhieusua.ToList().ForEach(t =>
+            foreach (var item in model.PhieuSua)
+            {                
+                item.Status = (int)TicketStatus.ChuaXuLy;
+                if (item.Type == (byte)PhieuSuaType.BaoHanh)
                 {
-                    var objForUpdate = model.PhieuSua.FirstOrDefault(m => m.Id == t.Id);
-                    objForUpdate.Status = (int)TicketStatus.ChuaXuLy;
-                    if (t.Type == (byte)PhieuSuaType.BaoHanh)
-                    {
-                        objForUpdate.SoTien = 0;
-                        objForUpdate.ProblemBy = t.ProblemBy;
-                    }
-                    else
-                    {
-                        objForUpdate.SoTien = t.SoTien;
-                        objForUpdate.ProblemBy = null;
-                    }
-                    obj.PhieuSua.Add(t);
+                    item.SoTien = 0;                    
                 }
-            );
+                else
+                {
+                    item.ProblemBy = null; 
+                }
+                model.PhieuSua.Add(item);
+            }           
             lisUpdatePhieusua.ToList().ForEach(t =>
             {
                 var objForUpdate = obj.PhieuSua.FirstOrDefault(m => m.Id == t.Id);
@@ -364,7 +355,7 @@ namespace iClassic.Services.Implementation
                 objForUpdate.ThoId = t.ThoId;
                 objForUpdate.SoTien = t.Type == (byte)PhieuSuaType.BaoHanh ? 0 : t.SoTien;
             });
-            listRemovePhieusua.ToList().ForEach(t => obj.PhieuSua.Remove(t));
+            context.PhieuSua.RemoveRange(listRemovePhieusua);
             #endregion
 
             base.Update(obj);

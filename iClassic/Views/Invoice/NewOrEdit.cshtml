@@ -33,6 +33,7 @@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(model => model.Id)
                     @Html.HiddenFor(model => model.BranchId)
+                    @Html.Hidden("isClose", null)
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -174,7 +175,8 @@
         }
     </div>
     <div class="mb40 mt10">
-        <button class="btn btn-lightblue" type="submit" onclick="return beforeSubmit();">@(Model.Id > 0 ? "Lưu" : "Tạo mới")</button>
+        <button class="btn btn-lightblue" type="submit" onclick="$('#isClose').val(false); return beforeSubmit();">@(Model.Id > 0 ? "Lưu" : "Tạo mới")</button>
+        <button class="btn btn-lightblue" type="submit" onclick="return beforeSubmit();">@(Model.Id > 0 ? "Lưu & đóng" : "Tạo mới & đóng")</button>
         <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
     </div>
 }

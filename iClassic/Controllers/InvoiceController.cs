@@ -77,7 +77,7 @@ namespace iClassic.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Total,ChietKhau,ChietKhauType,DatCoc,NgayThu,NgayTra,Status,CustomerId,BranchId,PhieuSanXuat,PhieuSua")] Invoice model)
+        public async Task<ActionResult> NewOrEdit([Bind(Include = "Id,Total,ChietKhau,ChietKhauType,DatCoc,NgayThu,NgayTra,Status,CustomerId,BranchId,PhieuSanXuat,PhieuSua")] Invoice model, bool isClose = true)
         {
             try
             {
@@ -99,7 +99,10 @@ namespace iClassic.Controllers
 
                     ShowMessageSuccess(Message.Update_Successfully);
 
-                    return RedirectToAction("Index");
+                    if (isClose)
+                        return RedirectToAction("Index");
+
+                    return RedirectToAction("NewOrEdit", new { id = model.Id });
                 }
             }
             catch (Exception ex)
