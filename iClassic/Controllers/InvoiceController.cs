@@ -59,7 +59,7 @@ namespace iClassic.Controllers
             }
             else
             {
-                if (model.Status != (byte)TicketStatus.ChuaXuLy)
+                if (model.Status != (byte)TicketStatus.ChuaXuLy && !User.IsInRole(RoleList.SupperAdmin))
                     return RedirectToAction("Details", new { id = id });
 
             }
@@ -144,6 +144,34 @@ namespace iClassic.Controllers
                     model.ModifiedBy = CurrentUserId;
                     model.ModifiedDate = DateTime.Now;
                     _phieuSanXuatRepository.ChangeStatusMuaVai(idPhieusx, status);
+                    _phieuSanXuatRepository.Save();
+
+                    ShowMessageSuccess(Message.Update_Successfully);
+                    return RedirectToAction("Details", new { id = id });
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageError(Message.Update_Fail);
+
+                _log.Info(ex.ToString());
+            }
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public ActionResult ChangeStatusThu(int id, int idPhieusx, bool status)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var model = _invoiceRepository.GetById(id);
+                    if (model == null)
+                        return RedirectToAction("Index");
+
+                    model.ModifiedBy = CurrentUserId;
+                    model.ModifiedDate = DateTime.Now;
+                    _phieuSanXuatRepository.ChangeStatusThu(idPhieusx, status);
                     _phieuSanXuatRepository.Save();
 
                     ShowMessageSuccess(Message.Update_Successfully);

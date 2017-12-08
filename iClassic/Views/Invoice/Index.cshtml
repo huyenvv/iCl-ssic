@@ -69,10 +69,11 @@
         @{
             foreach (var item in Model)
             {
+                var link = item.Status == (byte)TicketStatus.ChuaXuLy ? "NewOrEdit" : "Details";
                 var chietKhau = item.ChietKhau;
                 <tr class="stat even">
                     <td>
-                        <a href="@Url.Action("NewOrEdit", new { id = item.Id })">@item.Code - @item.Customer.TenKH</a>
+                        <a href="@Url.Action(link, new { id = item.Id })">@item.Code - @item.Customer.TenKH</a>
                         <div style="padding: 2px 0 5px 0;">
                             @item.Customer.SDT
                         </div>
@@ -184,7 +185,7 @@
                                 @foreach (var sp in item.PhieuSua.OrderBy(n => n.Type).ThenBy(m => m.ProductId))
                                 {
                                     <div>
-                                        <span class="text-info">+ 1 @(sp.ProductType!=null? sp.ProductType.Name:"SP Khác")</span>
+                                        <span class="text-info">+ 1 @(sp.ProductType != null ? sp.ProductType.Name : "SP Khác")</span>
                                     </div>}
                             </div>
                         }

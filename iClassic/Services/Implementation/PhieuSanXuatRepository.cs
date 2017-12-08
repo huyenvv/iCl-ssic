@@ -15,12 +15,19 @@ namespace iClassic.Services.Implementation
         public PhieuSanXuat GetById(int id)
         {
             return FirstOrDefault(m => m.Id == id);
-        }        
+        }
 
         public void ChangeStatusMuaVai(int id, bool status)
         {
             var obj = GetById(id);
             obj.HasVai = status;
+            base.Update(obj);
+        }
+
+        internal void ChangeStatusThu(int id, bool status)
+        {
+            var obj = GetById(id);
+            obj.Status = status ? 1 : 0;
             base.Update(obj);
         }
     }

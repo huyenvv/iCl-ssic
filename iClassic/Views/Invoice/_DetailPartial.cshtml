@@ -3,27 +3,83 @@
 @using Newtonsoft.Json;
 @model iClassic.Models.Invoice
 
+<style>
+    .widget-messaging .dropdown-toggle {
+        padding: 2px 5px;
+        line-height: initial;
+        font-size: 10px;
+    }
+</style>
+
 <table class="table table-noborder">
     <tr>
         <td colspan="2">
-            <h3 class="text-center ">CHI TIẾT ĐƠN HÀNG </h3>
+            <h3 class="text-center text-info">@Model.Code - @Model.Customer.TenKH</h3>
         </td>
     </tr>
     <tr>
         <td>
-            <div>Tên KH: <strong>@Model.Customer.TenKH</strong></div>
-            <div>SĐT: <strong>@Model.Customer.SDT</strong></div>
-            <div>Hạng thẻ: <strong>@(Model.MemberCardId.HasValue ? Model.MemberCard.Name : "Register")</strong></div>
-        </td>
-        <td>
-            <div>Số hóa đơn: <strong class="text-danger">@Model.Code</strong></div>
-            <div>
+            <p>Hạng thẻ: <strong class="text-info">@(Model.MemberCardId.HasValue ? Model.MemberCard.Name : "Register")</strong></p>
+            <p>SĐT: <strong class="text-danger">@Model.Customer.SDT</strong></p>
+            <p>
                 Ngày lấy: @Model.NgayTra.ToString("dd/MM/yyyy")
-            </div>
-            <div class="">
+            </p>
+            <p class="">
                 Tình trạng:
                 @Html.Raw(Helpers.DrawStatusTicket(Model.Status))
-            </div>
+            </p>
+        </td>
+        <td>
+            @{ var colspan = 1;}
+            <p>
+                <span colspan="@colspan" class="text-right">
+                    <strong>Tổng</strong>
+                </span>
+                <span class="text-right text-success">
+                    @Model.Total.ToString("N0") ₫
+                </span>
+            </p>
+            <p>
+                <span colspan="@colspan" class="text-right">
+                    <strong>Cọc</strong>
+                </span>
+                <span class="text-right">
+                    @((Model.DatCoc ?? 0).ToString("N0")) ₫
+                </span>
+            </p>
+            <p>
+                <span colspan="@colspan" class="text-right">
+                    <strong>CK</strong>
+                </span>
+                <span class="text-right">
+                    @{
+                        var chietKhau = Model.ChietKhau ?? 0;
+                    }
+                    @((Model.ChietKhau ?? 0).ToString("N0"))
+                    @if (Model.ChietKhauType == (byte)ChietKhauType.PhanTram)
+            {
+                var money = (Model.Total * Model.ChietKhau) ?? 0;
+                chietKhau = money != 0 ? money / 100 : 0;
+
+                        @("%")
+                        <span>
+                            (@(chietKhau.ToString("N0")) ₫)
+                        </span>
+                    }
+                    else
+                    {
+                        @("₫")
+                    }
+                </span>
+            </p>
+            <p>
+                <span colspan="@colspan" class="text-right">
+                    <strong>Thiếu</strong>
+                </span>
+                <span class="text-right text-danger">
+                    @((Model.Total - (Model.DatCoc ?? 0) - chietKhau).ToString("N0")) ₫
+                </span>
+            </p>
         </td>
     </tr>
 </table>
@@ -57,8 +113,8 @@
                                 <small>x</small>
                                 @dongia.ToString("N0") ₫
                             </div>
-                            <div>
-                                <strong>Vải:</strong>
+                            <div class="mt5 mb5">
+                                <strong>&nbsp;+</strong>
                                 @switch ((VaiTypes)item.VaiType)
                                 {
                                     case VaiTypes.KhachMangVaiDen:
@@ -66,12 +122,13 @@
                                         break;
                                     case VaiTypes.KhongCoSan:
                                         <span>@item.LoaiVai.Name (@item.LoaiVai.MaVai)</span>
+                                        <span>-</span>
                                         break;
                                     case VaiTypes.VaiMauCuaHang:
                                         <span>@VaiTypes.VaiMauCuaHang.GetDescription()</span>
                                         break;
                                 }
-                                <span>-</span>
+
                                 @if ((VaiTypes)item.VaiType == VaiTypes.KhongCoSan && item.HasVai)
                                 {
                                     if (Model.Status == (byte)TicketStatus.DangXuLy)
@@ -115,38 +172,40 @@
                                 {
                                     if (Model.Status != (byte)TicketStatus.DaTraChoKhach)
                                     {
+                                        <strong>&nbsp;+</strong>
                                         <span class="">@item.NgayThu.Value.ToString("dd/MM/yyyy")</span>
-                                        <div class="">
-                                            @if (item.Status == 1)
-                                            {
-                                                <div class="btn-group mr5">
-                                                    <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                        <i class="fa fa-check-square"></i>  Đã thử <span class="caret"></span>
-                                                    </button>
-                                                    <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="@Url.Action("ChangeStatusThu", new {id = Model.Id, idPhieusx = item.Id ,status = false})"><i class="fa  fa-times-circle"></i> Chưa thử</a></li>
-                                                    </ul>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="btn-group mr5">
-                                                    <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                        <i class="fa fa-times-circle"></i>  Chưa thử <span class="caret"></span>
-                                                    </button>
-                                                    <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="@Url.Action("ChangeStatusThu", new {id = Model.Id, idPhieusx = item.Id ,status = true})"><i class="fa fa-check-square"></i> Đã thử</a></li>
-                                                    </ul>
-                                                </div>
-                                            }
-                                        </div>
+                                        if (item.Status == 1)
+                                        {
+                                            <div class="btn-group mr5">
+                                                <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-check-square"></i>  Đã thử <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="@Url.Action("ChangeStatusThu", new {id = Model.Id, idPhieusx = item.Id ,status = false})"><i class="fa  fa-times-circle"></i> Chưa thử</a></li>
+                                                </ul>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="btn-group mr5">
+                                                <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="fa fa-times-circle"></i>  Chưa thử <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="@Url.Action("ChangeStatusThu", new {id = Model.Id, idPhieusx = item.Id ,status = true})"><i class="fa fa-check-square"></i> Đã thử</a></li>
+                                                </ul>
+                                            </div>
+                                        }
                                     }
                                 }
                             </div>
-                            <div>
+                            <div class="mt5">
                                 @if (!string.IsNullOrEmpty(item.TenSanPham))
                                 {
-                                    <p><strong class="">Kiểu cách: </strong><span>@item.TenSanPham.Replace(",", ", ")</span></p>
+                                    <p>
+                                        <strong>&nbsp;+</strong>
+                                        <strong class="">Kiểu cách: </strong><span>@item.TenSanPham.Replace(",", ", ")</span>
+                                    </p>
                                 }
                             </div>
                             @if (!string.IsNullOrEmpty(item.DangNguoi))
@@ -157,13 +216,14 @@
                             }
 
                             <div>
+                                <strong>&nbsp;+</strong>
                                 Đo: <strong>@item.Tho.Name</strong>
                                 &nbsp;| &nbsp;
                                 Cắt: <strong>@item.Tho2.Name</strong>
                                 &nbsp;| &nbsp;
                                 May: <strong>@item.Tho1.Name</strong>
                             </div>
-                        </td>                        
+                        </td>
                         <td class="text-right">@((dongia * item.SoLuong).ToString("N0")) ₫</td>
 
                     </tr>
@@ -187,61 +247,12 @@
                             1 @(item.ProductType != null ? item.ProductType.Name : "SP Khác")
                             <small>x</small>
                             @(item.SoTien.HasValue ? item.SoTien.Value.ToString("N0") : "0") ₫
-                        </td>                        
+                        </td>
                         <td class="text-right">@(item.SoTien.HasValue ? item.SoTien.Value.ToString("N0") : "0") ₫</td>
                     </tr>
                 }
             }
         </tbody>
-        <tfoot>
-            @{ var colspan = 1;}
-            <tr>
-                <td colspan="@colspan" class="text-right">
-                    <strong>Tổng</strong>
-                </td>
-                <td class="text-right text-success">
-                    @Model.Total.ToString("N0") ₫
-                </td>
-            </tr>
-            <tr>
-                <td colspan="@colspan" class="text-right">
-                    <strong>Đặt cọc</strong>
-                </td>
-                <td class="text-right">
-                    @((Model.DatCoc ?? 0).ToString("N0")) ₫
-                </td>
-            </tr>
-            <tr>
-                <td colspan="@colspan" class="text-right">
-                    <strong>Chiết khấu</strong>
-                </td>
-                <td class="text-right">
-                    @{
-                        var money = (Model.Total * Model.ChietKhau) ?? 0;
-                        var chietKhau = money != 0 ? money / 100 : 0;
-                    }
-                    @((Model.ChietKhau ?? 0).ToString("N0"))
-                    @if (Model.ChietKhauType == (byte)ChietKhauType.PhanTram)
-                    {
-                        @("%")
-                        <span>                            
-                            (@(chietKhau.ToString("N0")) ₫)
-                        </span>
-                    }
-                    else
-                    {
-                        @("₫")
-                    }
-                </td>
-            </tr>
-            <tr>
-                <td colspan="@colspan" class="text-right">
-                    <strong>Còn thiếu</strong>
-                </td>
-                <td class="text-right text-danger">
-                    @((Model.Total - (Model.DatCoc ?? 0) - chietKhau).ToString("N0")) ₫
-                </td>
-            </tr>
-        </tfoot>
+
     </table>
 </div><!-- table-responsive -->

@@ -30,7 +30,10 @@
     <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
     @if (User.IsInRole(RoleList.SupperAdmin))
     {
-        <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger pull-right btnConfirm">Xóa</a>
+        <div class="pull-right">
+            <a href="@Url.Action("NewOrEdit", new { id = Model.Id })" class="btn btn-primary btnConfirmEdit">Sửa</a>
+            <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger btnConfirm">Xóa</a>
+        </div>        
     }
 </div>
 
@@ -44,6 +47,8 @@
 
 @section Scripts{
     <script>
-
+        $(".btnConfirmEdit").click(function () {
+            return confirm("Bạn có chắc chắn muốn sửa đơn hàng này?");
+        });
     </script>
 }

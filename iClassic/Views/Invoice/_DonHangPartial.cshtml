@@ -252,17 +252,17 @@
                 </td>
                 <td class="text-right">
                     @{
-                        var money = (Model.Total * Model.ChietKhau) ?? 0;
-                        var chietKhau = money != 0 ? money / 100 : 0;
+                        var chietKhau = Model.ChietKhau ?? 0;
                     }
                     @((Model.ChietKhau ?? 0).ToString("N0"))
                     @if (Model.ChietKhauType == (byte)ChietKhauType.PhanTram)
                     {
+                        var money = (Model.Total * Model.ChietKhau) ?? 0;
+                        chietKhau = money != 0 ? money / 100 : 0;
 
+                        @("%")
                         <span>
-                            %
-                            (<i class="fa fa-exchange"></i>
-                            @(chietKhau.ToString("N0")) ₫)
+                            (@(chietKhau.ToString("N0")) ₫)
                         </span>
                     }
                     else
