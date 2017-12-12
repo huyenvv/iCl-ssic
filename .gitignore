@@ -2,7 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/iClassic/obj/Release
-/iClassic/logs/2017/09
-/iClassic/obj/Debug
+/iClassic/obj
 /iClassic/bin
+/iClassic/logs

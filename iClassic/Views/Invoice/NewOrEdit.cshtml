@@ -4,7 +4,7 @@
 @model iClassic.Models.Invoice
 
 @{
-    ViewBag.Title = Model.Id > 0 ? "Cập nhật đơn: HD" + Model.Id + " - " + (Model.Customer != null ? Model.Customer.TenKH: "") : "Thêm mới";
+    ViewBag.Title = Model.Id > 0 ? "Cập nhật đơn: HD" + Model.Id + " - " + (Model.Customer != null ? Model.Customer.TenKH : "") : "Thêm mới";
     ViewBag.Class = "fa fa-dollar";
     ViewBag.Breadcrumbs = "<a href='" + Url.Action("Index") + "'>Hóa đơn</a>" +
                           "<span>" + ViewBag.Title + "</span>";
@@ -179,6 +179,10 @@
         <button class="btn btn-lightblue" type="submit" onclick="return beforeSubmit();">@(Model.Id > 0 ? "Lưu & đóng" : "Tạo mới & đóng")</button>
         <a href="@Url.Action("Index")" class="btn btn-default">Quay lại</a>
     </div>
+
+    <ul class="scroll-pagination">
+        
+    </ul>
 }
 
 @section Styles {
@@ -225,7 +229,6 @@
     <script src="@Url.Content("~/Scripts/moment.min.js")"></script>
     <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.min.js")"></script>
     <script src="@Url.Content("~/js/jquery.tagsinput.min.js")"></script>
-    <script src="~/js/scrollview.js"></script>
 
     @*Sản phẩm may*@
     @Html.Partial("_PhieuSanXuatScript", Model)

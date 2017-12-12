@@ -33,7 +33,7 @@
     height: 37px;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__arrow {    
+.select2-container--default .select2-selection--single .select2-selection__arrow {
     top: 5px;
 }
 
@@ -70,3 +70,30 @@
         height: 38px;
     }
 }
+
+.scroll-pagination {
+    position: fixed;
+    right: 2px;
+    top: 50%;
+    z-index: 5;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .scroll-pagination li a {
+        display: block;
+        background: #1d2939;
+        border-radius: 10px;
+        padding: 1px 5px;
+        margin-bottom: 4px;
+        font-size: 9px;
+        line-height: 12px;
+        color: #fff;
+        text-decoration:none;
+    }
+
+        .scroll-pagination li a:hover {
+            background: #428bca;
+            text-decoration:none;
+        }

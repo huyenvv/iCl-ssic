@@ -466,7 +466,7 @@
             var giatien = formatMoney(dongia * item.SoLuong);
 
             var productSelected = getProduct(item.ProductTypeId);
-            html += "<div class='media'>";
+            html += "<div class='media' id='media" + index + "'>";
             html += "   <h4 class='text-warning'>" + (index + 1) + ". May <span class='title-tenspmay'>" + productSelected.Name + "</span> <span class='pull-right' onclick='removePhieuSx(this);'>x</span></h4>";
             html += "   <div class='form-group'>";
             var typecount = 0;
@@ -613,7 +613,7 @@
             if (dateChanged <= currentDate) {
                 currentBox.parent().removeClass("col-xs-12").addClass("col-xs-6");
                 obj.slideDown();
-            } else {                
+            } else {
                 obj.slideUp();
                 setTimeout(function () {
                     currentBox.parent().removeClass("col-xs-6").addClass("col-xs-12");
@@ -621,10 +621,30 @@
             }
         });
 
+        bindScrollSanPham(phieuSanXuatModels);
+
         var currentPosition = $(document).scrollTop();
         $('.price').maskMoney({ precision: 0 });
         formatPrices();
         $(document).scrollTop(currentPosition);
+    }
+
+    function bindScrollSanPham(phieuSanXuatModels) {
+        var htmlPageScroll = '';
+        $.each(phieuSanXuatModels, function (index, item) {
+            htmlPageScroll += '<li><a href="javascript:void(0)" onclick="scrollToSanPham(' + index + ')">' + (index + 1) + '</a></li>';
+        });
+        $(".scroll-pagination").html(htmlPageScroll);
+
+        var srollHeight = $(".scroll-pagination").height();
+        var screenHeight = $(window).height();
+        $(".scroll-pagination").css("top", ((screenHeight - srollHeight) / 2) + "px");
+    }
+
+    function scrollToSanPham(index) {
+        $('html, body').animate({
+            scrollTop: $("#media" + index).offset().top
+        }, 500);
     }
 
     function beforeSubmit() {
