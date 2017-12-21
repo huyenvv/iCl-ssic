@@ -150,7 +150,11 @@ namespace iClassic.Services.Implementation
 
         public int CountChuaMuaVai(int branchId)
         {
-            return Where(m => m.BranchId == branchId && m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && n.VaiType == (byte)VaiTypes.KhongCoSan)).Count();
+            return Where(m => m.BranchId == branchId && m.Status != (byte)TicketStatus.DaTraChoKhach &&
+                        m.Status != (byte)TicketStatus.DaXuLy &&  
+                        m.PhieuSanXuat.Any(n => n.MaVaiId.HasValue && n.VaiType == (byte)VaiTypes.KhongCoSan
+                                                && !n.HasVai
+                        )).Count();
         }
 
         public override void Insert(Invoice model)

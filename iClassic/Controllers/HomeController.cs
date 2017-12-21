@@ -35,7 +35,7 @@ namespace iClassic.Controllers
             && m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable().Where(m => m.NgayTra.Date <= tomorrow).Count();
 
             model.SapDenHanThu = _invoiceRepository.Where(m => m.BranchId == CurrentBranchId && m.Status != (byte)TicketStatus.DaTraChoKhach).AsEnumerable()
-                                                    .Where(m => m.PhieuSanXuat.Any(n => n.NgayThu.HasValue && n.NgayThu.Value.Date <= tomorrow))
+                                                    .Where(m => m.PhieuSanXuat.Any(n => n.Status == 0 && n.NgayThu.HasValue && n.NgayThu.Value.Date <= tomorrow))
                                                     .Count();
             return View(model);
         }
