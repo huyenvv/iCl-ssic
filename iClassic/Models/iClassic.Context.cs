@@ -40,8 +40,8 @@ namespace iClassic.Models
         public virtual DbSet<ProductMemberCard> ProductMemberCard { get; set; }
         public virtual DbSet<MemberCard> MemberCard { get; set; }
         public virtual DbSet<KieuCach> KieuCach { get; set; }
-        public virtual DbSet<Invoice> Invoice { get; set; }
         public virtual DbSet<PhieuSua> PhieuSua { get; set; }
         public virtual DbSet<ProductType> ProductType { get; set; }
+        public virtual DbSet<Invoice> Invoice { get; set; }
     }
 }

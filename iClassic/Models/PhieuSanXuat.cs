@@ -36,7 +36,7 @@ namespace iClassic.Models
         public virtual Tho Tho { get; set; }
         public virtual Tho Tho1 { get; set; }
         public virtual Tho Tho2 { get; set; }
-        public virtual Invoice Invoice { get; set; }
         public virtual ProductType ProductType { get; set; }
+        public virtual Invoice Invoice { get; set; }
     }
 }

@@ -38,16 +38,8 @@
         <EntityTypeShape EntityType="iClassicModel.MemberCard" Width="1.5" PointX="8.25" PointY="24.375" />
         <AssociationConnector Association="iClassicModel.FK_ProductMemberCard_MemberCard" />
         <EntityTypeShape EntityType="iClassicModel.KieuCach" Width="1.5" PointX="5.25" PointY="24.25" />
-        <EntityTypeShape EntityType="iClassicModel.Invoice" Width="1.5" PointX="10.5" PointY="16" />
-        <AssociationConnector Association="iClassicModel.FK_Invoice_UserCreate" />
-        <AssociationConnector Association="iClassicModel.FK_Invoice_UserModified" />
-        <AssociationConnector Association="iClassicModel.FK_Invoice_Branch1" />
-        <AssociationConnector Association="iClassicModel.FK_Invoice_Customer" />
-        <AssociationConnector Association="iClassicModel.FK_Invoice_MemberCard" />
-        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Invoice" />
         <EntityTypeShape EntityType="iClassicModel.PhieuSua" Width="1.5" PointX="15.75" PointY="12.625" />
         <EntityTypeShape EntityType="iClassicModel.ProductType" Width="1.5" PointX="3" PointY="17.875" />
-        <AssociationConnector Association="iClassicModel.FK_PhieuSua_Invoice" />
         <AssociationConnector Association="iClassicModel.FK_KieuCach_ProductType" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_ProductType" />
         <AssociationConnector Association="iClassicModel.FK_PhieuSua_ProductType" />
@@ -56,6 +48,14 @@
         <AssociationConnector Association="iClassicModel.FK_ProductMemberCard_ProductType" />
         <AssociationConnector Association="iClassicModel.FK_ProductTyeField_ProductType" />
         <AssociationConnector Association="iClassicModel.FK_ProductTypeLoaiVai_ProductType" />
+        <EntityTypeShape EntityType="iClassicModel.Invoice" Width="1.5" PointX="10.5" PointY="16" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_UserCreate" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_UserModified" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_Branch1" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_Customer" />
+        <AssociationConnector Association="iClassicModel.FK_Invoice_MemberCard" />
+        <AssociationConnector Association="iClassicModel.FK_PhieuSanXuat_Invoice" />
+        <AssociationConnector Association="iClassicModel.FK_PhieuSua_Invoice" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

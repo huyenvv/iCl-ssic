@@ -25,7 +25,6 @@ namespace iClassic.Models
         public string Code { get; set; }
         public double Total { get; set; }
         public Nullable<double> DatCoc { get; set; }
-        public byte ChietKhauType { get; set; }
         public Nullable<double> ChietKhau { get; set; }
         public Nullable<System.DateTime> NgayThu { get; set; }
         public System.DateTime NgayTra { get; set; }
@@ -37,6 +36,7 @@ namespace iClassic.Models
         public string CreateBy { get; set; }
         public string ModifiedBy { get; set; }
         public System.DateTime ModifiedDate { get; set; }
+        public int ChietKhauType { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual AspNetUsers AspNetUsers1 { get; set; }
