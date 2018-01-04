@@ -164,8 +164,7 @@ namespace iClassic.Services.Implementation
             var customer = GetById(id);
             var endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddMilliseconds(-1);
             var startDate = endDate.AddYears(-1);
-            var totalMoney = context.Invoice.Where(m => m.BranchId == branchId && m.Status == (byte)TicketStatus.DaTraChoKhach
-                                                        && m.CustomerId == id
+            var totalMoney = context.Invoice.Where(m => m.BranchId == branchId && m.CustomerId == id && m.Status == (byte)TicketStatus.DaTraChoKhach
                                                         && m.ModifiedDate >= startDate && m.ModifiedDate <= endDate).Sum(m => (double?)m.Total) ?? 0;
             var allCard = context.MemberCard.OrderByDescending(m => m.SoTien);
             foreach (var card in allCard)
