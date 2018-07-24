@@ -45,6 +45,7 @@
         $('#CustomerId').append('<option value="' + model.Id + '">' + model.TenKH + '(' + model.SDT + ')</option>');
         $('#CustomerId').val(model.Id);
         $('#CustomerId').select2({ width: '100%' });
+        GetMemberCard();
     }
     function showNewCustomerModal(isEdit) {
         var id = isEdit ? $("#CustomerId").val() : '';
