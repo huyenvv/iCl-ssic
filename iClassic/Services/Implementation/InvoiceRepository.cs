@@ -187,7 +187,7 @@ namespace iClassic.Services.Implementation
                         break;
                 }
 
-                if (memberCard.Id > 0)
+                if (item.VaiType != (int)VaiTypes.KhachMangVaiDen && memberCard.Id > 0)
                 {
                     var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == item.ProductTypeId);
                     if (productMemberCard != null)
@@ -276,7 +276,7 @@ namespace iClassic.Services.Implementation
                         break;
                 }
 
-                if (memberCard.Id > 0)
+                if (item.VaiType != (int)VaiTypes.KhachMangVaiDen && memberCard.Id > 0)
                 {
                     var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == item.ProductTypeId);
                     if (productMemberCard != null)
@@ -319,7 +319,7 @@ namespace iClassic.Services.Implementation
                         objForUpdate.GiaVaiMau = t.GiaVaiMau;
                         break;
                 }
-                if (memberCard.Id > 0)
+                if (objForUpdate.VaiType != (int)VaiTypes.KhachMangVaiDen && memberCard.Id > 0)
                 {
                     var productMemberCard = memberCard.ProductMemberCard.FirstOrDefault(m => m.ProductId == t.ProductTypeId);
                     if (productMemberCard != null)

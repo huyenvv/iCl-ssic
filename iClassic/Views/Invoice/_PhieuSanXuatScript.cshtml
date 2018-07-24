@@ -280,7 +280,7 @@
             var dongia = getPrice(vaiType, loaivaiId, productTypeId, giaVaiMau);
             var discount = {};
             var cardId = $('#lblMemberCard').attr('data-id');
-            if (cardId > 0) {
+            if (vaiType !== vaiKhachMangDen && cardId > 0) {
                 var cardProduct = getProductMemberCard(productTypeId, cardId);
                 if (cardProduct.Discount) {
                     var priceDiscount = dongia * cardProduct.Discount / 100;
@@ -455,7 +455,7 @@
             var dongia = getPrice(item.VaiType, item.MaVaiId, item.ProductTypeId, item.GiaVaiMau);
             var discount = {};
             var cardId = $('#lblMemberCard').attr('data-id');
-            if (cardId > 0) {
+            if (item.VaiType !== vaiKhachMangDen && cardId > 0) {
                 var cardProduct = getProductMemberCard(item.ProductTypeId, cardId);
                 if (cardProduct.Discount) {
                     var priceDiscount = dongia * cardProduct.Discount / 100;
