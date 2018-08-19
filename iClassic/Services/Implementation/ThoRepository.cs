@@ -85,6 +85,7 @@ namespace iClassic.Services.Implementation
             obj.Name = model.Name;
             obj.Salary = model.Salary;
             obj.SalaryPercent = model.SalaryPercent;
+            obj.IsActive = model.IsActive;
             base.Update(obj);
         }
     }

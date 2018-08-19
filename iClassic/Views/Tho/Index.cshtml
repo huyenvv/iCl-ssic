@@ -49,11 +49,12 @@
             <th>
                 <a href="javascript:void(0)" class="sortField" data-sortName="Error">Số lỗi</a>
             </th>
+            <th><a href="javascript:void(0)" class="sortField" data-sortName="Status">Trạng thái</a></th>
             <th></th>
         </tr>
 
         @foreach (var item in Model)
-            {
+        {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -91,6 +92,16 @@
                     @item.PhieuSua1.Count
                 </td>
                 <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="label label-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="label label-danger">Deactivate</span>
+                    }
+                </td>
+                <td>
                     <a href="@Url.Action("NewOrEdit", new { id=item.Id })" class="btn btn-xs btn-primary">Sửa</a>
                     <a href="@Url.Action("Delete", new { id=item.Id })" class="btn btn-xs btn-danger btnConfirm">Xóa</a>
                 </td>
@@ -103,12 +114,12 @@
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
         @Html.PagedListPager(Model, page => Url.Action("Index",
-        new
-        {
-            page,
-            searchModel.SearchText,
-            searchModel.SortOrder,
-            searchModel.PageSize
-        }))
+             new
+             {
+                 page,
+                 searchModel.SearchText,
+                 searchModel.SortOrder,
+                 searchModel.PageSize
+             }))
     </div>
 </div>

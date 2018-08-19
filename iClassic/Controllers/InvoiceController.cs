@@ -277,7 +277,7 @@ namespace iClassic.Controllers
 
         private void CreateDanhSachThoViewBag()
         {
-            ViewBag.ListThoMayDo = _thoRepository.GetAll();
+            ViewBag.ListThoMayDo = _thoRepository.Where(m=>m.IsActive);
         }
 
         private void CreateDanhSachHangTheViewBag()
