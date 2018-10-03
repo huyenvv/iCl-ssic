@@ -272,7 +272,7 @@ namespace iClassic.Controllers
 
         private void CreateLoaiVaiViewBag()
         {
-            ViewBag.MaVaiId = _loaiVaiRepository.GetByBranchId(CurrentBranchId);
+            ViewBag.MaVaiId = _loaiVaiRepository.GetAll();
         }
 
         private void CreateDanhSachThoViewBag()
