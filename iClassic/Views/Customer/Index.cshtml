@@ -13,6 +13,7 @@
 <div class="row mb10 mt10">
     <div class="col-md-12">
         <a href="@Url.Action("NewOrEdit")" class="btn btn-lightblue btn-sm pull-right">Thêm mới</a>
+        <a href="@Url.Action("ExportPhoneNumber", new { hasName = true})" class="btn btn-lightblue btn-sm pull-right hide" target="_blank" style="margin-right: 5px;">Tải SĐT</a>
         <h3 class="panel-title">
             @ViewBag.Title
         </h3>

@@ -9,6 +9,8 @@ using log4net;
 using iClassic.Helper;
 using System.Web;
 using Newtonsoft.Json;
+using System.Linq;
+using System.Text;
 
 namespace iClassic.Controllers
 {
@@ -101,7 +103,7 @@ namespace iClassic.Controllers
                         isNew = false;
                         _customerRepository.Update(model);
                     }
-                    await _customerRepository.SaveAsync();                   
+                    await _customerRepository.SaveAsync();
 
                     if (Request.IsAjaxRequest())
                     {
@@ -174,6 +176,17 @@ namespace iClassic.Controllers
                 return Json(new { }, JsonRequestBehavior.AllowGet);
             }
 
+        }
+
+        [Override.Authorize(RoleList.SupperAdmin)]
+        public FileContentResult ExportPhoneNumber(bool hasName = true)
+        {
+            var sdt = 0;
+            var customers = _customerRepository.GetAll().ToList().Where(m => m.SDT.Length >= 10 && int.TryParse(m.SDT, out sdt));
+            var result = hasName
+                ? customers.Select(m => new { m.TenKH, SDT = m.SDT.Trim() }).Distinct().ToCsv()
+                : customers.Select(m => new { SDT = m.SDT.Trim() }).Distinct().ToCsv();
+            return File(new UTF8Encoding().GetBytes(result), "text/csv", "iclassic_danhsachsodienthoai.csv");
         }
 
         protected override void Dispose(bool disposing)
